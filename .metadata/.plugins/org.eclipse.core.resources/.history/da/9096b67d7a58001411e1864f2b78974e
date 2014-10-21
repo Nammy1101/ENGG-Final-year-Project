@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">urBooks</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Login page strings -->
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="signin">Sign In</string>
+    <string name="username">Username</string>
+    <string name="signup">Sign up</string>
+
+    <!-- Sign Up page strings -->
+    <string name="signuptitle">Sign up to urBooks!</string>
+    <string name="firstnamelastname">Firstname Lastname</string>
+    <string name="email">Email</string>
+    <string name="title_activity_signup">Signup</string>
+    <string name="title_activity_main_page">MainPage</string>
+
+</resources>
