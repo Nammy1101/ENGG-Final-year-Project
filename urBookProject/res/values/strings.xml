@@ -14,7 +14,8 @@
 
     <!-- Sign Up page strings -->
     <string name="signuptitle">Sign up to urBooks!</string>
-    <string name="firstnamelastname">Firstname Lastname</string>
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
     <string name="email">Email</string>
     <string name="title_activity_signup">Signup</string>
     <string name="title_activity_main_page">MainPage</string>

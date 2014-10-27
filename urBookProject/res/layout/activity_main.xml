@@ -12,7 +12,7 @@
         android:id="@+id/Password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Username"
+        android:layout_below="@+id/UsernameSignup"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="27dp"
         android:ems="10"
@@ -39,7 +39,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/Username"
+        android:id="@+id/UsernameSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/Password"
@@ -51,7 +51,7 @@
         android:id="@+id/gotosignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Username"
+        android:layout_alignLeft="@+id/UsernameSignup"
         android:layout_alignRight="@+id/Password"
         android:layout_below="@+id/login"
         android:layout_marginTop="82dp"

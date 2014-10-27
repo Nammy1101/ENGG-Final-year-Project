@@ -1080,9 +1080,13 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020057;
     }
     public static final class id {
+        public static final int EmailSignup=0x7f050044;
+        public static final int FirstNameSignup=0x7f050045;
+        public static final int LastNameSignup=0x7f050046;
         public static final int Password=0x7f05003c;
+        public static final int PasswordSignup=0x7f050043;
         public static final int SignUpButton=0x7f050042;
-        public static final int Username=0x7f05003d;
+        public static final int UsernameSignup=0x7f05003d;
         public static final int action_bar=0x7f05001c;
         public static final int action_bar_activity_content=0x7f050015;
         public static final int action_bar_container=0x7f05001b;
@@ -1104,10 +1108,6 @@ containing a value of this type.
         public static final int dialog=0x7f05000e;
         public static final int disableHome=0x7f050008;
         public static final int dropdown=0x7f05000f;
-        public static final int editText1=0x7f050045;
-        public static final int editText2=0x7f050044;
-        public static final int editText3=0x7f050043;
-        public static final int editText5=0x7f050046;
         public static final int edit_query=0x7f050030;
         public static final int end=0x7f050013;
         public static final int expand_activities_button=0x7f050026;
@@ -1257,9 +1257,10 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
         public static final int action_settings=0x7f0a000f;
         public static final int app_name=0x7f0a000d;
-        public static final int email=0x7f0a0017;
-        public static final int firstnamelastname=0x7f0a0016;
+        public static final int email=0x7f0a0018;
+        public static final int firstname=0x7f0a0016;
         public static final int hello_world=0x7f0a000e;
+        public static final int lastname=0x7f0a0017;
         public static final int login=0x7f0a0011;
         /**  Login page strings 
          */
@@ -1269,9 +1270,9 @@ containing a value of this type.
         /**  Sign Up page strings 
          */
         public static final int signuptitle=0x7f0a0015;
-        public static final int title_activity_login_success=0x7f0a001a;
-        public static final int title_activity_main_page=0x7f0a0019;
-        public static final int title_activity_signup=0x7f0a0018;
+        public static final int title_activity_login_success=0x7f0a001b;
+        public static final int title_activity_main_page=0x7f0a001a;
+        public static final int title_activity_signup=0x7f0a0019;
         public static final int username=0x7f0a0013;
     }
     public static final class style {

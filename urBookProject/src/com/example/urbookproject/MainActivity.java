@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-    	username = (EditText) findViewById(R.id.Username);
+    	username = (EditText) findViewById(R.id.UsernameSignup);
     	password = (EditText) findViewById(R.id.Password);
         
         Button SignIn = (Button) findViewById(R.id.login);
@@ -152,7 +152,7 @@ public class MainActivity extends ActionBarActivity {
 
                 for (int i = 0; i < jsonMainNode.length(); i++) {
                         JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                        count = jsonChildNode.optString("Count");
+                        count = jsonChildNode.optString("response").trim();
                 }
         } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Error" + e.toString(),
