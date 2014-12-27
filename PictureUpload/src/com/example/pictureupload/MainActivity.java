@@ -3,24 +3,20 @@ package com.example.pictureupload;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Random;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.commons.net.ftp.*;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,11 +33,18 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
 	private Button mTakePhoto;
-	private ImageView mImageView;
 	private static final String TAG = "upload";
 	String uploadServer;
 	static final int REQUEST_IMAGE_CAPTURE = 1;
+	static final int MEDIA_TYPE_IMAGE = 1;
+	static final int REQUEST_TAKE_PHOTO = 1;
 	private Bitmap imageToSend;
+	Uri imageUri;
+	ImageView iv;
+	String imageFilePath;
+	String mCurrentPhotoPath;
+	File fileToSend;
+	public static int count = 0;
 
 
 	@Override
@@ -49,11 +52,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		uploadServer = "http://162.253.8.37/pictureUpload";
-        
+        iv = (ImageView) findViewById(R.id.imageview);
 		mTakePhoto = (Button) findViewById(R.id.take_photo);
-		mImageView = (ImageView) findViewById(R.id.imageview);
-
 		mTakePhoto.setOnClickListener(this);
+	}
+	
+	public void onSavedInstanceState(Bundle savedInstanceState){
+		super.onSaveInstanceState(savedInstanceState);
+		
 	}
 	
 	@Override
@@ -65,18 +71,52 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
+		
 		takePicture();
 	}
 	
 	void takePicture(){
+		
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        
 		if(takePictureIntent.resolveActivity(getPackageManager()) != null){
 			startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 		}
+		
+		/*
+        final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/picFolder/"; 
+        File newdir = new File(dir); 
+        newdir.mkdirs();
+        
+        Random rng = new Random();
+        
+        count++;
+        String file = dir+rng+".jpg";
+        File newfile = new File(file);
+        try {
+            newfile.createNewFile();
+        } catch (IOException e) {}       
+
+        Uri outputFileUri = Uri.fromFile(newfile);
+        
+        mCurrentPhotoPath = file;
+        imageFilePath=mCurrentPhotoPath;
+        
+		imageUri = Uri.fromFile(fileToSend);
+		
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); 
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+	    
+        //Toast.makeText(getApplicationContext(), mCurrentPhotoPath , Toast.LENGTH_SHORT).show();*/
+		
 	}
+	
+	
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+			/*
 			Bundle extras = data.getExtras();
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
 			imageToSend = imageBitmap;
@@ -85,6 +125,33 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			//sendToFTP.execute();
 			SendBitmapTask sendImage = new SendBitmapTask();
 			sendImage.execute();
+			*/
+			/*if(data == null){
+				File file = new File(imageUri.getPath());
+				fileToSend = file;
+			
+				SendBitmapTask sendImage = new SendBitmapTask();
+				//sendImage.execute();
+			
+				Log.d("CameraDemo", "Pic saved");
+			}*/
+			
+			Uri fullPhotoUri = data.getData();
+			
+			try {
+				Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), fullPhotoUri);
+				imageToSend = getResizedBitmap(bm, 600);
+				SendBitmapTask sendImage = new SendBitmapTask();
+				sendImage.execute();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				Toast.makeText(getApplicationContext(), fullPhotoUri.getPath() , Toast.LENGTH_SHORT).show();
+			}
+			
+			
+			
+			//Toast.makeText(getApplicationContext(), fullPhotoUri.getPath() , Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -93,6 +160,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
+	
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			imageToSend.compress(CompressFormat.PNG, 0, bos);
 			byte[] bitmapdata = bos.toByteArray();
@@ -128,6 +196,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			imageToSend.compress(CompressFormat.PNG, 100, bos);
 			byte[] bitmapdata = bos.toByteArray();
 			ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+			
 			
 			DefaultHttpClient httpclient = new DefaultHttpClient();
 			try {
@@ -173,4 +242,19 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		
 	}
 	
+	public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+}
+	   
 }
