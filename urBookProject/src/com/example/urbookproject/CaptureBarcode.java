@@ -1,17 +1,7 @@
 
-package com.example.pictureupload;
+package com.example.urbookproject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
+import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -19,7 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -29,7 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener {
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+public class CaptureBarcode extends ActionBarActivity implements OnClickListener {
     private Button mTakePhoto;
     private static final String TAG = "upload";
     String uploadServer;
@@ -49,11 +49,12 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_capture_barcode);
         //uploadServer = "http://172.16.1.253/pictureUpload";
-        uploadServer = getString(R.string.server_url);
+        //uploadServer = getString(R.string.server_url_local);
+		uploadServer = getString(R.string.server_url);
         iv = (ImageView) findViewById(R.id.imageview);
-        mTakePhoto = (Button) findViewById(R.id.take_photo);
+        mTakePhoto = (Button) findViewById(R.id.button_camera);
         mTakePhoto.setOnClickListener(this);
 
         phpResponse = (TextView) findViewById(R.id.phpResponse);
@@ -176,10 +177,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
                     result = EntityUtils.toString(response.getEntity());
                 } catch (ClientProtocolException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(MainActivity.this, "f", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CaptureBarcode.this, "f", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 } catch (IOException e) {
-                    Toast.makeText(MainActivity.this, "f", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CaptureBarcode.this, "f", Toast.LENGTH_LONG).show();
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -200,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         protected void onPostExecute(String result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
+            Toast.makeText(CaptureBarcode.this, "Uploaded", Toast.LENGTH_LONG).show();
             phpResponse.setText(result);
             iv.setImageBitmap(imageToSend);
         }
@@ -222,3 +223,30 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }
+/*
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_capture_barcode);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.capture_barcode, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
+*/

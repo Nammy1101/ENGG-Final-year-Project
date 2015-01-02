@@ -10,15 +10,29 @@
     <string name="login">Login</string>
     <string name="signin">Sign In</string>
     <string name="username">Username</string>
-    <string name="signup">Sign up</string>
+    <string name="signup">Sign Up</string>
 
     <!-- Sign Up page strings -->
     <string name="signuptitle">Sign up to urBooks!</string>
-    <string name="firstname">Firstname</string>
-    <string name="lastname">Lastname</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
     <string name="email">Email</string>
-    <string name="title_activity_signup">Signup</string>
-    <string name="title_activity_main_page">MainPage</string>
-    <string name="title_activity_login_success">LoginSuccess</string>
+    <string name="title_activity_signup">Sign Up</string>
+    <string name="title_activity_home_screen">Home</string>
+    <string name="title_activity_capture_barcode">Capture Barcode</string>
+    <string name="title_activity_login_success">Login Success</string>
+
+    <!-- Home Screen strings -->
+    <string name="button_wanted">Books Wanted</string>
+    <string name="button_owned">Books Owned</string>
+    <string name="button_account">Account</string>
+    <string name="button_search">Search</string>
+    <string name="button_auto_search">Auto</string>
+    <string name="add_new_books">Add New?</string>
+    
+    <!-- Capture Barcode strings -->
+    <string name="button_camera">Camera</string>
+    <string name="isbn_label">ISBN:  </string>
+    <string name="barcode_image">Captured Barcode</string>
 
 </resources>

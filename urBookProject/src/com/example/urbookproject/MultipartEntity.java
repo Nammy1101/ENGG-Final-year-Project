@@ -1,5 +1,5 @@
 
-package com.example.pictureupload;
+package com.example.urbookproject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

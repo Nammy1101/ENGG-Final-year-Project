@@ -29,12 +29,16 @@
             android:label="@string/title_activity_signup" >
         </activity>
         <activity
-            android:name=".MainPage"
-            android:label="@string/title_activity_main_page" >
-        </activity>
-        <activity
             android:name=".LoginSuccess"
             android:label="@string/title_activity_login_success" >
+        </activity>
+        <activity
+            android:name=".HomeScreen"
+            android:label="@string/title_activity_home_screen" >
+        </activity>
+        <activity
+            android:name=".CaptureBarcode"
+            android:label="@string/title_activity_capture_barcode" >
         </activity>
     </application>
 

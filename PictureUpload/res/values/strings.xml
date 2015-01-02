@@ -4,5 +4,7 @@
     <string name="app_name">PictureUpload</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="take_photo">Camera</string>
+    <string name="barcode_image">Captured Barcode</string>
 
 </resources>
