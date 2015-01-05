@@ -29,10 +29,12 @@
     <string name="button_search">Search</string>
     <string name="button_auto_search">Auto</string>
     <string name="add_new_books">Add New?</string>
-    
+
     <!-- Capture Barcode strings -->
     <string name="button_camera">Camera</string>
     <string name="isbn_label">ISBN:  </string>
     <string name="barcode_image">Captured Barcode</string>
+    <string name="title_activity_manual_search">ManualSearch</string>
+    <string name="title_activity_search_results">SearchResults</string>
 
 </resources>

@@ -10,21 +10,43 @@ import android.view.View;
 import android.widget.Button;
 
 public class HomeScreen extends ActionBarActivity {
+	
+	int ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
+        Intent intent = getIntent();
+        ID = intent.getIntExtra("USER_ID", 0);
+        
         Button autoButton = (Button) findViewById(R.id.button_auto_search);
+        Button searchButton = (Button) findViewById(R.id.button_search);
+        Button booksWantedButton = (Button) findViewById(R.id.button_wanted);
+        Button booksOwnedButton = (Button) findViewById(R.id.button_owned);
+        Button accountButton = (Button) findViewById(R.id.button_account);
 
         autoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeScreen.this, CaptureBarcode.class);
+                intent.putExtra("USER_ID", ID);
                 startActivity(intent);
             }
         });
+        
+        searchButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+                Intent intent = new Intent(HomeScreen.this, ManualSearch.class);
+                intent.putExtra("USER_ID", ID);
+                startActivity(intent);
+			}
+		});
+        
     }
 
     @Override

@@ -39,8 +39,9 @@ public class MainActivity extends ActionBarActivity {
     // private String url = getString(R.string.server_url) + "test.php";
     // private String url = getString(R.string.server_url_local) + "test.php";
     private String url;
-    String count;
+    String response;
     List<NameValuePair> nameValuePairs;
+    int ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,12 +146,13 @@ public class MainActivity extends ActionBarActivity {
             ReadHttpResponse();
             
             // if successfully logged in
-            goToHomeScreen();
+          //  goToHomeScreen();
         }
     }
 
-    public void goToHomeScreen() {
+    public void goToHomeScreen(int ID) {
         Intent intent = new Intent(this, HomeScreen.class);
+        intent.putExtra("USER_ID", ID);
         startActivity(intent);
     }
     
@@ -161,14 +163,21 @@ public class MainActivity extends ActionBarActivity {
 
             for (int i = 0; i < jsonMainNode.length(); i++) {
                 JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                count = jsonChildNode.optString("response").trim();
+                response = jsonChildNode.optString("response").trim();
+                ID = jsonChildNode.optInt("user_id");
             }
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "Error" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
 
-        Toast.makeText(getApplicationContext(), count,
+        if(response.contains("true")){
+        	goToHomeScreen(ID);
+        }
+        else{
+        
+        Toast.makeText(getApplicationContext(), response,
                 Toast.LENGTH_SHORT).show();
+        }
     }
 }
