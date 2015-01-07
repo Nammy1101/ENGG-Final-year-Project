@@ -30,7 +30,7 @@ import android.widget.Toast;
 public class Signup extends Activity {
     private String jsonResult;
     EditText username, password, email, firstName, lastName;
-    //private String url = "http://172.16.1.253/signup.php";
+    // private String url = "http://172.16.1.253/signup.php";
     // private String url = getString(R.string.server_url) + "signup.php";
     // private String url = getString(R.string.server_url_local) + "signup.php";
     private String url;
@@ -42,8 +42,8 @@ public class Signup extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        url = getString(R.string.server_url) + "signup.php";
-        // url = getString(R.string.server_url_local) + "signup.php";
+        // url = getString(R.string.server_url) + "signup.php";
+        url = getString(R.string.server_url_local) + "signup.php";
 
         username = (EditText) findViewById(R.id.UsernameSignup);
         password = (EditText) findViewById(R.id.PasswordSignup);

@@ -20,14 +20,14 @@
     <ImageView
         android:id="@+id/imageview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_above="@+id/button_camera"
         android:layout_alignLeft="@+id/button_camera"
-        android:layout_below="@+id/phpResponse"
         android:contentDescription="@string/barcode_image"
         android:minHeight="100dp"
         android:minWidth="100dp" />
 
+    <!--
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -41,6 +41,7 @@
         android:id="@+id/phpResponse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/imageview"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textView1"
@@ -49,5 +50,17 @@
         android:minWidth="100dp"
         android:textAlignment="gravity"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    -->
+    
+    <ListView
+        android:id="@+id/scan_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/imageview"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+    </ListView>
 
 </RelativeLayout>

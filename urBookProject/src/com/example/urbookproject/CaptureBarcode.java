@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +24,15 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CaptureBarcode extends ActionBarActivity implements OnClickListener {
     private Button mTakePhoto;
@@ -46,18 +51,24 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
 
     TextView phpResponse;
 
+    ListView resultsList;
+    ArrayList<String> titleArray = new ArrayList<String>();
+    ArrayList<String> authorArray = new ArrayList<String>();
+    ArrayList<String> yearArray = new ArrayList<String>();
+    SearchResultsBaseAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture_barcode);
-        //uploadServer = "http://172.16.1.253/pictureUpload";
-        //uploadServer = getString(R.string.server_url_local);
-		uploadServer = getString(R.string.server_url);
+        // uploadServer = "http://172.16.1.253/pictureUpload";
+        uploadServer = getString(R.string.server_url_local);
         iv = (ImageView) findViewById(R.id.imageview);
         mTakePhoto = (Button) findViewById(R.id.button_camera);
         mTakePhoto.setOnClickListener(this);
 
-        phpResponse = (TextView) findViewById(R.id.phpResponse);
+        // phpResponse = (TextView) findViewById(R.id.phpResponse);
+        resultsList = (ListView) findViewById(R.id.scan_results);
     }
 
     public void onSavedInstanceState(Bundle savedInstanceState) {
@@ -162,7 +173,8 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String result = "Error: ISBN unresolved";
             try {
-                //HttpPost httppost = new HttpPost("http://172.16.1.253/pictureUpload.php"); // server
+                // HttpPost httppost = new HttpPost("http://172.16.1.253/pictureUpload.php"); //
+                // server
                 HttpPost httppost = new HttpPost(uploadServer + "pictureUpload.php"); // server
 
                 MultipartEntity reqEntity = new MultipartEntity();
@@ -202,7 +214,35 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             Toast.makeText(CaptureBarcode.this, "Uploaded", Toast.LENGTH_LONG).show();
-            phpResponse.setText(result);
+
+            try {
+                JSONObject jsonResponse = new JSONObject(result);
+                JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
+                result = jsonMainNode.toString();
+
+                jsonMainNode = new JSONArray(result);
+                for (int i = 0; i < jsonMainNode.length(); i++) {
+                    try {
+                        JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                        // responseTitle = jsonChildNode.optString("Book_Title").trim();
+                        titleArray.add(jsonChildNode.getString("Book_Title").toString());
+                        authorArray.add(jsonChildNode.getString("Book_Author").toString());
+                        yearArray.add(jsonChildNode.getString("Book_Year").toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter = new SearchResultsBaseAdapter(CaptureBarcode.this, titleArray,
+                        authorArray,
+                        yearArray);
+                resultsList.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            // phpResponse.setText(result);
             iv.setImageBitmap(imageToSend);
         }
 
@@ -224,29 +264,13 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
     }
 }
 /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capture_barcode);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.capture_barcode, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-}
-*/
+ * @Override protected void onCreate(Bundle savedInstanceState) {
+ * super.onCreate(savedInstanceState); setContentView(R.layout.activity_capture_barcode); }
+ * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the menu; this adds items to
+ * the action bar if it is present. getMenuInflater().inflate(R.menu.capture_barcode, menu); return
+ * true; }
+ * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle action bar item clicks
+ * here. The action bar will // automatically handle clicks on the Home/Up button, so long // as you
+ * specify a parent activity in AndroidManifest.xml. int id = item.getItemId(); if (id ==
+ * R.id.action_settings) { return true; } return super.onOptionsItemSelected(item); } }
+ */

@@ -2,6 +2,7 @@
 package com.example.urbookproject;
 
 import android.support.v7.app.ActionBarActivity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,8 +11,8 @@ import android.view.View;
 import android.widget.Button;
 
 public class HomeScreen extends ActionBarActivity {
-	
-	int ID;
+
+    int ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,7 @@ public class HomeScreen extends ActionBarActivity {
 
         Intent intent = getIntent();
         ID = intent.getIntExtra("USER_ID", 0);
-        
+
         Button autoButton = (Button) findViewById(R.id.button_auto_search);
         Button searchButton = (Button) findViewById(R.id.button_search);
         Button booksWantedButton = (Button) findViewById(R.id.button_wanted);
@@ -35,18 +36,17 @@ public class HomeScreen extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        
+
         searchButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
                 Intent intent = new Intent(HomeScreen.this, ManualSearch.class);
                 intent.putExtra("USER_ID", ID);
                 startActivity(intent);
-			}
-		});
-        
+            }
+        });
+
     }
 
     @Override

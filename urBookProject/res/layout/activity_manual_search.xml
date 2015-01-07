@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
         android:ems="10"
-        android:hint="Book Title" >
+        android:hint="@string/book_title" >
 
         <requestFocus />
     </EditText>
@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
         android:ems="10"
-        android:hint="Book Author" />
+        android:hint="@string/book_author" />
 
     <Button
         android:id="@+id/search"
@@ -38,7 +38,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="41dp"
-        android:text="Search" />
+        android:text="@string/button_search" />
 
     <EditText
         android:id="@+id/book_year"
@@ -48,6 +48,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Book Year" />
+        android:hint="@string/book_year" />
 
 </RelativeLayout>

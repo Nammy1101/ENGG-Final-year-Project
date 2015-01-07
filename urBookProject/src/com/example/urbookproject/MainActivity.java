@@ -144,9 +144,9 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             ReadHttpResponse();
-            
+
             // if successfully logged in
-          //  goToHomeScreen();
+            // goToHomeScreen();
         }
     }
 
@@ -155,7 +155,7 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra("USER_ID", ID);
         startActivity(intent);
     }
-    
+
     public void ReadHttpResponse() {
         try {
             JSONObject jsonResponse = new JSONObject(jsonResult);
@@ -171,13 +171,11 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
-        if(response.contains("true")){
-        	goToHomeScreen(ID);
-        }
-        else{
-        
-        Toast.makeText(getApplicationContext(), response,
-                Toast.LENGTH_SHORT).show();
+        if (response.contains("true")) {
+            goToHomeScreen(ID);
+        } else {
+            Toast.makeText(getApplicationContext(), response,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }
