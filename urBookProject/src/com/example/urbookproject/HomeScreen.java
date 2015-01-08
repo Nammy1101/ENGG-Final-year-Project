@@ -20,7 +20,8 @@ public class HomeScreen extends ActionBarActivity {
         setContentView(R.layout.activity_home_screen);
 
         Intent intent = getIntent();
-        ID = intent.getIntExtra("USER_ID", 0);
+       // ID = intent.getIntExtra("USER_ID", 0);
+        ((MyAppUserID) this.getApplication()).setUserID(intent.getIntExtra("USER_ID", 0));
 
         Button autoButton = (Button) findViewById(R.id.button_auto_search);
         Button searchButton = (Button) findViewById(R.id.button_search);

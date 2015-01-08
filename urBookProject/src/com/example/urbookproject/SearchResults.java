@@ -1,20 +1,23 @@
 
 package com.example.urbookproject;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SearchResults extends ActionBarActivity {
 
@@ -33,11 +36,13 @@ public class SearchResults extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        
+        Intent intent = getIntent();
+        ID = intent.getIntExtra("USER_ID", 0);
 
         resultsList = (ListView) findViewById(R.id.search_results);
         // tv = (TextView) findViewById(R.id.textView1);
 
-        Intent intent = getIntent();
         jsonArray = intent.getStringExtra("SEARCH_RESULTS");
         // tv.setText(jsonArray);
 
@@ -55,12 +60,15 @@ public class SearchResults extends ActionBarActivity {
                 }
             }
             adapter = new SearchResultsBaseAdapter(SearchResults.this, titleArray, authorArray,
-                    yearArray);
+                    yearArray, ID);
             resultsList.setAdapter(adapter);
+            resultsList.setOnItemClickListener(new OnResultsListItemClickListener());
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+
     }
 
     @Override

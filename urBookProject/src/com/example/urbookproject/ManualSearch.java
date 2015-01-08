@@ -72,6 +72,11 @@ public class ManualSearch extends ActionBarActivity {
                 }
             }
         });
+        /*
+        if(((MyAppUserID) this.getApplication()).getUserID() == 1){
+        	 Toast.makeText(getApplicationContext(), "it works!",
+                     Toast.LENGTH_SHORT).show();
+        }*/
     }
 
     @Override

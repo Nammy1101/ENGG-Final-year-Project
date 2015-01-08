@@ -48,6 +48,7 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
     String mCurrentPhotoPath;
     File fileToSend;
     public static int count = 0;
+    int ID;
 
     TextView phpResponse;
 
@@ -61,6 +62,8 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture_barcode);
+       Intent intent = getIntent();
+       ID = intent.getIntExtra("USER_ID", 0);
         // uploadServer = "http://172.16.1.253/pictureUpload";
         uploadServer = getString(R.string.server_url_local);
         iv = (ImageView) findViewById(R.id.imageview);
@@ -234,7 +237,7 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                 }
                 adapter = new SearchResultsBaseAdapter(CaptureBarcode.this, titleArray,
                         authorArray,
-                        yearArray);
+                        yearArray, ID);
                 resultsList.setAdapter(adapter);
 
             } catch (JSONException e) {
