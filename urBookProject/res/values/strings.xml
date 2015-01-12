@@ -36,13 +36,14 @@
     <string name="barcode_image">Captured Barcode</string>
     <string name="title_activity_manual_search">Search</string>
     <string name="title_activity_search_results">Search Results</string>
-    
+
     <!-- Manual Search strings -->
     <string name="book_title">Title</string>
     <string name="book_author">Author</string>
     <string name="book_year">Year</string>
-    
+
     <!-- Custom List layout strings (layout_search_results.xml) -->
     <string name="image_cover">Cover</string>
+    <string name="title_activity_insert_book">InsertBook</string>
 
 </resources>
