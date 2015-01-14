@@ -18,7 +18,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="com.example.urbookproject.MyAppUserID" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -51,6 +52,10 @@
         <activity
             android:name=".SearchResults"
             android:label="@string/title_activity_search_results" >
+        </activity>
+        <activity
+            android:name=".InsertBook"
+            android:label="@string/title_activity_insert_book" >
         </activity>
     </application>
 

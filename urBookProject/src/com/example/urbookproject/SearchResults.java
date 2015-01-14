@@ -28,6 +28,7 @@ public class SearchResults extends ActionBarActivity {
     ArrayList<String> titleArray = new ArrayList<String>();
     ArrayList<String> authorArray = new ArrayList<String>();
     ArrayList<String> yearArray = new ArrayList<String>();
+    ArrayList<String> bookID = new ArrayList<String>();
     SearchResultsBaseAdapter adapter;
 
     // TextView tv;
@@ -55,12 +56,12 @@ public class SearchResults extends ActionBarActivity {
                     titleArray.add(jsonChildNode.getString("Book_Title").toString());
                     authorArray.add(jsonChildNode.getString("Book_Author").toString());
                     yearArray.add(jsonChildNode.getString("Book_Year").toString());
+                    bookID.add(jsonChildNode.getString("Book_ID").toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            adapter = new SearchResultsBaseAdapter(SearchResults.this, titleArray, authorArray,
-                    yearArray, ID);
+            adapter = new SearchResultsBaseAdapter(SearchResults.this, titleArray, authorArray, yearArray, bookID, ID);
             resultsList.setAdapter(adapter);
             resultsList.setOnItemClickListener(new OnResultsListItemClickListener());
         } catch (JSONException e) {

@@ -117,7 +117,7 @@ public class ManualSearch extends ActionBarActivity {
                     .trim()));
             nameValuePairs.add(new BasicNameValuePair("bookAuthor", bookAuthor.getText().toString()
                     .trim()));
-            nameValuePairs.add(new BasicNameValuePair("bookYear", bookAuthor.getText().toString()
+            nameValuePairs.add(new BasicNameValuePair("bookYear", bookYear.getText().toString()
                     .trim()));
 
             HttpClient httpclient = new DefaultHttpClient();
