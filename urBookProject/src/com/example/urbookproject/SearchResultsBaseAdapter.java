@@ -24,16 +24,18 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     private ArrayList title, author, year, id;
     private String imageurl;
     private static LayoutInflater inflater = null;
+    private int resource;
     int ID;
     private Context context;
 
-    public SearchResultsBaseAdapter(Activity activity, ArrayList title, ArrayList author,
+    public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList title, ArrayList author,
             ArrayList year, ArrayList id, int userID) {
         this.activity = activity;
         this.title = title;
         this.author = author;
         this.year = year;
         this.id = id;
+        this.resource = resource;
         this.ID = userID;
         this.context = activity;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -46,7 +48,8 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (convertView == null) {
-            view = inflater.inflate(R.layout.layout_search_results, null);
+            //view = inflater.inflate(R.layout.layout_search_results, null);
+            view = inflater.inflate(resource, null);
         }
 
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
@@ -64,7 +67,7 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
                 + id.get(position).toString() + ".jpg";
 
         new DownloadImageTask(bookCover).execute(imageurl);
-        
+
         /*
          * view.setOnClickListener(new OnClickListener(){
          * @Override public void onClick(View v) { // TODO Auto-generated method stub Intent intent

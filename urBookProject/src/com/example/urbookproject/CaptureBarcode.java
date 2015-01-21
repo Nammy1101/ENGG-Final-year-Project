@@ -63,8 +63,8 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture_barcode);
-       Intent intent = getIntent();
-       ID = intent.getIntExtra("USER_ID", 0);
+        Intent intent = getIntent();
+        ID = intent.getIntExtra("USER_ID", 0);
         // uploadServer = "http://172.16.1.253/pictureUpload";
         uploadServer = getString(R.string.server_url_local);
         iv = (ImageView) findViewById(R.id.imageview);
@@ -237,7 +237,9 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                         e.printStackTrace();
                     }
                 }
-                adapter = new SearchResultsBaseAdapter(CaptureBarcode.this, titleArray, authorArray, yearArray, bookID, ID);
+                adapter = new SearchResultsBaseAdapter(CaptureBarcode.this,
+                        R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID,
+                        ID);
                 resultsList.setAdapter(adapter);
                 resultsList.setOnItemClickListener(new OnResultsListItemClickListener());
             } catch (JSONException e) {

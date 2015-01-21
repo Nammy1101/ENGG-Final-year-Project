@@ -37,7 +37,7 @@ public class SearchResults extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        
+
         Intent intent = getIntent();
         ID = intent.getIntExtra("USER_ID", 0);
 
@@ -61,15 +61,14 @@ public class SearchResults extends ActionBarActivity {
                     e.printStackTrace();
                 }
             }
-            adapter = new SearchResultsBaseAdapter(SearchResults.this, titleArray, authorArray, yearArray, bookID, ID);
+            adapter = new SearchResultsBaseAdapter(SearchResults.this,
+                    R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID, ID);
             resultsList.setAdapter(adapter);
             resultsList.setOnItemClickListener(new OnResultsListItemClickListener());
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-
     }
 
     @Override

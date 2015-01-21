@@ -49,8 +49,6 @@ public class HomeScreen extends ActionBarActivity {
         });
         
         accountButton.setOnClickListener(new View.OnClickListener() {
-        	
-			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -59,7 +57,26 @@ public class HomeScreen extends ActionBarActivity {
                 startActivity(intent);
 			}
 		});
-
+        
+        booksWantedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(HomeScreen.this, WantedList.class);
+                intent.putExtra("USER_ID", ID);
+                startActivity(intent);
+            }
+        });
+        
+        booksOwnedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(HomeScreen.this, OwnedList.class);
+                intent.putExtra("USER_ID", ID);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -45,6 +45,8 @@
     <!-- Custom List layout strings (layout_search_results.xml) -->
     <string name="image_cover">Cover</string>
     <string name="title_activity_insert_book">Insert Book</string>
-    <string name="title_activity_my_account">MyAccount</string>
+    <string name="title_activity_my_account">My Account</string>
+    <string name="title_activity_wanted_list">Wanted List</string>
+    <string name="title_activity_owned_list">Owned List</string>
 
 </resources>

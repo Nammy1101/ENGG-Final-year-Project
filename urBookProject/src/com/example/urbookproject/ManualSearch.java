@@ -103,7 +103,6 @@ public class ManualSearch extends ActionBarActivity {
         task.execute(new String[] {
                 url
         });
-
     }
 
     private class SearchInServer extends AsyncTask<String, Void, String> {

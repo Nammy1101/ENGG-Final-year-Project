@@ -61,6 +61,14 @@
             android:name=".MyAccount"
             android:label="@string/title_activity_my_account" >
         </activity>
+        <activity
+            android:name=".WantedList"
+            android:label="@string/title_activity_wanted_list" >
+        </activity>
+        <activity
+            android:name=".OwnedList"
+            android:label="@string/title_activity_owned_list" >
+        </activity>
     </application>
 
 </manifest>
