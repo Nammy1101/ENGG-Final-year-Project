@@ -47,6 +47,18 @@ public class HomeScreen extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        
+        accountButton.setOnClickListener(new View.OnClickListener() {
+        	
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+                Intent intent = new Intent(HomeScreen.this, MyAccount.class);
+                intent.putExtra("USER_ID", ID);
+                startActivity(intent);
+			}
+		});
 
     }
 

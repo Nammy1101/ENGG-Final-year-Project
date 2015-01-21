@@ -15,11 +15,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".MyAppUserID"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="com.example.urbookproject.MyAppUserID" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -56,6 +56,10 @@
         <activity
             android:name=".InsertBook"
             android:label="@string/title_activity_insert_book" >
+        </activity>
+        <activity
+            android:name=".MyAccount"
+            android:label="@string/title_activity_my_account" >
         </activity>
     </application>
 
