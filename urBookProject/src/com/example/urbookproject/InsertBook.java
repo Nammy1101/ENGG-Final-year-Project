@@ -157,7 +157,8 @@ public class InsertBook extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             ReadHttpResponse();
-
+            
+            finish();
             // if successfully logged in
             // goToHomeScreen();
         }

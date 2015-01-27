@@ -64,7 +64,7 @@ public class SearchResults extends ActionBarActivity {
             adapter = new SearchResultsBaseAdapter(SearchResults.this,
                     R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID, ID);
             resultsList.setAdapter(adapter);
-            resultsList.setOnItemClickListener(new OnResultsListItemClickListener());
+            resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults"));
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

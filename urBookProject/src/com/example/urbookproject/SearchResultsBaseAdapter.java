@@ -21,20 +21,35 @@ import android.widget.TextView;
 
 public class SearchResultsBaseAdapter extends BaseAdapter {
     private Activity activity;
-    private ArrayList title, author, year, id;
+    private ArrayList title, author, year, id, owned_id, wanted_id;
     private String imageurl;
     private static LayoutInflater inflater = null;
     private int resource;
     int ID;
     private Context context;
 
-    public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList title, ArrayList author,
+    public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList title,
+            ArrayList author,
             ArrayList year, ArrayList id, int userID) {
         this.activity = activity;
         this.title = title;
         this.author = author;
         this.year = year;
         this.id = id;
+        this.resource = resource;
+        this.ID = userID;
+        this.context = activity;
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public SearchResultsBaseAdapter(Activity activity, int resource, int userID, BookList b) {
+        this.activity = activity;
+        this.title = b.title;
+        this.author = b.author;
+        this.year = b.year;
+        this.id = b.book_id;
+        this.owned_id = b.owned_id;
+        this.wanted_id = b.wanted_id;
         this.resource = resource;
         this.ID = userID;
         this.context = activity;
@@ -48,7 +63,7 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (convertView == null) {
-            //view = inflater.inflate(R.layout.layout_search_results, null);
+            // view = inflater.inflate(R.layout.layout_search_results, null);
             view = inflater.inflate(resource, null);
         }
 
@@ -62,6 +77,14 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
         bookAuthor.setText(author.get(position).toString());
         bookYear.setText(year.get(position).toString());
         bookID.setText(id.get(position).toString());
+
+        if (resource == R.layout.layout_owned_results) {
+            TextView ownedID = (TextView) view.findViewById(R.id.owned_id);
+            ownedID.setText(owned_id.get(position).toString());
+        } else if (resource == R.layout.layout_wanted_results) {
+            TextView wantedID = (TextView) view.findViewById(R.id.wanted_id);
+            wantedID.setText(wanted_id.get(position).toString());
+        }
 
         imageurl = activity.getResources().getString(R.string.server_url) + "covers/"
                 + id.get(position).toString() + ".jpg";
