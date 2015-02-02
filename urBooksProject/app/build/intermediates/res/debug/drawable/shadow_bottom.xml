@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <gradient
+        android:angle="90"
+        android:endColor="@android:color/white"
+        android:startColor="@android:color/black" >
+    </gradient>
+
+</shape><!-- From: file:/C:/Users/Nammy/AndroidstudioProjects/urBooksProject1/app/src/main/res/drawable/shadow_bottom.xml -->

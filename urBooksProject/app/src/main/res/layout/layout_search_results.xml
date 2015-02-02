@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="95dp"
+    android:orientation="vertical"
+    android:padding="4dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@drawable/white_border"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/thumbnail"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dp"
+            android:layout_toRightOf="@+id/vertical_bar"
+            android:gravity="center_vertical"
+            android:minWidth="100dp"
+            android:orientation="vertical"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/book_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@string/book_title"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/book_author"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxEms="20"
+                android:maxLines="1"
+                android:text="@string/book_author"
+                android:textColor="#808080"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/book_year"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxEms="20"
+                android:maxLines="1"
+                android:text="@string/book_year"
+                android:textColor="#808080"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/book_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/vertical_bar"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_toRightOf="@+id/book_cover"
+            android:background="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/book_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/black_border"
+            android:contentDescription="@string/image_cover"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher" />
+    </RelativeLayout>
+
+</RelativeLayout>

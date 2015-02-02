@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-ce19931935c6f68b6d0fd40ef24ea6ec40626b97.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nammy\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-f2a61d7d5a90c7b793ca81841762964ae4b16982.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\pre-dexed\debug\classes-5f2e02e770b363cab497404bdf0e3829910e701f.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\20.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef">
+        <dex dex="C:\Users\Nammy\AndroidstudioProjects\urBooksProject1\app\build\intermediates\pre-dexed\debug\classes-a49ef1f58fa6168df67c4c1bdc71fedfbc4cd6a0.jar" />
+    </item>
+
+</items>

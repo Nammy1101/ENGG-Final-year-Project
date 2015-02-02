@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.urbookproject.MyAccount" >
+
+    <TextView
+        android:id="@+id/accountUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="18dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/accountFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/accountUserName"
+        android:layout_marginTop="24dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/accountLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/accountFirstName"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/accountFirstName"
+        android:layout_marginTop="28dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/accountEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/accountLastName"
+        android:layout_marginTop="27dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/ChangeInformationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ChangePasswordButton"
+        android:layout_alignLeft="@+id/ChangePasswordButton"
+        android:layout_alignRight="@+id/accountEmail"
+        android:layout_marginBottom="49dp"
+        android:text="Change Information" />
+
+    <Button
+        android:id="@+id/ChangePasswordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/accountEmail"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/accountEmail"
+        android:layout_marginBottom="70dp"
+        android:text="Change Password" />
+
+</RelativeLayout>

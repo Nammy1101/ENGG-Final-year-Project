@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">urBooks</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Login page strings -->
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="signin">Sign In</string>
+    <string name="username">Username</string>
+    <string name="signup">Sign Up</string>
+
+    <!-- Sign Up page strings -->
+    <string name="signuptitle">Sign up to urBooks!</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="email">Email</string>
+    <string name="title_activity_signup">Sign Up</string>
+    <string name="title_activity_home_screen">Home</string>
+    <string name="title_activity_capture_barcode">Capture Barcode</string>
+    <string name="title_activity_login_success">Login Success</string>
+
+    <!-- Home Screen strings -->
+    <string name="button_wanted">Books Wanted</string>
+    <string name="button_owned">Books Owned</string>
+    <string name="button_account">Account</string>
+    <string name="button_search">Search</string>
+    <string name="button_auto_search">Auto</string>
+    <string name="button_confirm">Confirm</string>
+    <string name="add_new_books">Add New?</string>
+
+    <!-- Capture Barcode strings -->
+    <string name="button_camera">Camera</string>
+    <string name="isbn_label">ISBN:  </string>
+    <string name="barcode_image">Captured Barcode</string>
+    <string name="title_activity_manual_search">Search</string>
+    <string name="title_activity_search_results">Search Results</string>
+
+    <!-- Manual Search strings -->
+    <string name="book_title">Title</string>
+    <string name="book_author">Author</string>
+    <string name="book_year">Year</string>
+
+    <!-- Custom List layout strings (layout_search_results.xml) -->
+    <string name="image_cover">Cover</string>
+    <string name="title_activity_insert_book">Insert Book</string>
+    <string name="title_activity_my_account">My Account</string>
+    <string name="title_activity_wanted_list">Wanted List</string>
+    <string name="title_activity_owned_list">Owned List</string>
+    
+    <string name="text_confirm_selection">Press the button below to confirm your selection:</string>
+    <string name="text_select_a_list">Please select a list:</string>
+    <string name="text_wanted">Wanted</string>
+    <string name="text_owned">Owned</string>
+
+</resources>
