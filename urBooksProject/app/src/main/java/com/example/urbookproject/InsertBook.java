@@ -1,24 +1,4 @@
-
 package com.example.urbookproject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,14 +16,33 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class InsertBook extends ActionBarActivity {
 
     String title, author, year, bookid;
     int ID;
     String selectedOption;
-    private String url, jsonResult;
     List<NameValuePair> nameValuePairs;
     String response;
+    private String url, jsonResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +103,45 @@ public class InsertBook extends ActionBarActivity {
     public void insertBook() {
         insertBookTask task = new insertBookTask();
         // passes values for the urls string array
-        task.execute(new String[] {
+        task.execute(new String[]{
                 url
         });
+    }
+
+    public void ReadHttpResponse() {
+        try {
+            JSONObject jsonResponse = new JSONObject(jsonResult);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
+
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                response = jsonChildNode.optString("response").trim();
+            }
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        Toast.makeText(getApplicationContext(), response,
+                Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void onOptionSelectedClick(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch (view.getId()) {
+            case R.id.wantedBook:
+                if (checked) {
+                    selectedOption = "want";
+                }
+                break;
+            case R.id.ownedBook:
+                if (checked) {
+                    selectedOption = "owned";
+                }
+                break;
+        }
     }
 
     private class insertBookTask extends AsyncTask<String, Void, String> {
@@ -157,46 +192,10 @@ public class InsertBook extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             ReadHttpResponse();
-            
+
             finish();
             // if successfully logged in
             // goToHomeScreen();
-        }
-    }
-
-    public void ReadHttpResponse() {
-        try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
-
-            for (int i = 0; i < jsonMainNode.length(); i++) {
-                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                response = jsonChildNode.optString("response").trim();
-            }
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        Toast.makeText(getApplicationContext(), response,
-                Toast.LENGTH_SHORT).show();
-
-    }
-
-    public void onOptionSelectedClick(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-
-        switch (view.getId()) {
-            case R.id.wantedBook:
-                if (checked) {
-                    selectedOption = "want";
-                }
-                break;
-            case R.id.ownedBook:
-                if (checked) {
-                    selectedOption = "owned";
-                }
-                break;
         }
     }
 

@@ -1,8 +1,8 @@
 package com.example.urbookproject;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,17 +30,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeMyAccountPassword extends ActionBarActivity {
-    private String url;
     String response;
-    private String jsonResult;
     List<NameValuePair> nameValuePairs;
     int ID;
     EditText oldPassword, newPassword, verifyPassword;
+    private String url;
+    private String jsonResult;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_change_my_account_password);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_change_my_account_password);
 
         url = getString(R.string.server_url) + "ChangeUserPassword.php";
         ID = ((MyAppUserID) this.getApplication()).getUserID();
@@ -54,43 +54,42 @@ public class ChangeMyAccountPassword extends ActionBarActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(oldPassword.getText().toString().matches("") || newPassword.getText().toString().matches("")
-                        || verifyPassword.getText().toString().matches("")){
+                if (oldPassword.getText().toString().matches("") || newPassword.getText().toString().matches("")
+                        || verifyPassword.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(),
                             "One or more fields are empty", Toast.LENGTH_LONG).show();
                 }
                 //else if(newPassword.getText().toString() != verifyPassword.getText().toString()){
                 //this does not work!, needs something else to match edit text passwords
-                else if(newPassword.getText().toString().equals(verifyPassword.getText().toString())){
+                else if (newPassword.getText().toString().equals(verifyPassword.getText().toString())) {
                     Toast.makeText(getApplicationContext(),
                             "Verfiy new password failed", Toast.LENGTH_LONG).show();
-                }
-               else {
+                } else {
                     changePasswordInServer tasks = new changePasswordInServer();
                     tasks.execute();
                 }
             }
         });
-	}
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.change_my_account_password, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.change_my_account_password, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private class changePasswordInServer extends AsyncTask<String, Void, String> {
         @Override
@@ -100,8 +99,8 @@ public class ChangeMyAccountPassword extends ActionBarActivity {
             StringBuilder sb = new StringBuilder();
             sb.append(ID);
             nameValuePairs.add(new BasicNameValuePair("ID", sb.toString()));
-            nameValuePairs.add(new BasicNameValuePair("OldPassword",oldPassword.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("NewPassword",newPassword.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("OldPassword", oldPassword.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("NewPassword", newPassword.getText().toString()));
 
 
             HttpClient httpclient = new DefaultHttpClient();

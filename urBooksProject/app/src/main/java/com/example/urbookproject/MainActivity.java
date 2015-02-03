@@ -1,12 +1,15 @@
-
 package com.example.urbookproject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -20,28 +23,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
+    EditText username, password;
+    String response;
+    List<NameValuePair> nameValuePairs;
+    int ID;
     // private String url = "http://204.83.105.45/test.php";
     private String jsonResult;
-    EditText username, password;
     // private String url = "http://172.16.1.253/test.php";
     // private String url = getString(R.string.server_url) + "test.php";
     // private String url = getString(R.string.server_url_local) + "test.php";
     private String url;
-    String response;
-    List<NameValuePair> nameValuePairs;
-    int ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
     public void accessWebService() {
         JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[] {
+        task.execute(new String[]{
                 url
         });
     }
@@ -97,6 +96,35 @@ public class MainActivity extends ActionBarActivity {
     public void goToSignUp(View view) {
         Intent intent = new Intent(this, Signup.class);
         startActivity(intent);
+    }
+
+    public void goToHomeScreen(int ID) {
+        Intent intent = new Intent(this, HomeScreen.class);
+        intent.putExtra("USER_ID", ID);
+        startActivity(intent);
+    }
+
+    public void ReadHttpResponse() {
+        try {
+            JSONObject jsonResponse = new JSONObject(jsonResult);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
+
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                response = jsonChildNode.optString("response").trim();
+                ID = jsonChildNode.optInt("user_id");
+            }
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        if (response.contains("true")) {
+            goToHomeScreen(ID);
+        } else {
+            Toast.makeText(getApplicationContext(), response,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class JsonReadTask extends AsyncTask<String, Void, String> {
@@ -147,35 +175,6 @@ public class MainActivity extends ActionBarActivity {
 
             // if successfully logged in
             // goToHomeScreen();
-        }
-    }
-
-    public void goToHomeScreen(int ID) {
-        Intent intent = new Intent(this, HomeScreen.class);
-        intent.putExtra("USER_ID", ID);
-        startActivity(intent);
-    }
-
-    public void ReadHttpResponse() {
-        try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
-
-            for (int i = 0; i < jsonMainNode.length(); i++) {
-                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                response = jsonChildNode.optString("response").trim();
-                ID = jsonChildNode.optInt("user_id");
-            }
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        if (response.contains("true")) {
-            goToHomeScreen(ID);
-        } else {
-            Toast.makeText(getApplicationContext(), response,
-                    Toast.LENGTH_SHORT).show();
         }
     }
 }

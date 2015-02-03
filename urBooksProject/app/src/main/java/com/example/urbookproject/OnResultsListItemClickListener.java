@@ -1,4 +1,3 @@
-
 package com.example.urbookproject;
 
 import android.app.AlertDialog;
@@ -7,10 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.TextView;
 
 public class OnResultsListItemClickListener implements OnItemClickListener, OnItemLongClickListener {
     private String caller;
@@ -21,7 +19,7 @@ public class OnResultsListItemClickListener implements OnItemClickListener, OnIt
     public OnResultsListItemClickListener(String caller) {
         this.caller = caller;
     }
-    
+
     public OnResultsListItemClickListener(String caller, BookList b) {
         this.caller = caller;
         this.list = b;
@@ -29,7 +27,7 @@ public class OnResultsListItemClickListener implements OnItemClickListener, OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         // TODO Auto-generated method stub
 
         if (caller.equals("SearchResults")) {

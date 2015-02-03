@@ -1,15 +1,14 @@
-
 package com.example.urbookproject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.os.Bundle;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -41,7 +40,9 @@ public class WantedList extends ActionBarActivity {
     ArrayList<String> wantedID = new ArrayList<String>();
     SearchResultsBaseAdapter adapter;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,13 +53,13 @@ public class WantedList extends ActionBarActivity {
 
         GetWantedListAsyncTask task = new GetWantedListAsyncTask();
         task.execute();
-        
+
         resultsList.setOnItemClickListener(new OnResultsListItemClickListener("WantedList"));
         //resultsList.setOnItemLongClickListener(new OnResultsListItemClickListener("WantedList", list));
         resultsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position,
-                    long id) {
+                                           long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(WantedList.this);
                 builder.setCancelable(true);
                 builder.setTitle("Delete \'" + list.title.get(position) + "\'?");
@@ -119,7 +120,7 @@ public class WantedList extends ActionBarActivity {
                         //yearArray.add(jsonChildNode.getString("Book_Year").toString());
                         //bookID.add(jsonChildNode.getString("Book_ID").toString());
                         //wantedID.add(jsonChildNode.getString("Wanted_ID").toString());
-                        
+
                         list.title.add(jsonChildNode.getString("Book_Title").toString());
                         list.author.add(jsonChildNode.getString("Book_Author").toString());
                         list.year.add(jsonChildNode.getString("Book_Year").toString());
@@ -140,16 +141,16 @@ public class WantedList extends ActionBarActivity {
             }
         }
     }
-    
+
     private class DeleteFromWantedListAsyncTask extends AsyncTask<String, Void, String> {
         private String wanted_id;
         private int position;
-        
+
         public DeleteFromWantedListAsyncTask(String wanted_id, int position) {
             this.wanted_id = wanted_id;
             this.position = position;
         }
-        
+
         @Override
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
@@ -174,7 +175,7 @@ public class WantedList extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            
+
             if (result.equals("Successfully removed book!")) {
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                 list.remove(position);

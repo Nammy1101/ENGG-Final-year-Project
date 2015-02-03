@@ -1,36 +1,33 @@
-
 package com.example.urbookproject;
-
-import java.io.InputStream;
-import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+
 public class SearchResultsBaseAdapter extends BaseAdapter {
+    private static LayoutInflater inflater = null;
+    int ID;
     private Activity activity;
     private ArrayList title, author, year, id, owned_id, wanted_id;
     private String imageurl;
-    private static LayoutInflater inflater = null;
     private int resource;
-    int ID;
     private Context context;
 
     public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList title,
-            ArrayList author,
-            ArrayList year, ArrayList id, int userID) {
+                                    ArrayList author,
+                                    ArrayList year, ArrayList id, int userID) {
         this.activity = activity;
         this.title = title;
         this.author = author;

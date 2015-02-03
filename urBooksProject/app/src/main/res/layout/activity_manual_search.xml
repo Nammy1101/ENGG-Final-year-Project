@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.urbookproject.ManualSearch" >
+    tools:context="com.example.urbookproject.ManualSearch">
 
     <EditText
         android:id="@+id/book_title"
@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
         android:ems="10"
-        android:hint="@string/book_title" >
+        android:hint="@string/book_title">
 
         <requestFocus />
     </EditText>

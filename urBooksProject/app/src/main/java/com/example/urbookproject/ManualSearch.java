@@ -1,12 +1,15 @@
-
 package com.example.urbookproject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -20,27 +23,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.support.v7.app.ActionBarActivity;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManualSearch extends ActionBarActivity {
 
     EditText bookAuthor, bookTitle, bookYear;
     List<NameValuePair> nameValuePairs;
-    private String url;
-    // private String response;
-    private String jsonResult;
     String responseTitle, responseISBN10, responseISBN13, responseYear, responseAuthor,
             responseBookID;
     int ID;
+    private String url;
+    // private String response;
+    private String jsonResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +65,7 @@ public class ManualSearch extends ActionBarActivity {
                         && bookTitle.getText().toString() == null) {
                     Toast.makeText(getApplicationContext(), "Must have Title or Author",
                             Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     SearchForBook();
                 }
             }
@@ -100,9 +98,36 @@ public class ManualSearch extends ActionBarActivity {
 
     public void SearchForBook() {
         SearchInServer task = new SearchInServer();
-        task.execute(new String[] {
+        task.execute(new String[]{
                 url
         });
+    }
+
+    public void ReadHttpResponse() {
+        try {
+            JSONObject jsonResponse = new JSONObject(jsonResult);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
+
+            Intent intent = new Intent(this, SearchResults.class);
+            intent.putExtra("SEARCH_RESULTS", jsonMainNode.toString());
+            intent.putExtra("USER_ID", ID);
+
+            startActivity(intent);
+
+            /*
+             * for (int i = 0; i < jsonMainNode.length(); i++) { JSONObject jsonChildNode =
+             * jsonMainNode.getJSONObject(i); responseTitle =
+             * jsonChildNode.optString("Book_Title").trim(); }
+             */
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        // Toast.makeText(getApplicationContext(),
+        // responseTitle , Toast.LENGTH_LONG).show();
+
+        // Need to put code here for the response back from the server about the book data
     }
 
     private class SearchInServer extends AsyncTask<String, Void, String> {
@@ -156,32 +181,5 @@ public class ManualSearch extends ActionBarActivity {
             }
             return answer;
         }
-    }
-
-    public void ReadHttpResponse() {
-        try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
-
-            Intent intent = new Intent(this, SearchResults.class);
-            intent.putExtra("SEARCH_RESULTS", jsonMainNode.toString());
-            intent.putExtra("USER_ID", ID);
-
-            startActivity(intent);
-
-            /*
-             * for (int i = 0; i < jsonMainNode.length(); i++) { JSONObject jsonChildNode =
-             * jsonMainNode.getJSONObject(i); responseTitle =
-             * jsonChildNode.optString("Book_Title").trim(); }
-             */
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        // Toast.makeText(getApplicationContext(),
-        // responseTitle , Toast.LENGTH_LONG).show();
-
-        // Need to put code here for the response back from the server about the book data
     }
 }

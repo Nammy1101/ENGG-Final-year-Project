@@ -1,10 +1,8 @@
-
 package com.example.urbookproject;
 
-import android.support.v7.app.ActionBarActivity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +18,7 @@ public class HomeScreen extends ActionBarActivity {
         setContentView(R.layout.activity_home_screen);
 
         Intent intent = getIntent();
-       // ID = intent.getIntExtra("USER_ID", 0);
+        // ID = intent.getIntExtra("USER_ID", 0);
         ((MyAppUserID) this.getApplication()).setUserID(intent.getIntExtra("USER_ID", 0));
 
         Button autoButton = (Button) findViewById(R.id.button_auto_search);
@@ -47,17 +45,17 @@ public class HomeScreen extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        
+
         accountButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
                 Intent intent = new Intent(HomeScreen.this, MyAccount.class);
                 intent.putExtra("USER_ID", ID);
                 startActivity(intent);
-			}
-		});
-        
+            }
+        });
+
         booksWantedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +65,7 @@ public class HomeScreen extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        
+
         booksOwnedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -49,7 +49,7 @@
     <string name="title_activity_my_account">My Account</string>
     <string name="title_activity_wanted_list">Wanted List</string>
     <string name="title_activity_owned_list">Owned List</string>
-    
+
     <string name="text_confirm_selection">Press the button below to confirm your selection:</string>
     <string name="text_select_a_list">Please select a list:</string>
     <string name="text_wanted">Wanted</string>

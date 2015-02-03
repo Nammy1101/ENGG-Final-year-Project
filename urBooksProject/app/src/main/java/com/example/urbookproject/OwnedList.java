@@ -1,18 +1,14 @@
-
 package com.example.urbookproject;
 
-import android.support.v7.app.ActionBarActivity;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -44,7 +40,9 @@ public class OwnedList extends ActionBarActivity {
     ArrayList<String> ownedID = new ArrayList<String>();
     SearchResultsBaseAdapter adapter;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +53,7 @@ public class OwnedList extends ActionBarActivity {
 
         GetOwnedListAsyncTask task = new GetOwnedListAsyncTask();
         task.execute();
-        
+
         resultsList.setOnItemClickListener(new OnResultsListItemClickListener("OwnedList"));
         //resultsList.setOnItemLongClickListener(new OnResultsListItemClickListener("OwnedList", list));
         resultsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -63,7 +61,7 @@ public class OwnedList extends ActionBarActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(OwnedList.this);
                 builder.setCancelable(true);
-                builder.setTitle("Delete \'" + list.title.get(position) + "\'?" );
+                builder.setTitle("Delete \'" + list.title.get(position) + "\'?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
@@ -75,7 +73,7 @@ public class OwnedList extends ActionBarActivity {
                     }
                 });
                 builder.show();
-                
+
                 return true;
             }
         });
@@ -121,7 +119,7 @@ public class OwnedList extends ActionBarActivity {
                         //yearArray.add(jsonChildNode.getString("Book_Year").toString());
                         //bookID.add(jsonChildNode.getString("Book_ID").toString());
                         //ownedID.add(jsonChildNode.getString("Owned_ID").toString());
-                        
+
                         list.title.add(jsonChildNode.getString("Book_Title").toString());
                         list.author.add(jsonChildNode.getString("Book_Author").toString());
                         list.year.add(jsonChildNode.getString("Book_Year").toString());
@@ -134,23 +132,23 @@ public class OwnedList extends ActionBarActivity {
                 //adapter = new SearchResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results, titleArray, authorArray, yearArray, bookID, ID);
                 adapter = new SearchResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results, ID, list);
                 resultsList.setAdapter(adapter);
-                
+
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
-    
+
     private class DeleteFromOwnedListAsyncTask extends AsyncTask<String, Void, String> {
         private String owned_id;
         private int position;
-        
+
         public DeleteFromOwnedListAsyncTask(String owned_id, int position) {
             this.owned_id = owned_id;
             this.position = position;
         }
-        
+
         @Override
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
@@ -175,7 +173,7 @@ public class OwnedList extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            
+
             if (result.equals("Successfully removed book!")) {
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                 list.remove(position);

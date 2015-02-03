@@ -1,7 +1,5 @@
-
 package com.example.urbookproject;
 
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -9,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -35,29 +34,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CaptureBarcode extends ActionBarActivity implements OnClickListener {
-    private Button mTakePhoto;
-    private static final String TAG = "upload";
-    String uploadServer;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int MEDIA_TYPE_IMAGE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
-    private Bitmap imageToSend;
+    private static final String TAG = "upload";
+    public static int count = 0;
+    String uploadServer;
     Uri imageUri;
     ImageView iv;
     String imageFilePath;
     String mCurrentPhotoPath;
     File fileToSend;
-    public static int count = 0;
     int ID;
-
     TextView phpResponse;
-
     ListView resultsList;
     ArrayList<String> titleArray = new ArrayList<String>();
     ArrayList<String> authorArray = new ArrayList<String>();
     ArrayList<String> yearArray = new ArrayList<String>();
     ArrayList<String> bookID = new ArrayList<String>();
     SearchResultsBaseAdapter adapter;
+    private Button mTakePhoto;
+    private Bitmap imageToSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +160,21 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
      * "aldjkfldalds", Toast.LENGTH_SHORT).show(); } return null; } }
      */
 
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     private class SendBitmapTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -251,21 +263,6 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             iv.setImageBitmap(imageToSend);
         }
 
-    }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }
 /*

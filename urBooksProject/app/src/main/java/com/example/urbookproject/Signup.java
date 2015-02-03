@@ -1,21 +1,4 @@
-
 package com.example.urbookproject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,15 +10,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Signup extends Activity {
-    private String jsonResult;
     EditText username, password, email, firstName, lastName;
+    String count;
+    List<NameValuePair> nameValuePairs;
+    private String jsonResult;
     // private String url = "http://172.16.1.253/signup.php";
     // private String url = getString(R.string.server_url) + "signup.php";
     // private String url = getString(R.string.server_url_local) + "signup.php";
     private String url;
-    String count;
-    List<NameValuePair> nameValuePairs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +76,14 @@ public class Signup extends Activity {
     public void accessWebService() {
         JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[] {
+        task.execute(new String[]{
                 url
         });
+    }
+
+    public void goToMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private class JsonReadTask extends AsyncTask<String, Void, String> {
@@ -136,10 +140,5 @@ public class Signup extends Activity {
         protected void onPostExecute(String result) {
             goToMain();
         }
-    }
-
-    public void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }

@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.urbooks.MainActivity" >
+    tools:context="com.example.urbooks.MainActivity">
 
     <EditText
         android:id="@+id/Password"
@@ -55,7 +55,7 @@
         android:layout_alignRight="@+id/Password"
         android:layout_below="@+id/login"
         android:layout_marginTop="82dp"
-        android:text="@string/signup"
-        android:onClick="goToSignUp" />
+        android:onClick="goToSignUp"
+        android:text="@string/signup" />
 
 </RelativeLayout>
