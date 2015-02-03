@@ -29,7 +29,6 @@ import java.util.List;
 
 public class OwnedList extends ActionBarActivity {
     List<NameValuePair> nameValuePairs;
-    int ID;
 
     ListView resultsList;
     BookList list = new BookList();
@@ -39,6 +38,7 @@ public class OwnedList extends ActionBarActivity {
     ArrayList<String> bookID = new ArrayList<String>();
     ArrayList<String> ownedID = new ArrayList<String>();
     SearchResultsBaseAdapter adapter;
+    private UserData userData = new UserData();
 
     /**
      * Called when the activity is first created.
@@ -48,8 +48,8 @@ public class OwnedList extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owned_list);
 
-        ID = ((MyAppUserID) this.getApplication()).getUserID();
         resultsList = (ListView) findViewById(R.id.owned_list);
+        userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         GetOwnedListAsyncTask task = new GetOwnedListAsyncTask();
         task.execute();
@@ -85,7 +85,7 @@ public class OwnedList extends ActionBarActivity {
             // TODO Auto-generated method stub
             String result = "";
             nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("UserID", Integer.toString(ID)));
+            nameValuePairs.add(new BasicNameValuePair("UserID", userData.getUserID()));
 
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(getString(R.string.server_url) + "getOwnedList.php");
@@ -129,8 +129,9 @@ public class OwnedList extends ActionBarActivity {
                         e.printStackTrace();
                     }
                 }
-                //adapter = new SearchResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results, titleArray, authorArray, yearArray, bookID, ID);
-                adapter = new SearchResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results, ID, list);
+
+                adapter = new SearchResultsBaseAdapter(OwnedList.this,
+                        R.layout.layout_owned_results, list);
                 resultsList.setAdapter(adapter);
 
             } catch (JSONException e) {

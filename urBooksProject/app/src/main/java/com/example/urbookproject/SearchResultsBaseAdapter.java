@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class SearchResultsBaseAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
-    int ID;
     private Activity activity;
     private ArrayList title, author, year, id, owned_id, wanted_id;
     private String imageurl;
@@ -26,20 +25,19 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     private Context context;
 
     public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList title,
-                                    ArrayList author,
-                                    ArrayList year, ArrayList id, int userID) {
+                                    ArrayList author, ArrayList year, ArrayList id) {
         this.activity = activity;
+        ((MyAppUserID) this.activity.getApplication()).getUserData();
         this.title = title;
         this.author = author;
         this.year = year;
         this.id = id;
         this.resource = resource;
-        this.ID = userID;
         this.context = activity;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public SearchResultsBaseAdapter(Activity activity, int resource, int userID, BookList b) {
+    public SearchResultsBaseAdapter(Activity activity, int resource, BookList b) {
         this.activity = activity;
         this.title = b.title;
         this.author = b.author;
@@ -48,7 +46,6 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
         this.owned_id = b.owned_id;
         this.wanted_id = b.wanted_id;
         this.resource = resource;
-        this.ID = userID;
         this.context = activity;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

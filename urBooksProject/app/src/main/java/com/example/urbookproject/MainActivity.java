@@ -30,16 +30,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
-    EditText username, password;
-    String response;
-    List<NameValuePair> nameValuePairs;
-    int ID;
-    // private String url = "http://204.83.105.45/test.php";
-    private String jsonResult;
-    // private String url = "http://172.16.1.253/test.php";
-    // private String url = getString(R.string.server_url) + "test.php";
-    // private String url = getString(R.string.server_url_local) + "test.php";
+public class MainActivity extends ActionBarActivity implements IAsyncHttpHandler {
+    private UserData userData = new UserData();
+    private EditText username, password;
     private String url;
 
     @Override
@@ -47,31 +40,62 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        url = getString(R.string.server_url) + "test.php";
-        // url = getString(R.string.server_url_local) + "test.php";
+        url = getString(R.string.server_url) + "getUserData.php";
+        username = (EditText) findViewById(R.id.main_username);
+        password = (EditText) findViewById(R.id.main_password);
 
-        username = (EditText) findViewById(R.id.UsernameSignup);
-        password = (EditText) findViewById(R.id.Password);
+        Button loginButton = (Button) findViewById(R.id.main_button_login);
+        Button signUpButton = (Button) findViewById(R.id.main_button_signup);
 
-        Button SignIn = (Button) findViewById(R.id.login);
-
-        SignIn.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                // dialog = ProgressDialog.show(MainActivity.this, "",
-                // "Validating user...", true);
-                accessWebService();
+                HttpPostAsyncTask task = new HttpPostAsyncTask(MainActivity.this);
+                task.execute(url, username.getHint().toString(), username.getText().toString(),
+                        password.getHint().toString(), password.getText().toString());
+            }
+        });
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Signup.class);
+                startActivity(intent);
             }
         });
     }
 
-    public void accessWebService() {
-        JsonReadTask task = new JsonReadTask();
-        // passes values for the urls string array
-        task.execute(new String[]{
-                url
-        });
+    @Override
+    public void onPostExec(String json) {
+        String phpResponse = "No response...";
+
+        try {
+            JSONObject jsonResponse = new JSONObject(json);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
+
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                phpResponse = jsonChildNode.optString("response").trim();
+                userData.setUserID(jsonChildNode.optString("user_id"));
+                userData.setUserName(jsonChildNode.optString("username"));
+                userData.setPassword(jsonChildNode.optString("password"));
+                userData.setEmail(jsonChildNode.optString("email"));
+                userData.setFirstName(jsonChildNode.optString("first_name"));
+                userData.setLastName(jsonChildNode.optString("last_name"));
+            }
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        if (phpResponse.contains("true")) {
+            ((MyAppUserID) this.getApplication()).setUserData(userData);
+            Toast.makeText(getApplicationContext(), "Login success!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HomeScreen.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), phpResponse, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -91,90 +115,5 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void goToSignUp(View view) {
-        Intent intent = new Intent(this, Signup.class);
-        startActivity(intent);
-    }
-
-    public void goToHomeScreen(int ID) {
-        Intent intent = new Intent(this, HomeScreen.class);
-        intent.putExtra("USER_ID", ID);
-        startActivity(intent);
-    }
-
-    public void ReadHttpResponse() {
-        try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
-
-            for (int i = 0; i < jsonMainNode.length(); i++) {
-                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                response = jsonChildNode.optString("response").trim();
-                ID = jsonChildNode.optInt("user_id");
-            }
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        if (response.contains("true")) {
-            goToHomeScreen(ID);
-        } else {
-            Toast.makeText(getApplicationContext(), response,
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class JsonReadTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            nameValuePairs.add(new BasicNameValuePair("username", username.getText().toString()
-                    .trim())); // $Edittext_value = $_POST['Edittext_value'];
-            nameValuePairs.add(new BasicNameValuePair("password", password.getText().toString()
-                    .trim()));
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(params[0]);
-            try {
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                jsonResult = inputStreamToString(
-                        response.getEntity().getContent()).toString();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
-            StringBuilder answer = new StringBuilder();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
-            try {
-                while ((rLine = rd.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-                // e.printStackTrace();
-                Toast.makeText(getApplicationContext(),
-                        "Error..." + e.toString(), Toast.LENGTH_LONG).show();
-            }
-            return answer;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            ReadHttpResponse();
-
-            // if successfully logged in
-            // goToHomeScreen();
-        }
     }
 }

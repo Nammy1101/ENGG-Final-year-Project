@@ -29,7 +29,6 @@ import java.util.List;
 
 public class WantedList extends ActionBarActivity {
     List<NameValuePair> nameValuePairs;
-    int ID;
 
     ListView resultsList;
     BookList list = new BookList();
@@ -39,6 +38,7 @@ public class WantedList extends ActionBarActivity {
     ArrayList<String> bookID = new ArrayList<String>();
     ArrayList<String> wantedID = new ArrayList<String>();
     SearchResultsBaseAdapter adapter;
+    private UserData userData = new UserData();
 
     /**
      * Called when the activity is first created.
@@ -48,7 +48,7 @@ public class WantedList extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wanted_list);
 
-        ID = ((MyAppUserID) this.getApplication()).getUserID();
+        userData = ((MyAppUserID) this.getApplication()).getUserData();
         resultsList = (ListView) findViewById(R.id.wanted_list);
 
         GetWantedListAsyncTask task = new GetWantedListAsyncTask();
@@ -86,7 +86,7 @@ public class WantedList extends ActionBarActivity {
             // TODO Auto-generated method stub
             String result = "";
             nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("UserID", Integer.toString(ID)));
+            nameValuePairs.add(new BasicNameValuePair("UserID", userData.getUserID()));
 
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(getString(R.string.server_url) + "getWantedList.php");
@@ -130,8 +130,9 @@ public class WantedList extends ActionBarActivity {
                         e.printStackTrace();
                     }
                 }
-                //adapter = new SearchResultsBaseAdapter(WantedList.this, R.layout.layout_wanted_results, titleArray, authorArray, yearArray, bookID, ID);
-                adapter = new SearchResultsBaseAdapter(WantedList.this, R.layout.layout_wanted_results, ID, list);
+
+                adapter = new SearchResultsBaseAdapter(WantedList.this,
+                        R.layout.layout_wanted_results, list);
                 resultsList.setAdapter(adapter);
                 //resultsList.setOnItemClickListener(new OnResultsListItemClickListener("WantedList"));
                 //resultsList.setOnItemLongClickListener(new OnResultsListItemClickListener("WantedList", list));

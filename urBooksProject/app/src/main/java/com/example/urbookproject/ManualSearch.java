@@ -36,18 +36,17 @@ public class ManualSearch extends ActionBarActivity {
     List<NameValuePair> nameValuePairs;
     String responseTitle, responseISBN10, responseISBN13, responseYear, responseAuthor,
             responseBookID;
-    int ID;
     private String url;
     // private String response;
     private String jsonResult;
+    private UserData userData = new UserData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_search);
 
-        Intent intent = getIntent();
-        ID = intent.getIntExtra("USER_ID", 0);
+        userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         url = getString(R.string.server_url) + "manualUpload.php";
 
@@ -60,7 +59,6 @@ public class ManualSearch extends ActionBarActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (bookAuthor.getText().toString() == null
                         && bookTitle.getText().toString() == null) {
                     Toast.makeText(getApplicationContext(), "Must have Title or Author",
@@ -110,8 +108,6 @@ public class ManualSearch extends ActionBarActivity {
 
             Intent intent = new Intent(this, SearchResults.class);
             intent.putExtra("SEARCH_RESULTS", jsonMainNode.toString());
-            intent.putExtra("USER_ID", ID);
-
             startActivity(intent);
 
             /*
@@ -133,10 +129,7 @@ public class ManualSearch extends ActionBarActivity {
     private class SearchInServer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
-
             nameValuePairs = new ArrayList<NameValuePair>(3);
-
             nameValuePairs.add(new BasicNameValuePair("bookTitle", bookTitle.getText().toString()
                     .trim()));
             nameValuePairs.add(new BasicNameValuePair("bookAuthor", bookAuthor.getText().toString()

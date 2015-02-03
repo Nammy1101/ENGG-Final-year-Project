@@ -79,6 +79,7 @@ public class ChangeMyAccount extends ActionBarActivity {
                 }
             }
         });
+
         submitChangeLastName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

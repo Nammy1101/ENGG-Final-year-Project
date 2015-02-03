@@ -26,10 +26,7 @@ public class OnResultsListItemClickListener implements OnItemClickListener, OnIt
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-        // TODO Auto-generated method stub
-
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (caller.equals("SearchResults")) {
             Context context = view.getContext();
             bookTitle = (TextView) view.findViewById(R.id.book_title);

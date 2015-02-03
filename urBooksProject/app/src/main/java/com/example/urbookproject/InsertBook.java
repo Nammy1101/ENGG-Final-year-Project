@@ -43,6 +43,7 @@ public class InsertBook extends ActionBarActivity {
     List<NameValuePair> nameValuePairs;
     String response;
     private String url, jsonResult;
+    private UserData userData = new UserData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,8 @@ public class InsertBook extends ActionBarActivity {
         author = intent.getStringExtra("BOOK_AUTHOR");
         year = intent.getStringExtra("BOOK_YEAR");
         bookid = intent.getStringExtra("BOOK_ID");
-        ID = ((MyAppUserID) this.getApplication()).getUserID();
+        //ID = ((MyAppUserID) this.getApplication()).getUserID();
+        userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         url = getString(R.string.server_url) + "insertBook.php";
 
@@ -153,7 +155,8 @@ public class InsertBook extends ActionBarActivity {
             nameValuePairs.add(new BasicNameValuePair("bookTitle", title));
             nameValuePairs.add(new BasicNameValuePair("bookAuthor", author));
             nameValuePairs.add(new BasicNameValuePair("bookYear", year));
-            nameValuePairs.add(new BasicNameValuePair("user_id", String.valueOf(ID)));
+            //nameValuePairs.add(new BasicNameValuePair("user_id", String.valueOf(ID)));
+            nameValuePairs.add(new BasicNameValuePair("user_id", userData.getUserID()));
             nameValuePairs.add(new BasicNameValuePair("option_selected", selectedOption));
 
             HttpClient httpclient = new DefaultHttpClient();

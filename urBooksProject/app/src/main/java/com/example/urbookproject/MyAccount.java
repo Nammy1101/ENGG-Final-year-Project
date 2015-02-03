@@ -35,9 +35,9 @@ public class MyAccount extends ActionBarActivity {
     TextView UserName, FirstName, LastName, Email;
     String response;
     List<NameValuePair> nameValuePairs;
-    int ID;
     private String url;
     private String jsonResult;
+    private UserData userData = new UserData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class MyAccount extends ActionBarActivity {
         LastName = (TextView) findViewById(R.id.accountLastName);
         Email = (TextView) findViewById(R.id.accountEmail);
 
-        ID = ((MyAppUserID) this.getApplication()).getUserID();
+        userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         getInfoFromServer task = new getInfoFromServer();
         task.execute();
@@ -65,7 +65,6 @@ public class MyAccount extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MyAccount.this, ChangeMyAccount.class);
                 startActivity(intent);
-
             }
         });
         changePassword.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +73,6 @@ public class MyAccount extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MyAccount.this, ChangeMyAccountPassword.class);
                 startActivity(intent);
-
             }
 
         });
@@ -127,9 +125,7 @@ public class MyAccount extends ActionBarActivity {
         @Override
         protected String doInBackground(String... arg0) {
             nameValuePairs = new ArrayList<NameValuePair>(1);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ID);
-            nameValuePairs.add(new BasicNameValuePair("ID", sb.toString()));
+            nameValuePairs.add(new BasicNameValuePair("ID", userData.getUserID()));
 
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(url);
@@ -144,7 +140,6 @@ public class MyAccount extends ActionBarActivity {
                 e.printStackTrace();
             }
 
-            // TODO Auto-generated method stub
             return null;
         }
 

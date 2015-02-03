@@ -14,10 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class SearchResults extends ActionBarActivity {
-
-    int ID;
     String jsonArray;
-
     ListView resultsList;
     ArrayList<String> titleArray = new ArrayList<String>();
     ArrayList<String> authorArray = new ArrayList<String>();
@@ -32,12 +29,10 @@ public class SearchResults extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        Intent intent = getIntent();
-        ID = intent.getIntExtra("USER_ID", 0);
-
         resultsList = (ListView) findViewById(R.id.search_results);
         // tv = (TextView) findViewById(R.id.textView1);
 
+        Intent intent = getIntent();
         jsonArray = intent.getStringExtra("SEARCH_RESULTS");
         // tv.setText(jsonArray);
 
@@ -56,11 +51,10 @@ public class SearchResults extends ActionBarActivity {
                 }
             }
             adapter = new SearchResultsBaseAdapter(SearchResults.this,
-                    R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID, ID);
+                    R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID);
             resultsList.setAdapter(adapter);
             resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults"));
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
