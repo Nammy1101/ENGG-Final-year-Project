@@ -2,7 +2,6 @@ package com.example.urbookproject;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,30 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Signup extends Activity {
-    EditText username, password, email, firstName, lastName;
-    String count;
-    List<NameValuePair> nameValuePairs;
-    private String jsonResult;
-    // private String url = "http://172.16.1.253/signup.php";
-    // private String url = getString(R.string.server_url) + "signup.php";
-    // private String url = getString(R.string.server_url_local) + "signup.php";
+public class Signup extends Activity implements IAsyncHttpHandler {
+    private EditText username, password, email, firstName, lastName;
     private String url;
 
     @Override
@@ -41,24 +18,40 @@ public class Signup extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // url = getString(R.string.server_url) + "signup.php";
-        url = getString(R.string.server_url_local) + "signup.php";
+        url = getString(R.string.server_url) + "signup.php";
 
-        username = (EditText) findViewById(R.id.UsernameSignup);
-        password = (EditText) findViewById(R.id.PasswordSignup);
-        email = (EditText) findViewById(R.id.EmailSignup);
-        firstName = (EditText) findViewById(R.id.FirstNameSignup);
-        lastName = (EditText) findViewById(R.id.LastNameSignup);
+        username = (EditText) findViewById(R.id.signup_username);
+        password = (EditText) findViewById(R.id.signup_password);
+        email = (EditText) findViewById(R.id.signup_email);
+        firstName = (EditText) findViewById(R.id.signup_firstname);
+        lastName = (EditText) findViewById(R.id.signup_lastname);
 
-        Button signUp = (Button) findViewById(R.id.SignUpButton);
+        Button signUp = (Button) findViewById(R.id.signup_button);
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                accessWebService();
+                //accessWebService();
+                HttpPostAsyncTask task = new HttpPostAsyncTask(Signup.this);
+                task.execute(url,
+                        "username", username.getText().toString(),
+                        "password", password.getText().toString(),
+                        "email", email.getText().toString(),
+                        "first_name", firstName.getText().toString(),
+                        "last_name", lastName.getText().toString());
             }
         });
+    }
+
+    @Override
+    public void onPostExec(String json) {
+        if (json.equals("1")) {
+            Toast.makeText(getApplicationContext(), "Account created!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "Unable to create account.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -71,74 +64,5 @@ public class Signup extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void accessWebService() {
-        JsonReadTask task = new JsonReadTask();
-        // passes values for the urls string array
-        task.execute(new String[]{
-                url
-        });
-    }
-
-    public void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    private class JsonReadTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            nameValuePairs = new ArrayList<NameValuePair>(5);
-
-            nameValuePairs.add(new BasicNameValuePair("username", username.getText().toString()
-                    .trim())); // $Edittext_value = $_POST['Edittext_value'];
-            nameValuePairs.add(new BasicNameValuePair("password", password.getText().toString()
-                    .trim()));
-            nameValuePairs.add(new BasicNameValuePair("email", email.getText().toString().trim()));
-            nameValuePairs.add(new BasicNameValuePair("lastname", lastName.getText().toString()
-                    .trim()));
-            nameValuePairs.add(new BasicNameValuePair("firstname", firstName.getText().toString()
-                    .trim()));
-
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(params[0]);
-            try {
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                jsonResult = inputStreamToString(
-                        response.getEntity().getContent()).toString();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
-            StringBuilder answer = new StringBuilder();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
-            try {
-                while ((rLine = rd.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-                // e.printStackTrace();
-                Toast.makeText(getApplicationContext(),
-                        "Error..." + e.toString(), Toast.LENGTH_LONG).show();
-            }
-            return answer;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            goToMain();
-        }
     }
 }

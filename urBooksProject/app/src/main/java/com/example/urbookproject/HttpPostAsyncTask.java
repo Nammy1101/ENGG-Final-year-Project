@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by rds23 on 2/3/2015.
+ * Created by rstancu on 2/3/2015.
  */
 public class HttpPostAsyncTask extends AsyncTask<String, Void, String> {
     IAsyncHttpHandler handler = null;

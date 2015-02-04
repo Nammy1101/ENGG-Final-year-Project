@@ -8,15 +8,17 @@
     <!-- Login page strings -->
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="signin">Sign In</string>
+    <string name="sign_in">Sign In</string>
     <string name="username">Username</string>
-    <string name="signup">Sign Up</string>
+    <string name="sign_up">Sign Up</string>
 
     <!-- Sign Up page strings -->
-    <string name="signuptitle">Sign up to urBooks!</string>
-    <string name="firstname">First Name</string>
-    <string name="lastname">Last Name</string>
-    <string name="email">Email</string>
+    <string name="signup_title">Sign up to urBooks!</string>
+    <string name="signup_firstname">First Name</string>
+    <string name="signup_lastname">Last Name</string>
+    <string name="signup_email">Email</string>
+    <string name="contact_info">Contact Information:</string>
+    <string name="username_and_password">Username and Password:</string>
     <string name="title_activity_signup">Sign Up</string>
     <string name="title_activity_home_screen">Home</string>
     <string name="title_activity_capture_barcode">Capture Barcode</string>
