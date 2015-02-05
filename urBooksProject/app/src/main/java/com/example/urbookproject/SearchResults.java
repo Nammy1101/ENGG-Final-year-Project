@@ -1,28 +1,17 @@
 package com.example.urbookproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class SearchResults extends ActionBarActivity {
-    String jsonArray;
-    ListView resultsList;
-    ArrayList<String> titleArray = new ArrayList<String>();
-    ArrayList<String> authorArray = new ArrayList<String>();
-    ArrayList<String> yearArray = new ArrayList<String>();
-    ArrayList<String> bookID = new ArrayList<String>();
-    SearchResultsBaseAdapter adapter;
-
-    // TextView tv;
+    private ArrayList<BookData> bookDataArray = new ArrayList<>();
+    private SearchResultsBaseAdapter adapter;
+    private ListView resultsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,33 +19,16 @@ public class SearchResults extends ActionBarActivity {
         setContentView(R.layout.activity_search_results);
 
         resultsList = (ListView) findViewById(R.id.search_results);
-        // tv = (TextView) findViewById(R.id.textView1);
 
-        Intent intent = getIntent();
-        jsonArray = intent.getStringExtra("SEARCH_RESULTS");
-        // tv.setText(jsonArray);
+        /* Grab data sent from ManualSearch activity */
+        bookDataArray = new ArrayList<>();
+        bookDataArray = getIntent().getParcelableArrayListExtra("bookData");
 
-        try {
-            JSONArray array = new JSONArray(jsonArray);
-            for (int i = 0; i < array.length(); i++) {
-                try {
-                    JSONObject jsonChildNode = array.getJSONObject(i);
-                    // responseTitle = jsonChildNode.optString("Book_Title").trim();
-                    titleArray.add(jsonChildNode.getString("Book_Title").toString());
-                    authorArray.add(jsonChildNode.getString("Book_Author").toString());
-                    yearArray.add(jsonChildNode.getString("Book_Year").toString());
-                    bookID.add(jsonChildNode.getString("Book_ID").toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            adapter = new SearchResultsBaseAdapter(SearchResults.this,
-                    R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID);
-            resultsList.setAdapter(adapter);
-            resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        adapter = new SearchResultsBaseAdapter(SearchResults.this, R.layout.layout_search_results,
+                bookDataArray);
+        resultsList.setAdapter(adapter);
+        resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults",
+                bookDataArray));
     }
 
     @Override

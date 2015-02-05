@@ -1,7 +1,6 @@
 package com.example.urbookproject;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -11,42 +10,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
-public class ManualSearch extends ActionBarActivity {
-
-    EditText bookAuthor, bookTitle, bookYear;
-    List<NameValuePair> nameValuePairs;
-    String responseTitle, responseISBN10, responseISBN13, responseYear, responseAuthor,
-            responseBookID;
+public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler {
+    private ArrayList<BookData> bookDataArray = new ArrayList<>();
+    private EditText bookAuthor, bookTitle, bookYear;
     private String url;
-    // private String response;
-    private String jsonResult;
-    private UserData userData = new UserData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_search);
-
-        userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         url = getString(R.string.server_url) + "manualUpload.php";
 
@@ -64,15 +42,45 @@ public class ManualSearch extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Must have Title or Author",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    SearchForBook();
+                    HttpPostAsyncTask task = new HttpPostAsyncTask(ManualSearch.this);
+                    task.execute(url,
+                            "title", bookTitle.getText().toString(),
+                            "author", bookAuthor.getText().toString(),
+                            "year", bookYear.getText().toString());
                 }
             }
         });
-        /*
-        if(((MyAppUserID) this.getApplication()).getUserID() == 1){
-        	 Toast.makeText(getApplicationContext(), "it works!",
-                     Toast.LENGTH_SHORT).show();
-        }*/
+    }
+
+    @Override
+    public void onPostExec(String json) {
+        try {
+            BookData bookData;
+            JSONObject jsonResponse = new JSONObject(json);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
+
+            bookDataArray = new ArrayList<>();
+
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                bookData = new BookData(jsonChildNode.getString("author"),
+                        jsonChildNode.getString("book_id"),
+                        jsonChildNode.getString("has_cover"),
+                        jsonChildNode.getString("isbn10"),
+                        jsonChildNode.getString("isbn13"),
+                        jsonChildNode.getString("title"),
+                        jsonChildNode.getString("year"));
+                bookDataArray.add(bookData);
+            }
+
+            /* Send bookDataArray to SearchResults and switch to it */
+            Intent intent = new Intent(this, SearchResults.class);
+            intent.putParcelableArrayListExtra("bookData", bookDataArray);
+            startActivity(intent);
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -92,87 +100,5 @@ public class ManualSearch extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void SearchForBook() {
-        SearchInServer task = new SearchInServer();
-        task.execute(new String[]{
-                url
-        });
-    }
-
-    public void ReadHttpResponse() {
-        try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
-
-            Intent intent = new Intent(this, SearchResults.class);
-            intent.putExtra("SEARCH_RESULTS", jsonMainNode.toString());
-            startActivity(intent);
-
-            /*
-             * for (int i = 0; i < jsonMainNode.length(); i++) { JSONObject jsonChildNode =
-             * jsonMainNode.getJSONObject(i); responseTitle =
-             * jsonChildNode.optString("Book_Title").trim(); }
-             */
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        // Toast.makeText(getApplicationContext(),
-        // responseTitle , Toast.LENGTH_LONG).show();
-
-        // Need to put code here for the response back from the server about the book data
-    }
-
-    private class SearchInServer extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            nameValuePairs = new ArrayList<NameValuePair>(3);
-            nameValuePairs.add(new BasicNameValuePair("bookTitle", bookTitle.getText().toString()
-                    .trim()));
-            nameValuePairs.add(new BasicNameValuePair("bookAuthor", bookAuthor.getText().toString()
-                    .trim()));
-            nameValuePairs.add(new BasicNameValuePair("bookYear", bookYear.getText().toString()
-                    .trim()));
-
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(params[0]);
-            try {
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                jsonResult = inputStreamToString(
-                        response.getEntity().getContent()).toString();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            ReadHttpResponse();
-        }
-
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
-            StringBuilder answer = new StringBuilder();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
-            try {
-                while ((rLine = rd.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-                // e.printStackTrace();
-                Toast.makeText(getApplicationContext(),
-                        "Error..." + e.toString(), Toast.LENGTH_LONG).show();
-            }
-            return answer;
-        }
     }
 }

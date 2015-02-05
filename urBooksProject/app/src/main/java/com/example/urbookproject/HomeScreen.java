@@ -9,19 +9,11 @@ import android.view.View;
 import android.widget.Button;
 
 public class HomeScreen extends ActionBarActivity {
-    int ID;
-    private UserData userData = new UserData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-
-        //Intent intent = getIntent();
-        //userData = getIntent().getParcelableExtra("userData");
-        // ID = intent.getIntExtra("USER_ID", 0);
-        //((MyAppUserID) this.getApplication()).setUserID(intent.getIntExtra("USER_ID", 0));
-        userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         Button autoButton = (Button) findViewById(R.id.button_auto_search);
         Button searchButton = (Button) findViewById(R.id.button_search);

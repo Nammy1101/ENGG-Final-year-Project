@@ -18,6 +18,7 @@ public class BookData implements Parcelable {
             return new BookData[size];
         }
     };
+
     /* Data members corresponding to urBooks.books table */
     private String author;
     private String bookID;

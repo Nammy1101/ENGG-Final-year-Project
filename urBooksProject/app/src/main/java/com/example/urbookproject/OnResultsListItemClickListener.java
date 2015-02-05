@@ -1,75 +1,53 @@
 package com.example.urbookproject;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.TextView;
 
-public class OnResultsListItemClickListener implements OnItemClickListener, OnItemLongClickListener {
+import java.util.ArrayList;
+
+public class OnResultsListItemClickListener implements OnItemClickListener {
     private String caller;
-    private String title, author, year, bkid;
-    private TextView bookTitle, bookAuthor, bookYear, bookID, ownedID, wantedID;
-    private BookList list;
+    private ArrayList<BookData> bookDataArray = new ArrayList<>();
+    private ArrayList<BookDataOwned> bookDataOwnedArray = new ArrayList<>();
+    private ArrayList<BookDataWanted> bookDataWantedArray = new ArrayList<>();
 
     public OnResultsListItemClickListener(String caller) {
         this.caller = caller;
     }
 
-    public OnResultsListItemClickListener(String caller, BookList b) {
+    public OnResultsListItemClickListener(String caller, ArrayList<?> objectArray) {
         this.caller = caller;
-        this.list = b;
-    }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (caller.equals("SearchResults")) {
-            Context context = view.getContext();
-            bookTitle = (TextView) view.findViewById(R.id.book_title);
-            bookAuthor = (TextView) view.findViewById(R.id.book_author);
-            bookYear = (TextView) view.findViewById(R.id.book_year);
-            bookID = (TextView) view.findViewById(R.id.book_id);
-
-            title = bookTitle.getText().toString();
-            author = bookAuthor.getText().toString();
-            year = bookYear.getText().toString();
-            bkid = bookID.getText().toString();
-
-            Intent intent = new Intent(context, InsertBook.class);
-            intent.putExtra("BOOK_TITLE", title.toString());
-            intent.putExtra("BOOK_AUTHOR", author.toString());
-            intent.putExtra("BOOK_YEAR", year.toString());
-            intent.putExtra("BOOK_ID", bkid.toString());
-
-            context.startActivity(intent);
-        } else if (caller.equals("OwnedList")) {
-
-        } else if (caller.equals("WantedList")) {
-
+        if (!objectArray.isEmpty() && objectArray.get(0) instanceof BookDataOwned) {
+            for (int i = 0; i < objectArray.size(); i++) {
+                bookDataOwnedArray.add((BookDataOwned) objectArray.get(i));
+            }
+        } else if (!objectArray.isEmpty() && objectArray.get(0) instanceof BookDataWanted) {
+            for (int i = 0; i < objectArray.size(); i++) {
+                bookDataWantedArray.add((BookDataWanted) objectArray.get(i));
+            }
+        } else if (!objectArray.isEmpty() && objectArray.get(0) instanceof BookData) {
+            for (int i = 0; i < objectArray.size(); i++) {
+                bookDataArray.add((BookData) objectArray.get(i));
+            }
+            bookDataArray = (ArrayList<BookData>) objectArray;
         }
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setCancelable(true);
-        builder.setTitle("Delete choice");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //adapter.remove(adapter.getItem(position));
-                list.remove(position);
-            }
-        });
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (caller.equals("OwnedList")) {
-            return true;
+            //Intent intent = new Intent(view.getContext(), OwnedList.class);
+            //intent.putParcelableArrayListExtra("bookData", bookDataOwnedArray);
+            //view.getContext().startActivity(intent);
         } else if (caller.equals("WantedList")) {
-            return true;
+
         } else {
-            return false;
+            Intent intent = new Intent(view.getContext(), InsertBook.class);
+            intent.putExtra("bookData", bookDataArray.get(position));
+            view.getContext().startActivity(intent);
         }
     }
 }

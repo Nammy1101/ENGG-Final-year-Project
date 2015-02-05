@@ -1,6 +1,5 @@
 package com.example.urbookproject;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -16,45 +15,24 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
-public class InsertBook extends ActionBarActivity {
-
-    String title, author, year, bookid;
-    int ID;
-    String selectedOption;
-    List<NameValuePair> nameValuePairs;
-    String response;
-    private String url, jsonResult;
+public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
     private UserData userData = new UserData();
+    private BookData bookData = new BookData();
+    private String url, selectedOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_book);
-        Intent intent = getIntent();
-        title = intent.getStringExtra("BOOK_TITLE");
-        author = intent.getStringExtra("BOOK_AUTHOR");
-        year = intent.getStringExtra("BOOK_YEAR");
-        bookid = intent.getStringExtra("BOOK_ID");
-        //ID = ((MyAppUserID) this.getApplication()).getUserID();
+
+        bookData = new BookData();
+        bookData = getIntent().getParcelableExtra("bookData");
         userData = ((MyAppUserID) this.getApplication()).getUserData();
 
         url = getString(R.string.server_url) + "insertBook.php";
@@ -66,67 +44,23 @@ public class InsertBook extends ActionBarActivity {
         TextView bookYear = (TextView) findViewById(R.id.insert_book_year);
         ImageView bookCover = (ImageView) findViewById(R.id.insert_book_cover);
 
-        bookTitle.setText(title);
-        bookAuthor.setText(author);
-        bookYear.setText(year);
-
+        bookTitle.setText(bookData.getTitle());
+        bookAuthor.setText(bookData.getAuthor());
+        bookYear.setText(bookData.getYear());
         new DownloadImageTask(bookCover).execute(getString(R.string.server_url) + "covers/"
-                + bookid + ".jpg");
+                + bookData.getBookID() + ".jpg");
 
         Button select = (Button) findViewById(R.id.select);
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                insertBook();
+                HttpPostAsyncTask task = new HttpPostAsyncTask(InsertBook.this);
+                task.execute(url,
+                        "book_id", bookData.getBookID(),
+                        "user_id", userData.getUserID(),
+                        "option_selected", selectedOption);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.insert_book, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void insertBook() {
-        insertBookTask task = new insertBookTask();
-        // passes values for the urls string array
-        task.execute(new String[]{
-                url
-        });
-    }
-
-    public void ReadHttpResponse() {
-        try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
-
-            for (int i = 0; i < jsonMainNode.length(); i++) {
-                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                response = jsonChildNode.optString("response").trim();
-            }
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        Toast.makeText(getApplicationContext(), response,
-                Toast.LENGTH_SHORT).show();
-
     }
 
     public void onOptionSelectedClick(View view) {
@@ -146,60 +80,44 @@ public class InsertBook extends ActionBarActivity {
         }
     }
 
-    private class insertBookTask extends AsyncTask<String, Void, String> {
+    @Override
+    public void onPostExec(String json) {
+        String phpResponse = "No response...";
 
-        @Override
-        protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
-            nameValuePairs = new ArrayList<NameValuePair>(5);
-            nameValuePairs.add(new BasicNameValuePair("bookTitle", title));
-            nameValuePairs.add(new BasicNameValuePair("bookAuthor", author));
-            nameValuePairs.add(new BasicNameValuePair("bookYear", year));
-            //nameValuePairs.add(new BasicNameValuePair("user_id", String.valueOf(ID)));
-            nameValuePairs.add(new BasicNameValuePair("user_id", userData.getUserID()));
-            nameValuePairs.add(new BasicNameValuePair("option_selected", selectedOption));
+        try {
+            JSONObject jsonResponse = new JSONObject(json);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
 
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(params[0]);
-            try {
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                jsonResult = inputStreamToString(
-                        response.getEntity().getContent()).toString();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                phpResponse = jsonChildNode.optString("response").trim();
             }
-
-            return null;
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "JSON Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
         }
 
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
-            StringBuilder answer = new StringBuilder();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        Toast.makeText(getApplicationContext(), phpResponse, Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
-            try {
-                while ((rLine = rd.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-                // e.printStackTrace();
-                Toast.makeText(getApplicationContext(),
-                        "Error..." + e.toString(), Toast.LENGTH_LONG).show();
-            }
-            return answer;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.insert_book, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            ReadHttpResponse();
-
-            finish();
-            // if successfully logged in
-            // goToHomeScreen();
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {

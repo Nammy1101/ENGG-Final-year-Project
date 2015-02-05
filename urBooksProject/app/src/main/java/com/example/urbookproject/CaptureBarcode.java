@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -47,14 +46,15 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
     File fileToSend;
     TextView phpResponse;
     ListView resultsList;
-    ArrayList<String> titleArray = new ArrayList<String>();
-    ArrayList<String> authorArray = new ArrayList<String>();
-    ArrayList<String> yearArray = new ArrayList<String>();
-    ArrayList<String> bookID = new ArrayList<String>();
+    ArrayList<String> titleArray = new ArrayList<>();
+    ArrayList<String> authorArray = new ArrayList<>();
+    ArrayList<String> yearArray = new ArrayList<>();
+    ArrayList<String> bookID = new ArrayList<>();
     SearchResultsBaseAdapter adapter;
     private Button mTakePhoto;
     private Bitmap imageToSend;
     private UserData userData = new UserData();
+    private ArrayList<BookData> bookDataArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +71,6 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
 
         // phpResponse = (TextView) findViewById(R.id.phpResponse);
         resultsList = (ListView) findViewById(R.id.scan_results);
-    }
-
-    public void onSavedInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
     }
 
     @Override
@@ -162,9 +157,6 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                 try {
                     response = httpclient.execute(httppost);
                     result = EntityUtils.toString(response.getEntity());
-                } catch (ClientProtocolException e) {
-                    Toast.makeText(CaptureBarcode.this, "f", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
                 } catch (IOException e) {
                     Toast.makeText(CaptureBarcode.this, "f", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -187,6 +179,8 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             super.onPostExecute(result);
             Toast.makeText(CaptureBarcode.this, "Uploaded", Toast.LENGTH_LONG).show();
 
+            BookData bookData = new BookData();
+
             try {
                 JSONObject jsonResponse = new JSONObject(result);
                 JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
@@ -197,16 +191,27 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                     try {
                         JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
                         // responseTitle = jsonChildNode.optString("Book_Title").trim();
-                        titleArray.add(jsonChildNode.getString("Book_Title"));
-                        authorArray.add(jsonChildNode.getString("Book_Author"));
-                        yearArray.add(jsonChildNode.getString("Book_Year"));
-                        bookID.add(jsonChildNode.getString("Book_ID"));
+                        titleArray.add(jsonChildNode.getString("title"));
+                        authorArray.add(jsonChildNode.getString("author"));
+                        yearArray.add(jsonChildNode.getString("year"));
+                        bookID.add(jsonChildNode.getString("book_id"));
+
+                        bookData = new BookData(jsonChildNode.getString("author"),
+                                jsonChildNode.getString("book_id"),
+                                jsonChildNode.getString("has_cover"),
+                                jsonChildNode.getString("isbn10"),
+                                jsonChildNode.getString("isbn13"),
+                                jsonChildNode.getString("title"),
+                                jsonChildNode.getString("year"));
+
+                        bookDataArray.add(bookData);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                //adapter = new SearchResultsBaseAdapter(CaptureBarcode.this, R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID);
                 adapter = new SearchResultsBaseAdapter(CaptureBarcode.this,
-                        R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID);
+                        R.layout.layout_search_results, bookDataArray);
                 resultsList.setAdapter(adapter);
                 resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults"));
             } catch (JSONException e) {
