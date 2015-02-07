@@ -51,10 +51,12 @@
     <string name="title_activity_my_account">My Account</string>
     <string name="title_activity_wanted_list">Wanted List</string>
     <string name="title_activity_owned_list">Owned List</string>
-
     <string name="text_confirm_selection">Press the button below to confirm your selection:</string>
     <string name="text_select_a_list">Please select a list:</string>
     <string name="text_wanted">Wanted</string>
     <string name="text_owned">Owned</string>
+    <string name="title_activity_book_matching">BookMatching</string>
+    <string name="title_activity_book_wanted_matching">BookWantedMatching</string>
+    <string name="title_activity_book_owned_matching">BookOwnedMatching</string>
 
 </resources>
