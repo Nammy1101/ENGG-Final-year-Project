@@ -14,14 +14,6 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-
     <application
         android:name=".MyAppUserID"
         android:allowBackup="true"
@@ -73,25 +65,13 @@
             android:name=".ChangeMyAccountPassword"
             android:label="Change Password" >
         </activity>
-        <activity
+                <activity
             android:name=".WantedList"
             android:label="@string/title_activity_wanted_list" >
         </activity>
         <activity
             android:name=".OwnedList"
             android:label="@string/title_activity_owned_list" >
-        </activity>
-        <activity
-            android:name=".BookMatching"
-            android:label="@string/title_activity_book_matching" >
-        </activity>
-        <activity
-            android:name=".BookWantedMatching"
-            android:label="@string/title_activity_book_wanted_matching" >
-        </activity>
-        <activity
-            android:name=".BookOwnedMatching"
-            android:label="@string/title_activity_book_owned_matching" >
         </activity>
     </application>
 
