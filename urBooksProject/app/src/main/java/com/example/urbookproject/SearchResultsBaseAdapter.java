@@ -21,6 +21,7 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     private ArrayList<BookData> bookDataArray;
     private ArrayList<BookDataOwned> bookDataOwnedArray;
     private ArrayList<BookDataWanted> bookDataWantedArray;
+    private ArrayList<BookDataMatch> bookDataMatchArray;
     private Activity activity;
     private String imageurl;
     private int resource;
@@ -42,6 +43,11 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
             //    bookDataArray.add((BookData) objectArray.get(i));
             //}
             bookDataArray = (ArrayList<BookData>) objectArray;
+        } else if (!objectArray.isEmpty() && objectArray.get(0) instanceof BookDataMatch) {
+            //for (int i = 0; i < objectArray.size(); i++) {
+            //    bookDataArray.add((BookData) objectArray.get(i));
+            //}
+            bookDataMatchArray = (ArrayList<BookDataMatch>) objectArray;
         }
 
         this.activity = activity;
@@ -56,7 +62,10 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
             return bookDataWantedArray.size();
         } else if (resource == R.layout.layout_search_results) {
             return bookDataArray.size();
-        } else {
+        }else if (resource == R.layout.layout_match_results){
+            return bookDataMatchArray.size();
+        }
+        else {
             return 0;
         }
     }
@@ -91,6 +100,12 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
             bookYear.setText(bookDataArray.get(position).getYear());
             imageurl = activity.getResources().getString(R.string.server_url) + "covers/"
                     + bookDataArray.get(position).getBookID() + ".jpg";
+        }else if (resource == R.layout.layout_match_results) {
+            bookTitle.setText(bookDataMatchArray.get(position).getTitle());
+            bookAuthor.setText(bookDataMatchArray.get(position).getAuthor());
+            bookYear.setText(bookDataMatchArray.get(position).getYear());
+            imageurl = activity.getResources().getString(R.string.server_url) + "covers/"
+                    + bookDataMatchArray.get(position).getBookID() + ".jpg";
         }
 
         new DownloadImageTask(bookCover).execute(imageurl);

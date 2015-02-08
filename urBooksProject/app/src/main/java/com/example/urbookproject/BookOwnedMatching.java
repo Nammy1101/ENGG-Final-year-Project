@@ -15,10 +15,11 @@ import java.util.ArrayList;
 
 
 public class BookOwnedMatching extends ActionBarActivity implements IAsyncHttpHandler {
-
+    private SearchResultsBaseAdapter adapter;
     private String url;
-    private UserData userData = new UserData();
-    private BookData bookData = new BookData();
+    private ArrayList<BookDataMatch> bookDataMatchArray = new ArrayList<>();
+   // private ArrayList<BookDataWanted> bookDataMatchArray = new ArrayList<>();
+    private ListView resultsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,41 +28,64 @@ public class BookOwnedMatching extends ActionBarActivity implements IAsyncHttpHa
 
         url = getString(R.string.server_url) + "MatchOwnedBooks.php";
 
-        userData = ((MyAppUserID) this.getApplication()).getUserData();
+        UserData userData = ((MyAppUserID) this.getApplication()).getUserData();
 
-        HttpPostAsyncTask task = new HttpPostAsyncTask(BookOwnedMatching.this);
-        task.execute(url,
-                "user_id", userData.getUserID());
+        HttpPostAsyncTask getListTask = new HttpPostAsyncTask(BookOwnedMatching.this);
+        getListTask.execute(url, "user_id", userData.getUserID());
+
+        resultsList = (ListView) findViewById(R.id.matching_owned_results);
     }
 
 
     @Override
     public void onPostExec(String json) {
-        String userID = "";
-        String bookID = "";
-
+        String test = "";
+        int test1 = 0;
         try {
+
+            BookDataMatch bookDataMatch;
+         //   BookDataWanted bookDataMatch;
             JSONObject jsonResponse = new JSONObject(json);
             JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
 
+            bookDataMatchArray = new ArrayList<>();
+
             for (int i = 0; i < jsonMainNode.length(); i++) {
                 JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                userID = jsonChildNode.optString("user_id").trim();
-                bookID = jsonChildNode.optString("book_id").trim();
+                test = jsonChildNode.getString("isbn10");
+                bookDataMatch = new BookDataMatch(jsonChildNode.getString("author"),
+                        jsonChildNode.getString("book_id"),
+                        jsonChildNode.getString("has_cover"),
+                        jsonChildNode.getString("isbn10"),
+                        jsonChildNode.getString("isbn13"),
+                        jsonChildNode.getString("title"),
+                        jsonChildNode.getString("year"),
+                        jsonChildNode.getString("user_id"));
+                bookDataMatchArray.add(bookDataMatch);
             }
+
+          test1 =  bookDataMatchArray.size();
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "JSON Error" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
 
-        Toast.makeText(getApplicationContext(), userID, Toast.LENGTH_SHORT).show();
-       // finish();
+        adapter = new SearchResultsBaseAdapter(BookOwnedMatching.this, R.layout.layout_wanted_results,
+               bookDataMatchArray);
+        resultsList.setAdapter(adapter);
+
+      /*  StringBuilder sb = new StringBuilder();
+        sb.append("");
+        sb.append(test1);
+
+        Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_SHORT).show();*/
+      //  finish();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_book_owned_matching, menu);
+        //getMenuInflater().inflate(R.menu., menu);
         return true;
     }
 

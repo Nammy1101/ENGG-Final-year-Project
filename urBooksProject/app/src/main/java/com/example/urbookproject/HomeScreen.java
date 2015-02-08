@@ -20,6 +20,15 @@ public class HomeScreen extends ActionBarActivity {
         Button booksWantedButton = (Button) findViewById(R.id.button_wanted);
         Button booksOwnedButton = (Button) findViewById(R.id.button_owned);
         Button accountButton = (Button) findViewById(R.id.button_account);
+        Button matchButton = (Button) findViewById(R.id.button_match);
+
+        matchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreen.this, BookMatching.class);
+                startActivity(intent);
+            }
+        });
 
         autoButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,19 +6,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class BookWantedMatching extends ActionBarActivity {
+public class BookWantedMatching extends ActionBarActivity implements IAsyncHttpHandler {
+
+    private String url;
+    private UserData userData = new UserData();
+    private BookData bookData = new BookData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_wanted_matching);
+
+        url = getString(R.string.server_url) + "MatchWantedBooks.php";
+
+        userData = ((MyAppUserID) this.getApplication()).getUserData();
+
+        HttpPostAsyncTask task = new HttpPostAsyncTask(BookWantedMatching.this);
+        task.execute(url,
+                "user_id", userData.getUserID());
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_book_wanted_matching, menu);
+       // getMenuInflater().inflate(R.menu.menu_book_wanted_matching, menu);
         return true;
     }
 
@@ -36,4 +49,11 @@ public class BookWantedMatching extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onPostExec(String json) {
+
+    }
+
+
 }
