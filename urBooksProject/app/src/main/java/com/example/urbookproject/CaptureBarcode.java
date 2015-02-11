@@ -213,7 +213,8 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                 adapter = new SearchResultsBaseAdapter(CaptureBarcode.this,
                         R.layout.layout_search_results, bookDataArray);
                 resultsList.setAdapter(adapter);
-                resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults"));
+                resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults",
+                        bookDataArray));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

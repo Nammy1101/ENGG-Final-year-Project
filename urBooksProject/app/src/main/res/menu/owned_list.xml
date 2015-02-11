@@ -1,42 +1,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.urbookproject.SearchResults">
+    tools:context="com.example.urbookproject.OwnedList">
 
     <item
-        android:id="@+id/search_results_title_asc"
+        android:id="@+id/owned_list_title_asc"
         android:orderInCategory="100"
         android:title="@string/sort_title_asc"
         app:showAsAction="never" />
     <item
-        android:id="@+id/search_results_title_dsc"
+        android:id="@+id/owned_list_title_dsc"
         android:orderInCategory="100"
         android:title="@string/sort_title_dsc"
         app:showAsAction="never" />
     <item
-        android:id="@+id/search_results_author_asc"
+        android:id="@+id/owned_list_author_asc"
         android:orderInCategory="100"
         android:title="@string/sort_author_asc"
         app:showAsAction="never" />
     <item
-        android:id="@+id/search_results_author_dsc"
+        android:id="@+id/owned_list_author_dsc"
         android:orderInCategory="100"
         android:title="@string/sort_author_dsc"
         app:showAsAction="never" />
     <item
-        android:id="@+id/search_results_year_asc"
+        android:id="@+id/owned_list_year_asc"
         android:orderInCategory="100"
         android:title="@string/sort_year_asc"
         app:showAsAction="never" />
     <item
-        android:id="@+id/search_results_year_dsc"
+        android:id="@+id/owned_list_year_dsc"
         android:orderInCategory="100"
         android:title="@string/sort_year_dsc"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
         app:showAsAction="never" />
 
 </menu>

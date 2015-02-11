@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
     private SearchResultsBaseAdapter adapter;
@@ -108,5 +111,52 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                     bookDataWantedArray);
             resultsList.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.wanted_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        String sortType;
+
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.wanted_list_title_asc:
+                sortType = "titleasc";
+                break;
+            case R.id.wanted_list_title_dsc:
+                sortType = "titledesc";
+                break;
+            case R.id.wanted_list_author_asc:
+                sortType = "authorasc";
+                break;
+            case R.id.wanted_list_author_dsc:
+                sortType = "authordesc";
+                break;
+            case R.id.wanted_list_year_asc:
+                sortType = "yearasc";
+                break;
+            case R.id.wanted_list_year_dsc:
+                sortType = "yeardesc";
+                break;
+            default:
+                return true;
+        }
+
+        Collections.sort(bookDataWantedArray,
+                new SearchResultsBaseAdapter.SearchResultsComparator(sortType));
+        adapter.notifyDataSetChanged();
+
+        return super.onOptionsItemSelected(item);
     }
 }

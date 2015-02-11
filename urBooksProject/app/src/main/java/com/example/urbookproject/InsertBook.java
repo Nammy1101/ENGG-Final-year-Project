@@ -10,7 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +27,10 @@ import java.io.InputStream;
 public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
     private UserData userData = new UserData();
     private BookData bookData = new BookData();
+    private LinearLayout ownedOptions, wantedOptions;
     private String url, selectedOption;
+    private String trade, sellPrice, purchasePrice, keep;
+    private boolean wantedChecked, ownedChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,11 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
         bookData = new BookData();
         bookData = getIntent().getParcelableExtra("bookData");
         userData = ((MyAppUserID) this.getApplication()).getUserData();
+
+        ownedOptions = (LinearLayout) findViewById(R.id.linear_owned_options);
+        wantedOptions = (LinearLayout) findViewById(R.id.linear_wanted_options);
+        ownedOptions.setVisibility(View.GONE);
+        wantedOptions.setVisibility(View.GONE);
 
         url = getString(R.string.server_url) + "insertBook.php";
 
@@ -54,13 +65,105 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HttpPostAsyncTask task = new HttpPostAsyncTask(InsertBook.this);
-                task.execute(url,
-                        "book_id", bookData.getBookID(),
-                        "user_id", userData.getUserID(),
-                        "option_selected", selectedOption);
+                if (validateInput()) {
+                    if (wantedChecked) {
+                        HttpPostAsyncTask task = new HttpPostAsyncTask(InsertBook.this);
+                        task.execute(url,
+                                "book_id", bookData.getBookID(),
+                                "user_id", userData.getUserID(),
+                                "trade", trade,
+                                "purchase", purchasePrice,
+                                "option_selected", selectedOption);
+                    }
+
+                    if (ownedChecked) {
+                        HttpPostAsyncTask task = new HttpPostAsyncTask(InsertBook.this);
+                        task.execute(url,
+                                "book_id", bookData.getBookID(),
+                                "user_id", userData.getUserID(),
+                                "keep", keep,
+                                "trade", trade,
+                                "sell", sellPrice,
+                                "option_selected", selectedOption);
+                    }
+                }
             }
         });
+    }
+
+    private boolean validateInput() {
+        if (wantedChecked == true) {
+            CheckBox tradeCheckbox = (CheckBox) findViewById(R.id.checkbox_wanted_trade);
+            CheckBox purchaseCheckbox = (CheckBox) findViewById(R.id.checkbox_wanted_purchase);
+            EditText purchaseText = (EditText) findViewById(R.id.edit_text_purchase);
+
+            if (!tradeCheckbox.isChecked() && !purchaseCheckbox.isChecked()) {
+                Toast.makeText(getApplicationContext(), "At least one checkbox must be selected.",
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (purchaseCheckbox.isChecked() && purchaseText.getText().toString().matches("")) {
+                Toast.makeText(getApplicationContext(), "You must enter a purchase amount.",
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (tradeCheckbox.isChecked()) {
+                trade = "1";
+            } else {
+                trade = "0";
+            }
+
+            if (purchaseText.isEnabled() && purchaseCheckbox.isChecked()) {
+                purchasePrice = purchaseText.getText().toString();
+            } else {
+                purchasePrice = "NULL";
+            }
+
+            return true;
+        } else if (ownedChecked == true) {
+            boolean keepRadio = ((RadioButton) findViewById(R.id.radio_owned_keep)).isChecked();
+            boolean exchange = ((RadioButton) findViewById(R.id.radio_owned_exchange)).isChecked();
+
+            if (keepRadio) {
+                keep = "1";
+                trade = "0";
+                sellPrice = "NULL";
+                return true;
+            }
+
+            if (exchange) {
+                CheckBox tradeCheckbox = (CheckBox) findViewById(R.id.checkbox_owned_trade);
+                CheckBox sellCheckbox = (CheckBox) findViewById(R.id.checkbox_owned_sell);
+                EditText sellText = (EditText) findViewById(R.id.edit_text_sell);
+                keep = "0";
+
+                if (!tradeCheckbox.isChecked() && !sellCheckbox.isChecked()) {
+                    Toast.makeText(getApplicationContext(), "At least one checkbox must be selected.",
+                            Toast.LENGTH_SHORT).show();
+                    return false;
+                } else if (sellCheckbox.isChecked() && sellText.getText().toString().matches("")) {
+                    Toast.makeText(getApplicationContext(), "You must enter a selling price.",
+                            Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                if (tradeCheckbox.isChecked()) {
+                    trade = "1";
+                } else {
+                    trade = "0";
+                }
+
+                if (sellText.isEnabled() && sellCheckbox.isChecked()) {
+                    sellPrice = sellText.getText().toString();
+                } else {
+                    sellPrice = "NULL";
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void onOptionSelectedClick(View view) {
@@ -70,11 +173,64 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
             case R.id.wantedBook:
                 if (checked) {
                     selectedOption = "want";
+                    wantedChecked = true;
+                    ownedChecked = false;
+                    ownedOptions.setVisibility(View.GONE);
+                    wantedOptions.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.ownedBook:
                 if (checked) {
                     selectedOption = "owned";
+                    ownedChecked = true;
+                    wantedChecked = false;
+                    wantedOptions.setVisibility(View.GONE);
+                    ownedOptions.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+    }
+
+    public void onOptionKeepExchangeClick(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        LinearLayout exchangeOptions = (LinearLayout) findViewById(R.id.linear_owned_exchange);
+
+        switch (view.getId()) {
+            case R.id.radio_owned_keep:
+                if (checked) {
+                    exchangeOptions.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.radio_owned_exchange:
+                if (checked) {
+                    exchangeOptions.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+    }
+
+    public void onCheckboxClick(View view) {
+        boolean isChecked = ((CheckBox) view).isChecked();
+
+        switch (view.getId()) {
+            case R.id.checkbox_wanted_purchase:
+                EditText purchaseText = (EditText) findViewById(R.id.edit_text_purchase);
+
+                if (isChecked) {
+                    purchaseText.setEnabled(true);
+                    purchaseText.requestFocus();
+                } else {
+                    purchaseText.setEnabled(false);
+                }
+                break;
+            case R.id.checkbox_owned_sell:
+                EditText sellText = (EditText) findViewById(R.id.edit_text_sell);
+
+                if (isChecked) {
+                    sellText.setEnabled(true);
+                    sellText.requestFocus();
+                } else {
+                    sellText.setEnabled(false);
                 }
                 break;
         }

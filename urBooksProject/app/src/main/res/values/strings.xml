@@ -52,9 +52,28 @@
     <string name="title_activity_wanted_list">Wanted List</string>
     <string name="title_activity_owned_list">Owned List</string>
 
-    <string name="text_confirm_selection">Press the button below to confirm your selection:</string>
-    <string name="text_select_a_list">Please select a list:</string>
+    <string name="text_confirm_selection">Please confirm your selection:</string>
+    <string name="text_transaction_options">Transaction options selected list:</string>
+    <string name="text_wanted_obtain">How would you like to obtain this book?</string>
+    <string name="text_keep_or_exchange">Would you like to keep or exchange your book?</string>
+    <string name="text_owned_obtain">How would you like to exchange your book?</string>
+    <string name="text_options_helper">Note: One or more options can be selected.</string>
+    <string name="text_select_an_option">Please select an option:</string>
+    <string name="text_want_this_book">I want this book.</string>
+    <string name="text_own_this_book">I own this book.</string>
     <string name="text_wanted">Wanted</string>
     <string name="text_owned">Owned</string>
+    <string name="text_keep">Keep</string>
+    <string name="text_trade">Trade</string>
+    <string name="text_sell">Sell:</string>
+    <string name="text_purchase">Purchase:</string>
+    <string name="text_exchange">Exchange</string>
+
+    <string name="sort_title_asc">Sort: Title (A-Z)</string>
+    <string name="sort_title_dsc">Sort: Title (Z-A)</string>
+    <string name="sort_year_asc">Sort: Year ASC</string>
+    <string name="sort_year_dsc">Sort: Year DESC</string>
+    <string name="sort_author_asc">Sort: Author (A-Z)</string>
+    <string name="sort_author_dsc">Sort: Author (Z-A)</string>
 
 </resources>

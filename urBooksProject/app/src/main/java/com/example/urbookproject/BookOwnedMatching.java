@@ -70,7 +70,7 @@ public class BookOwnedMatching extends ActionBarActivity implements IAsyncHttpHa
                     Toast.LENGTH_SHORT).show();
         }
 
-        adapter = new SearchResultsBaseAdapter(BookOwnedMatching.this, R.layout.layout_wanted_results,
+        adapter = new SearchResultsBaseAdapter(BookOwnedMatching.this, R.layout.layout_match_results,
                bookDataMatchArray);
         resultsList.setAdapter(adapter);
 
