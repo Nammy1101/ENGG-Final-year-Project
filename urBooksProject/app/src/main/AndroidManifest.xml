@@ -85,14 +85,6 @@
             android:name=".BookMatching"
             android:label="Book Matching" >
         </activity>
-        <activity
-            android:name=".BookWantedMatching"
-            android:label="Match Wanted Books" >
-        </activity>
-        <activity
-            android:name=".BookOwnedMatching"
-            android:label="Match Owned Books" >
-        </activity>
     </application>
 
 </manifest>

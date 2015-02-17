@@ -76,4 +76,8 @@
     <string name="sort_author_asc">Sort: Author (A-Z)</string>
     <string name="sort_author_dsc">Sort: Author (Z-A)</string>
 
+    <string name="text_your">Your&#8230;</string>
+    <string name="text_for_their">For their&#8230;</string>
+    <string name="text_money_placeholder">$999.99</string>
+
 </resources>

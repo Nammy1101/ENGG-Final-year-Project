@@ -144,12 +144,6 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
             bookYear.setText(bookDataArray.get(position).getYear());
             imageurl = activity.getResources().getString(R.string.server_url) + "covers/"
                     + bookDataArray.get(position).getBookID() + ".jpg";
-        } else if (resource == R.layout.layout_match_results) {
-            bookTitle.setText(bookDataMatchArray.get(position).getTitle());
-            bookAuthor.setText(bookDataMatchArray.get(position).getAuthor());
-            bookYear.setText(bookDataMatchArray.get(position).getYear());
-            imageurl = activity.getResources().getString(R.string.server_url) + "covers/"
-                    + bookDataMatchArray.get(position).getBookID() + ".jpg";
         }
 
         new DownloadImageTask(bookCover).execute(imageurl);

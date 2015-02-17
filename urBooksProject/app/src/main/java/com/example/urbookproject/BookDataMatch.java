@@ -1,69 +1,77 @@
 package com.example.urbookproject;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-/**
- * Created by Nammy on 2/7/2015.
- */
-public class BookDataMatch extends BookData {
-    public static final Parcelable.Creator<BookDataMatch> CREATOR = new Parcelable.Creator<BookDataMatch>() {
-        @Override
-        public BookDataMatch createFromParcel(Parcel source) {
-            return new BookDataMatch(source);
-        }
-
-        @Override
-        public BookDataMatch[] newArray(int size) {
-            return new BookDataMatch[size];
-        }
-    };
-
-    private String matchID;
+public class BookDataMatch {
+    private String userID;
+    private String username;
+    private String price;
+    private String transactionType;
+    private BookData incomingBook;
+    private BookData outgoingBook;
 
     public BookDataMatch() {
-        super("", "", "", "", "", "", "");
-        this.matchID = "";
+        this.userID = "";
+        this.username = "";
+        this.transactionType = "";
+        this.price = "";
+        this.incomingBook = new BookData();
+        this.outgoingBook = new BookData();
     }
 
-    public BookDataMatch(String author, String bookID, String hasCover, String isbn10,
-                         String isbn13, String title, String year, String matchID) {
-        super(author, bookID, hasCover, isbn10, isbn13, title, year);
-        this.matchID = matchID;
+    public BookDataMatch(String userID, String username, String price, String transactionType,
+                         BookData incomingBook, BookData outgoingBook) {
+        this.userID = userID;
+        this.username = username;
+        this.price = price;
+        this.transactionType = transactionType;
+        this.incomingBook = incomingBook;
+        this.outgoingBook = outgoingBook;
     }
 
-    public BookDataMatch(Parcel in) {
-        String[] inData = new String[8];
-        in.readStringArray(inData);
-
-        super.setAuthor(inData[0]);
-        super.setBookID(inData[1]);
-        super.setHasCover(inData[2]);
-        super.setIsbn10(inData[3]);
-        super.setIsbn13(inData[4]);
-        super.setTitle(inData[5]);
-        super.setYear(inData[6]);
-        this.matchID = inData[7];
+    public String getUserID() {
+        return userID;
     }
 
-    public String getMatchID() {
-        return matchID;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public void setMatchID(String matchID) {
-        this.matchID = matchID;
+    public String getUsername() {
+        return username;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    @Override
-    public void writeToParcel(Parcel destination, int flags) {
-        destination.writeStringArray(new String[]{super.getAuthor(), super.getBookID(),
-                super.getHasCover(), super.getIsbn10(), super.getIsbn13(), super.getTitle(),
-                super.getYear(), this.matchID});
+    public String getPrice() {
+        return price;
     }
 
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public BookData getIncomingBook() {
+        return incomingBook;
+    }
+
+    public void setIncomingBook(BookData incomingBook) {
+        this.incomingBook = incomingBook;
+    }
+
+    public BookData getOutgoingBook() {
+        return outgoingBook;
+    }
+
+    public void setOutgoingBook(BookData outgoingBook) {
+        this.outgoingBook = outgoingBook;
+    }
 }
