@@ -39,7 +39,7 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
 
         bookData = new BookData();
         bookData = getIntent().getParcelableExtra("bookData");
-        userData = ((MyAppUserID) this.getApplication()).getUserData();
+        userData = ((MyAppUserData) this.getApplication()).getUserData();
 
         ownedOptions = (LinearLayout) findViewById(R.id.linear_owned_options);
         wantedOptions = (LinearLayout) findViewById(R.id.linear_wanted_options);

@@ -23,7 +23,7 @@
         android:maxSdkVersion="18" />
 
     <application
-        android:name=".MyAppUserID"
+        android:name=".MyAppUserData"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -84,6 +84,14 @@
         <activity
             android:name=".BookMatching"
             android:label="Book Matching" >
+        </activity>
+        <activity
+            android:name=".MatchedUserInformation"
+            android:label="@string/title_activity_matched_user_information" >
+        </activity>
+        <activity
+            android:name=".MatchedUserAccount"
+            android:label="@string/title_activity_matched_user_account" >
         </activity>
     </application>
 

@@ -33,7 +33,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wanted_list);
 
-        UserData userData = ((MyAppUserID) this.getApplication()).getUserData();
+        UserData userData = ((MyAppUserData) this.getApplication()).getUserData();
         String getWantedListURL = getString(R.string.server_url) + "getWantedList.php";
 
         HttpPostAsyncTask getListTask = new HttpPostAsyncTask(WantedList.this);

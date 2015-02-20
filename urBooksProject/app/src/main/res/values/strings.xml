@@ -51,7 +51,6 @@
     <string name="title_activity_my_account">My Account</string>
     <string name="title_activity_wanted_list">Wanted List</string>
     <string name="title_activity_owned_list">Owned List</string>
-
     <string name="text_confirm_selection">Please confirm your selection:</string>
     <string name="text_transaction_options">Transaction options selected list:</string>
     <string name="text_wanted_obtain">How would you like to obtain this book?</string>
@@ -68,16 +67,16 @@
     <string name="text_sell">Sell:</string>
     <string name="text_purchase">Purchase:</string>
     <string name="text_exchange">Exchange</string>
-
     <string name="sort_title_asc">Sort: Title (A-Z)</string>
     <string name="sort_title_dsc">Sort: Title (Z-A)</string>
     <string name="sort_year_asc">Sort: Year ASC</string>
     <string name="sort_year_dsc">Sort: Year DESC</string>
     <string name="sort_author_asc">Sort: Author (A-Z)</string>
     <string name="sort_author_dsc">Sort: Author (Z-A)</string>
-
-    <string name="text_your">Your&#8230;</string>
-    <string name="text_for_their">For their&#8230;</string>
+    <string name="text_your">Your…</string>
+    <string name="text_for_their">For their…</string>
     <string name="text_money_placeholder">$999.99</string>
+    <string name="title_activity_matched_user_information">MatchedUserInformation</string>
+    <string name="title_activity_matched_user_account">MatchedUserAccount</string>
 
 </resources>

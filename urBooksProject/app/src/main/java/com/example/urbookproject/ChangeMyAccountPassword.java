@@ -43,7 +43,7 @@ public class ChangeMyAccountPassword extends ActionBarActivity {
         setContentView(R.layout.activity_change_my_account_password);
 
         url = getString(R.string.server_url) + "ChangeUserPassword.php";
-        ID = ((MyAppUserID) this.getApplication()).getUserID();
+        ID = ((MyAppUserData) this.getApplication()).getUserID();
 
         oldPassword = (EditText) findViewById(R.id.OldPassword);
         newPassword = (EditText) findViewById(R.id.NewPassword);

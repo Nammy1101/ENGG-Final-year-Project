@@ -24,7 +24,7 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_matching);
 
-        UserData userData = ((MyAppUserID) this.getApplication()).getUserData();
+        UserData userData = ((MyAppUserData) this.getApplication()).getUserData();
         String getOwnedListURL = getString(R.string.server_url) + "MatchBooks.php";
 
         HttpPostAsyncTask getListTask = new HttpPostAsyncTask(BookMatching.this);
@@ -125,6 +125,7 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         adapter = new MatchResultsBaseAdapter(BookMatching.this, R.layout.layout_match_results,
                 bookDataMatchArray);
         resultsList.setAdapter(adapter);
+        resultsList.setOnItemClickListener(new OnMatchResultsListItemClickListener(bookDataMatchArray));
     }
 
     @Override

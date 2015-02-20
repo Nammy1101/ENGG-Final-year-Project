@@ -2,7 +2,7 @@ package com.example.urbookproject;
 
 import android.app.Application;
 
-public class MyAppUserID extends Application {
+public class MyAppUserData extends Application {
     int ID;
     private UserData userData;
 

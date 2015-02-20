@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements IAsyncHttpHandler
         }
 
         if (phpResponse.contains("true")) {
-            ((MyAppUserID) this.getApplication()).setUserData(userData);
+            ((MyAppUserData) this.getApplication()).setUserData(userData);
             Toast.makeText(getApplicationContext(), "Login success!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, HomeScreen.class);
             startActivity(intent);

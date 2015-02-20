@@ -33,7 +33,7 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owned_list);
 
-        UserData userData = ((MyAppUserID) this.getApplication()).getUserData();
+        UserData userData = ((MyAppUserData) this.getApplication()).getUserData();
         String getOwnedListURL = getString(R.string.server_url) + "getOwnedList.php";
 
         HttpPostAsyncTask getListTask = new HttpPostAsyncTask(OwnedList.this);

@@ -51,7 +51,7 @@ public class ChangeMyAccount extends ActionBarActivity {
         changeEmail = false;
         changeAll = false;
 
-        ID = ((MyAppUserID) this.getApplication()).getUserID();
+        ID = ((MyAppUserData) this.getApplication()).getUserID();
 
         Email = (EditText) findViewById(R.id.changeEmail);
         FirstName = (EditText) findViewById(R.id.changeFirstName);

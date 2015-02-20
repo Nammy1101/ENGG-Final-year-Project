@@ -61,7 +61,7 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture_barcode);
 
-        userData = ((MyAppUserID) this.getApplication()).getUserData();
+        userData = ((MyAppUserData) this.getApplication()).getUserData();
 
         // uploadServer = "http://172.16.1.253/pictureUpload";
         uploadServer = getString(R.string.server_url_local);

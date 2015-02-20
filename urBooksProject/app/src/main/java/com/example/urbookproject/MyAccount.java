@@ -54,7 +54,7 @@ public class MyAccount extends ActionBarActivity {
         LastName = (TextView) findViewById(R.id.accountLastName);
         Email = (TextView) findViewById(R.id.accountEmail);
 
-        userData = ((MyAppUserID) this.getApplication()).getUserData();
+        userData = ((MyAppUserData) this.getApplication()).getUserData();
 
         getInfoFromServer task = new getInfoFromServer();
         task.execute();
