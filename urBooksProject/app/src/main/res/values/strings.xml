@@ -78,5 +78,5 @@
     <string name="text_money_placeholder">$999.99</string>
     <string name="title_activity_matched_user_information">MatchedUserInformation</string>
     <string name="title_activity_matched_user_account">MatchedUserAccount</string>
-
+    <string name="text_filter">Filter results…</string>
 </resources>

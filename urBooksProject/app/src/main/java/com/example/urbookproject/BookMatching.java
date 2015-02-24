@@ -2,8 +2,11 @@ package com.example.urbookproject;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
     private MatchResultsBaseAdapter adapter;
     private ArrayList<BookDataMatch> bookDataMatchArray = new ArrayList<>();
     private ListView resultsList;
+    private EditText filterEditText;
 
 
     @Override
@@ -32,6 +36,25 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
 
         resultsList = (ListView) findViewById(R.id.book_matching_list);
         //resultsList.setOnItemClickListener(new OnResultsListItemClickListener("OwnedList"));
+
+        filterEditText = (EditText) findViewById(R.id.book_matching_filter);
+        filterEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //System.out.println("Filter text: [" + s + "]");
+                adapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -125,7 +148,8 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         adapter = new MatchResultsBaseAdapter(BookMatching.this, R.layout.layout_match_results,
                 bookDataMatchArray);
         resultsList.setAdapter(adapter);
-        resultsList.setOnItemClickListener(new OnMatchResultsListItemClickListener(bookDataMatchArray));
+        //resultsList.setOnItemClickListener(new OnMatchResultsListItemClickListener(bookDataMatchArray));
+        resultsList.setOnItemClickListener(new OnMatchResultsListItemClickListener(adapter));
     }
 
     @Override

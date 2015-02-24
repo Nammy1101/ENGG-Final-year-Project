@@ -74,4 +74,24 @@ public class BookDataMatch {
     public void setOutgoingBook(BookData outgoingBook) {
         this.outgoingBook = outgoingBook;
     }
+
+    public String getFilterableString() {
+        String filterString = "";
+
+        filterString += " " + this.username;
+        filterString += " " + this.price;
+        filterString += " " + this.transactionType;
+        filterString += " " + this.incomingBook.getAuthor();
+        filterString += " " + this.incomingBook.getIsbn10();
+        filterString += " " + this.incomingBook.getIsbn13();
+        filterString += " " + this.incomingBook.getTitle();
+        filterString += " " + this.incomingBook.getYear();
+        filterString += " " + this.outgoingBook.getAuthor();
+        filterString += " " + this.outgoingBook.getIsbn10();
+        filterString += " " + this.outgoingBook.getIsbn13();
+        filterString += " " + this.outgoingBook.getTitle();
+        filterString += " " + this.outgoingBook.getYear();
+
+        return filterString;
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.urbookproject;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -17,6 +17,7 @@ public class MatchedUserInformation extends ActionBarActivity implements IAsyncH
     TextView matchedUserName, matchedFirstName, matchedLastName, matchedEmail;
     String url;
     BookData bookData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +27,13 @@ public class MatchedUserInformation extends ActionBarActivity implements IAsyncH
         matchedUserID = getIntent().getStringExtra("matchedUserID");
 
         matchedUserName = (TextView) findViewById(R.id.matched_username);
-        matchedFirstName= (TextView) findViewById(R.id.matched_first_name);
-        matchedLastName= (TextView) findViewById(R.id.matched_last_name);
-        matchedEmail= (TextView) findViewById(R.id.matched_email);
+        matchedFirstName = (TextView) findViewById(R.id.matched_first_name);
+        matchedLastName = (TextView) findViewById(R.id.matched_last_name);
+        matchedEmail = (TextView) findViewById(R.id.matched_email);
 
         HttpPostAsyncTask task = new HttpPostAsyncTask(MatchedUserInformation.this);
         task.execute(url,
-               "matched_user_id", matchedUserID);
+                "matched_user_id", matchedUserID);
         /*
         HttpPostAsyncTask task = new HttpPostAsyncTask(MatchedUserInformation.this);
         task.execute(url,
@@ -64,7 +65,7 @@ public class MatchedUserInformation extends ActionBarActivity implements IAsyncH
 
     @Override
     public void onPostExec(String json) {
-        try{
+        try {
             JSONObject jsonResponse = new JSONObject(json);
             JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
             for (int i = 0; i < jsonMainNode.length(); i++) {
@@ -75,12 +76,12 @@ public class MatchedUserInformation extends ActionBarActivity implements IAsyncH
                 matchedEmail.setText(jsonChildNode.optString("matched_email").trim());
             }
 
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "Error" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
 
-        Toast.makeText(getApplicationContext(), matchedUserName.getText(),
+        Toast.makeText(getApplicationContext(), matchedUserName.getText().toString().trim() + "'s page.",
                 Toast.LENGTH_SHORT).show();
     }
 }

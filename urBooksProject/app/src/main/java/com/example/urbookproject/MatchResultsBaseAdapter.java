@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,16 +22,20 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class MatchResultsBaseAdapter extends BaseAdapter {
+public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
     private static LayoutInflater inflater = null;
     private ArrayList<BookDataMatch> bookDataMatch;
+    private ArrayList<BookDataMatch> bookDataFiltered;
     private Activity activity;
     private int resource;
+
+    private BookMatchFilter bookMatchFilter = new BookMatchFilter();
 
 
     public MatchResultsBaseAdapter(Activity activity, int resource,
                                    ArrayList<BookDataMatch> bookDataMatch) {
         this.bookDataMatch = bookDataMatch;
+        this.bookDataFiltered = bookDataMatch;
 
         this.activity = activity;
         this.resource = resource;
@@ -37,8 +43,11 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        if (bookDataMatch != null) {
-            return bookDataMatch.size();
+        //if (bookDataMatch != null) {
+        //    return bookDataMatch.size();
+        //}
+        if (bookDataFiltered != null) {
+            return bookDataFiltered.size();
         }
         return 0;
     }
@@ -64,9 +73,9 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
         RelativeLayout outCoverView = (RelativeLayout) view.findViewById(R.id.match_your_book);
 
         if (resource == R.layout.layout_match_results) {
-            username.setText(bookDataMatch.get(position).getUsername());
+            username.setText(bookDataFiltered.get(position).getUsername());
 
-            if (bookDataMatch.get(position).getTransactionType().equals("trade")) {
+            if (bookDataFiltered.get(position).getTransactionType().equals("trade")) {
                 transText.setText("Trade with: ");
 
                 /* Set visibility for each item for trade view */
@@ -76,21 +85,21 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
                 outCoverView.setVisibility(View.VISIBLE);
 
                 String outgoingCoverURL = activity.getResources().getString(R.string.server_url)
-                        + "covers/" + bookDataMatch.get(position).getOutgoingBook().getBookID()
+                        + "covers/" + bookDataFiltered.get(position).getOutgoingBook().getBookID()
                         + ".jpg";
 
                 String incomingCoverURL = activity.getResources().getString(R.string.server_url)
-                        + "covers/" + bookDataMatch.get(position).getIncomingBook().getBookID()
+                        + "covers/" + bookDataFiltered.get(position).getIncomingBook().getBookID()
                         + ".jpg";
 
                 //if (incomingCover.getDrawable() == null) {
-                    new DownloadImageTask(incomingCover).execute(incomingCoverURL);
+                new DownloadImageTask(incomingCover).execute(incomingCoverURL);
                 //}
 
                 //if (outgoingCover.getDrawable() == null) {
-                    new DownloadImageTask(outgoingCover).execute(outgoingCoverURL);
+                new DownloadImageTask(outgoingCover).execute(outgoingCoverURL);
                 //}
-            } else if (bookDataMatch.get(position).getTransactionType().equals("sell")) {
+            } else if (bookDataFiltered.get(position).getTransactionType().equals("sell")) {
                 transText.setText("Sell to: ");
 
                 /* Set visibility for each item for sell view */
@@ -99,16 +108,16 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
                 outPriceView.setVisibility(View.GONE);
                 outCoverView.setVisibility(View.VISIBLE);
 
-                incomingPrice.setText("$"+ bookDataMatch.get(position).getPrice());
+                incomingPrice.setText("$" + bookDataFiltered.get(position).getPrice());
 
                 String outgoingCoverURL = activity.getResources().getString(R.string.server_url)
-                        + "covers/" + bookDataMatch.get(position).getOutgoingBook().getBookID()
+                        + "covers/" + bookDataFiltered.get(position).getOutgoingBook().getBookID()
                         + ".jpg";
 
                 //if (outgoingCover.getDrawable() == null) {
-                    new DownloadImageTask(outgoingCover).execute(outgoingCoverURL);
+                new DownloadImageTask(outgoingCover).execute(outgoingCoverURL);
                 //}
-            } else if (bookDataMatch.get(position).getTransactionType().equals("buy")) {
+            } else if (bookDataFiltered.get(position).getTransactionType().equals("buy")) {
                 transText.setText("Purchase from: ");
 
                 /* Set visibility for each item for purchase view */
@@ -117,14 +126,14 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
                 outPriceView.setVisibility(View.VISIBLE);
                 outCoverView.setVisibility(View.GONE);
 
-                outgoingPrice.setText("$"+ bookDataMatch.get(position).getPrice());
+                outgoingPrice.setText("$" + bookDataFiltered.get(position).getPrice());
 
                 String incomingCoverURL = activity.getResources().getString(R.string.server_url)
-                        + "covers/" + bookDataMatch.get(position).getIncomingBook().getBookID()
+                        + "covers/" + bookDataFiltered.get(position).getIncomingBook().getBookID()
                         + ".jpg";
 
                 //if (incomingCover.getDrawable() == null) {
-                    new DownloadImageTask(incomingCover).execute(incomingCoverURL);
+                new DownloadImageTask(incomingCover).execute(incomingCoverURL);
                 //}
             }
         }
@@ -137,7 +146,11 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return position;
+        return bookDataFiltered.get(position);
+    }
+
+    public Filter getFilter() {
+        return bookMatchFilter;
     }
 
     private void scaleImage(ImageView view, int boundBoxInDp) {
@@ -177,6 +190,43 @@ public class MatchResultsBaseAdapter extends BaseAdapter {
         params.width = width;
         params.height = height;
         view.setLayoutParams(params);
+    }
+
+    private class BookMatchFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterInput = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final ArrayList<BookDataMatch> originalList = bookDataMatch;
+
+            int count = originalList.size();
+            final ArrayList<BookDataMatch> newList = new ArrayList<>(count);
+
+            String filter;
+
+            for (int i = 0; i < count; i++) {
+                filter = originalList.get(i).getFilterableString();
+
+                if (filter.toLowerCase().contains(filterInput)) {
+                    newList.add(originalList.get(i));
+                }
+            }
+
+            results.values = newList;
+            results.count = newList.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            bookDataFiltered = (ArrayList<BookDataMatch>) results.values;
+            notifyDataSetChanged();
+        }
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
