@@ -32,7 +32,7 @@ import java.util.List;
 public class ChangeMyAccountPassword extends ActionBarActivity {
     String response;
     List<NameValuePair> nameValuePairs;
-    int ID;
+    String ID;
     EditText oldPassword, newPassword, verifyPassword;
     private String url;
     private String jsonResult;
@@ -43,7 +43,7 @@ public class ChangeMyAccountPassword extends ActionBarActivity {
         setContentView(R.layout.activity_change_my_account_password);
 
         url = getString(R.string.server_url) + "ChangeUserPassword.php";
-        ID = ((MyAppUserData) this.getApplication()).getUserID();
+        ID = ((MyAppUserData) this.getApplication()).getUserData().getUserID();
 
         oldPassword = (EditText) findViewById(R.id.OldPassword);
         newPassword = (EditText) findViewById(R.id.NewPassword);
@@ -96,9 +96,7 @@ public class ChangeMyAccountPassword extends ActionBarActivity {
         protected String doInBackground(String... arg0) {
 
             nameValuePairs = new ArrayList<NameValuePair>(3);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ID);
-            nameValuePairs.add(new BasicNameValuePair("ID", sb.toString()));
+            nameValuePairs.add(new BasicNameValuePair("ID", ID));
             nameValuePairs.add(new BasicNameValuePair("OldPassword", oldPassword.getText().toString()));
             nameValuePairs.add(new BasicNameValuePair("NewPassword", newPassword.getText().toString()));
 

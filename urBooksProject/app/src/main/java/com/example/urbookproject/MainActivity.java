@@ -1,6 +1,7 @@
 package com.example.urbookproject;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -23,6 +24,8 @@ public class MainActivity extends ActionBarActivity implements IAsyncHttpHandler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ((MyAppUserData) this.getApplication()).cache = new ImageCache();
 
         url = getString(R.string.server_url) + "getUserData.php";
         username = (EditText) findViewById(R.id.main_username);

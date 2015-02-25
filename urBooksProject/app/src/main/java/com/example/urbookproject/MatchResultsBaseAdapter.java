@@ -28,6 +28,7 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
     private ArrayList<BookDataMatch> bookDataFiltered;
     private Activity activity;
     private int resource;
+    private MyAppUserData cacheData;
 
     private BookMatchFilter bookMatchFilter = new BookMatchFilter();
 
@@ -40,6 +41,8 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
         this.activity = activity;
         this.resource = resource;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        this.cacheData = ((MyAppUserData)this.activity.getApplicationContext());
     }
 
     public int getCount() {
@@ -84,20 +87,24 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
                 outPriceView.setVisibility(View.GONE);
                 outCoverView.setVisibility(View.VISIBLE);
 
+                String outgoingName = bookDataFiltered.get(position).getOutgoingBook().getBookID()
+                        + ".jpg";
                 String outgoingCoverURL = activity.getResources().getString(R.string.server_url)
                         + "covers/" + bookDataFiltered.get(position).getOutgoingBook().getBookID()
                         + ".jpg";
 
+                String incomingName = bookDataFiltered.get(position).getIncomingBook().getBookID()
+                        + ".jpg";
                 String incomingCoverURL = activity.getResources().getString(R.string.server_url)
                         + "covers/" + bookDataFiltered.get(position).getIncomingBook().getBookID()
                         + ".jpg";
 
                 //if (incomingCover.getDrawable() == null) {
-                new DownloadImageTask(incomingCover).execute(incomingCoverURL);
+                new DownloadImageTask(incomingCover, incomingName).execute(incomingCoverURL);
                 //}
 
                 //if (outgoingCover.getDrawable() == null) {
-                new DownloadImageTask(outgoingCover).execute(outgoingCoverURL);
+                new DownloadImageTask(outgoingCover, outgoingName).execute(outgoingCoverURL);
                 //}
             } else if (bookDataFiltered.get(position).getTransactionType().equals("sell")) {
                 transText.setText("Sell to: ");
@@ -110,12 +117,14 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
 
                 incomingPrice.setText("$" + bookDataFiltered.get(position).getPrice());
 
+                String outgoingName = bookDataFiltered.get(position).getOutgoingBook().getBookID()
+                        + ".jpg";
                 String outgoingCoverURL = activity.getResources().getString(R.string.server_url)
                         + "covers/" + bookDataFiltered.get(position).getOutgoingBook().getBookID()
                         + ".jpg";
 
                 //if (outgoingCover.getDrawable() == null) {
-                new DownloadImageTask(outgoingCover).execute(outgoingCoverURL);
+                new DownloadImageTask(outgoingCover, outgoingName).execute(outgoingCoverURL);
                 //}
             } else if (bookDataFiltered.get(position).getTransactionType().equals("buy")) {
                 transText.setText("Purchase from: ");
@@ -128,12 +137,14 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
 
                 outgoingPrice.setText("$" + bookDataFiltered.get(position).getPrice());
 
+                String incomingName = bookDataFiltered.get(position).getIncomingBook().getBookID()
+                        + ".jpg";
                 String incomingCoverURL = activity.getResources().getString(R.string.server_url)
                         + "covers/" + bookDataFiltered.get(position).getIncomingBook().getBookID()
                         + ".jpg";
 
                 //if (incomingCover.getDrawable() == null) {
-                new DownloadImageTask(incomingCover).execute(incomingCoverURL);
+                new DownloadImageTask(incomingCover, incomingName).execute(incomingCoverURL);
                 //}
             }
         }
@@ -231,12 +242,21 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+        String name;
 
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
+        public DownloadImageTask(ImageView bmImage, String name) {
+            this.bmImage = bmImage;
+            this.name = name;
+        }
 
         protected Bitmap doInBackground(String... urls) {
+            if (cacheData.cache.containsKey(name)) {
+                return null;
+            }
+
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
@@ -250,8 +270,23 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-            scaleImage(bmImage, bmImage.getHeight());
+            if (result == null) {
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+                Log.d("CACHE", "Loaded: [" + name + "] from memory cache.");
+                scaleImage(bmImage, cacheData.cache.getImageSize());
+            } else {
+                if (cacheData.cache.getImageSize() == 0) {
+                    cacheData.cache.setImageSize(bmImage.getHeight());
+                }
+
+                cacheData.cache.put(name, result);
+
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+
+                scaleImage(bmImage, cacheData.cache.getImageSize());
+
+                Log.d("CACHE", "Fetched: [" + name + "] from URL.");
+            }
         }
     }
 }

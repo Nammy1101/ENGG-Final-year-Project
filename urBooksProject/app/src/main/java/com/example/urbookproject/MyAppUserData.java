@@ -3,7 +3,7 @@ package com.example.urbookproject;
 import android.app.Application;
 
 public class MyAppUserData extends Application {
-    int ID;
+    public ImageCache cache;
     private UserData userData;
 
     public UserData getUserData() {
@@ -13,13 +13,4 @@ public class MyAppUserData extends Application {
     public void setUserData(UserData userData) {
         this.userData = userData;
     }
-
-    public int getUserID() {
-        return ID;
-    }
-
-    public void setUserID(int userID) {
-        this.ID = userID;
-    }
-
 }

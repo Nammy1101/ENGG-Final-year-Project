@@ -118,6 +118,16 @@ public class BookData implements Parcelable {
         this.year = year;
     }
 
+    public String getFilterableString() {
+        String filterString = "";
+
+        filterString += " " + this.author;
+        filterString += " " + this.title;
+        filterString += " " + this.year;
+
+        return filterString;
+    }
+
     @Override
     public int describeContents() {
         return 0;

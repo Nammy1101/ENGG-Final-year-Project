@@ -25,11 +25,11 @@
     <string name="title_activity_login_success">Login Success</string>
 
     <!-- Home Screen strings -->
-    <string name="button_wanted">Books Wanted</string>
-    <string name="button_owned">Books Owned</string>
-    <string name="button_account">Account</string>
+    <string name="button_wanted">Wishlist</string>
+    <string name="button_owned">My Books</string>
+    <string name="button_account">User Account</string>
     <string name="button_search">Search</string>
-    <string name="button_auto_search">Auto</string>
+    <string name="button_auto_search">Scan Barcode</string>
     <string name="button_confirm">Confirm</string>
     <string name="add_new_books">Add New?</string>
 
@@ -79,4 +79,5 @@
     <string name="title_activity_matched_user_information">MatchedUserInformation</string>
     <string name="title_activity_matched_user_account">MatchedUserAccount</string>
     <string name="text_filter">Filter results…</string>
+    <string name="button_transactions">View Matches</string>
 </resources>

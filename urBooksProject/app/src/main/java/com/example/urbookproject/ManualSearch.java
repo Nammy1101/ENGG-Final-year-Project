@@ -70,6 +70,7 @@ public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler
                         jsonChildNode.getString("isbn13"),
                         jsonChildNode.getString("title"),
                         jsonChildNode.getString("year"));
+
                 bookDataArray.add(bookData);
             }
 

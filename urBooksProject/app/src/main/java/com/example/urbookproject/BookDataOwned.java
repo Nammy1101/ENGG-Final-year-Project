@@ -91,6 +91,16 @@ public class BookDataOwned extends BookData {
         this.sell = sell;
     }
 
+    public String getFilterableString() {
+        String filterString = super.getFilterableString();
+
+        if (this.keep.equals("1")) { filterString += " keep"; }
+        if (this.trade.equals("1")) { filterString += " trade"; }
+        if (this.sell.equals("1")) { filterString += " sell"; }
+
+        return filterString;
+    }
+
     @Override
     public int describeContents() {
         return 0;

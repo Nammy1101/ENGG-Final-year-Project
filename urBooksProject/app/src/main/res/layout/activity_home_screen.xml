@@ -8,62 +8,106 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.urbookproject.HomeScreen">
 
-    <Button
-        android:id="@+id/button_wanted"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="135dp"
-        android:text="@string/button_wanted" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button_owned"
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.19"></RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.62">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Manage your lists:"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/button_wanted"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_wanted" />
+
+                <Button
+                    android:id="@+id/button_owned"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_owned" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:text="Potential transactions:"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/button_match"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_transactions" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:text="Add to your lists:"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/button_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_search" />
+
+                <Button
+                    android:id="@+id/button_auto_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_auto_search" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.19"></RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_wanted"
-        android:layout_alignRight="@+id/button_wanted"
-        android:layout_below="@+id/button_wanted"
-        android:text="@string/button_owned" />
+        android:layout_above="@+id/button_account"
+        android:layout_alignLeft="@+id/button_account"
+        android:layout_alignStart="@+id/button_account"
+        android:layout_marginLeft="5dp"
+        android:text="Manage your account:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/button_account"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_owned"
-        android:layout_alignRight="@+id/button_owned"
-        android:layout_below="@+id/button_owned"
+        android:layout_alignParentBottom="true"
         android:text="@string/button_account" />
-
-    <Button
-        android:id="@+id/button_auto_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
-        android:text="@string/button_auto_search" />
-
-    <Button
-        android:id="@+id/button_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:text="@string/button_search" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Matched Books"
-        android:id="@+id/button_match"
-        android:layout_below="@+id/button_account"
-        android:layout_alignRight="@+id/button_account"
-        android:layout_alignEnd="@+id/button_account"
-        android:layout_alignLeft="@+id/button_account"
-        android:layout_alignStart="@+id/button_account" />
 
 </RelativeLayout>

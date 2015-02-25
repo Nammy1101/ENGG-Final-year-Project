@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.example.urbookproject"
         minSdkVersion 8
-        targetSdkVersion 20
+        targetSdkVersion 21
     }
 
     buildTypes {

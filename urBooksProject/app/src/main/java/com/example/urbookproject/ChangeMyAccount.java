@@ -35,7 +35,7 @@ public class ChangeMyAccount extends ActionBarActivity {
     boolean changeFirstName, changeLastName, changeEmail, changeAll;
     String response, selection;
     List<NameValuePair> nameValuePairs;
-    int ID;
+    String ID;
     private String url;
     private String jsonResult;
 
@@ -51,7 +51,8 @@ public class ChangeMyAccount extends ActionBarActivity {
         changeEmail = false;
         changeAll = false;
 
-        ID = ((MyAppUserData) this.getApplication()).getUserID();
+        //ID = ((MyAppUserData) this.getApplication()).getUserID();
+        ID = ((MyAppUserData) this.getApplication()).getUserData().getUserID();
 
         Email = (EditText) findViewById(R.id.changeEmail);
         FirstName = (EditText) findViewById(R.id.changeFirstName);
@@ -185,9 +186,7 @@ public class ChangeMyAccount extends ActionBarActivity {
                 nameValuePairs.add(new BasicNameValuePair("Value", Email.getText().toString()));
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(ID);
-            nameValuePairs.add(new BasicNameValuePair("ID", sb.toString()));
+            nameValuePairs.add(new BasicNameValuePair("ID", ID));
             nameValuePairs.add(new BasicNameValuePair("selection", selection));
 
             HttpClient httpclient = new DefaultHttpClient();

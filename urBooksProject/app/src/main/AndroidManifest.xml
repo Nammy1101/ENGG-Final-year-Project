@@ -8,19 +8,12 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="20" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
 
     <application
         android:name=".MyAppUserData"
@@ -88,10 +81,6 @@
         <activity
             android:name=".MatchedUserInformation"
             android:label="@string/title_activity_matched_user_information" >
-        </activity>
-        <activity
-            android:name=".MatchedUserAccount"
-            android:label="@string/title_activity_matched_user_account" >
         </activity>
     </application>
 

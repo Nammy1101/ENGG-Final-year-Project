@@ -22,6 +22,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
     private SearchResultsBaseAdapter adapter;
     private ArrayList<BookDataWanted> bookDataWantedArray = new ArrayList<>();
     private ListView resultsList;
+    private Menu sortMenu;
     private String deleteFromWantedListURL;
     private int deleteIndex;
 
@@ -100,6 +101,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                             jsonChildNode.getString("wanted_id"),
                             jsonChildNode.getString("trade"),
                             jsonChildNode.getString("purchase"));
+
                     bookDataWantedArray.add(bookDataWanted);
                 }
             } catch (JSONException e) {
@@ -117,6 +119,14 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.wanted_list, menu);
+
+        this.sortMenu = menu;
+
+        // Hide sort title asc because the PHP returns items sorted by title asc
+        this.sortMenu.findItem(R.id.wanted_list_title_asc).setVisible(false);
+        this.sortMenu.findItem(R.id.wanted_list_author_dsc).setVisible(false);
+        this.sortMenu.findItem(R.id.wanted_list_year_dsc).setVisible(false);
+
         return true;
     }
 
@@ -133,21 +143,33 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                 return true;
             case R.id.wanted_list_title_asc:
                 sortType = "titleasc";
+                this.sortMenu.findItem(R.id.wanted_list_title_asc).setVisible(false);
+                this.sortMenu.findItem(R.id.wanted_list_title_dsc).setVisible(true);
                 break;
             case R.id.wanted_list_title_dsc:
                 sortType = "titledesc";
+                this.sortMenu.findItem(R.id.wanted_list_title_asc).setVisible(true);
+                this.sortMenu.findItem(R.id.wanted_list_title_dsc).setVisible(false);
                 break;
             case R.id.wanted_list_author_asc:
                 sortType = "authorasc";
+                this.sortMenu.findItem(R.id.wanted_list_author_asc).setVisible(false);
+                this.sortMenu.findItem(R.id.wanted_list_author_dsc).setVisible(true);
                 break;
             case R.id.wanted_list_author_dsc:
                 sortType = "authordesc";
+                this.sortMenu.findItem(R.id.wanted_list_author_asc).setVisible(true);
+                this.sortMenu.findItem(R.id.wanted_list_author_dsc).setVisible(false);
                 break;
             case R.id.wanted_list_year_asc:
                 sortType = "yearasc";
+                this.sortMenu.findItem(R.id.wanted_list_year_asc).setVisible(false);
+                this.sortMenu.findItem(R.id.wanted_list_year_dsc).setVisible(true);
                 break;
             case R.id.wanted_list_year_dsc:
                 sortType = "yeardesc";
+                this.sortMenu.findItem(R.id.wanted_list_year_asc).setVisible(true);
+                this.sortMenu.findItem(R.id.wanted_list_year_dsc).setVisible(false);
                 break;
             default:
                 return true;
