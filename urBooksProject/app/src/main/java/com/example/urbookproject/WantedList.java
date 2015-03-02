@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
-    private SearchResultsBaseAdapter adapter;
+    private WantedResultsBaseAdapter adapter;
     private ArrayList<BookDataWanted> bookDataWantedArray = new ArrayList<>();
     private ListView resultsList;
     private Menu sortMenu;
@@ -109,7 +109,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                         Toast.LENGTH_SHORT).show();
             }
 
-            adapter = new SearchResultsBaseAdapter(WantedList.this, R.layout.layout_wanted_results,
+            adapter = new WantedResultsBaseAdapter(WantedList.this, R.layout.layout_wanted_results,
                     bookDataWantedArray);
             resultsList.setAdapter(adapter);
         }
@@ -176,7 +176,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
         }
 
         Collections.sort(bookDataWantedArray,
-                new SearchResultsBaseAdapter.SearchResultsComparator(sortType));
+                new WantedResultsBaseAdapter.WantedResultsComparator(sortType));
         adapter.notifyDataSetChanged();
 
         return super.onOptionsItemSelected(item);

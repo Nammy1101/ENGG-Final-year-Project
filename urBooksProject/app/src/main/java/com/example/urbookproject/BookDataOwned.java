@@ -96,7 +96,7 @@ public class BookDataOwned extends BookData {
 
         if (this.keep.equals("1")) { filterString += " keep"; }
         if (this.trade.equals("1")) { filterString += " trade"; }
-        if (this.sell.equals("1")) { filterString += " sell"; }
+        if (!this.sell.equals("null")) { filterString += " sell " + this.sell; }
 
         return filterString;
     }

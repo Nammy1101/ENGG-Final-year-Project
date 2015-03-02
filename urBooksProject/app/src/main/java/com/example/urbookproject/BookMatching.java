@@ -20,7 +20,6 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
     private MatchResultsBaseAdapter adapter;
     private ArrayList<BookDataMatch> bookDataMatchArray = new ArrayList<>();
     private ListView resultsList;
-    private EditText filterEditText;
 
 
     @Override
@@ -37,7 +36,7 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         resultsList = (ListView) findViewById(R.id.book_matching_list);
         //resultsList.setOnItemClickListener(new OnResultsListItemClickListener("OwnedList"));
 
-        filterEditText = (EditText) findViewById(R.id.book_matching_filter);
+        EditText filterEditText = (EditText) findViewById(R.id.book_matching_filter);
         filterEditText.addTextChangedListener(new TextWatcher() {
 
             @Override

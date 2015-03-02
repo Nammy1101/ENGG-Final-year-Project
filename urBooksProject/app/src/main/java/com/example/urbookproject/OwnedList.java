@@ -4,10 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,9 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
-    private SearchResultsBaseAdapter adapter;
+    private OwnedResultsBaseAdapter adapter;
     private ArrayList<BookDataOwned> bookDataOwnedArray = new ArrayList<>();
     private ListView resultsList;
+    private EditText filterEditText;
     private Menu sortMenu;
     private String deleteFromOwnedListURL;
     private int deleteIndex;
@@ -68,6 +72,25 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
                 return true;
             }
         });
+
+        filterEditText = (EditText) findViewById(R.id.book_owned_filter);
+        filterEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //System.out.println("Filter text: [" + s + "]");
+                adapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -79,6 +102,7 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
                 Toast.makeText(getApplicationContext(), json, Toast.LENGTH_SHORT).show();
                 bookDataOwnedArray.remove(deleteIndex);
                 adapter.notifyDataSetChanged();
+                adapter.getFilter().filter(filterEditText.getText().toString());
             }
         } else {
             // getOwnedList.php was called
@@ -110,7 +134,7 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
                         Toast.LENGTH_SHORT).show();
             }
 
-            adapter = new SearchResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results,
+            adapter = new OwnedResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results,
                     bookDataOwnedArray);
             resultsList.setAdapter(adapter);
         }
@@ -177,8 +201,9 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
         }
 
         Collections.sort(bookDataOwnedArray,
-                new SearchResultsBaseAdapter.SearchResultsComparator(sortType));
+                new OwnedResultsBaseAdapter.OwnedResultsComparator(sortType));
         adapter.notifyDataSetChanged();
+        adapter.getFilter().filter(filterEditText.getText().toString());
 
         return super.onOptionsItemSelected(item);
     }

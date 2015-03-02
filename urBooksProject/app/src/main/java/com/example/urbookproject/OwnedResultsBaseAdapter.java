@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,31 +23,32 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class SearchResultsBaseAdapter extends BaseAdapter {
+public class OwnedResultsBaseAdapter extends BaseAdapter implements Filterable {
     private static LayoutInflater inflater = null;
-    private ArrayList<BookData> bookDataArray;
+    private ArrayList<BookDataOwned> bookDataOwnedArray;
+    private ArrayList<BookDataOwned> bookDataOwnedFiltered;
     private Activity activity;
-    private String imageURL;
     private int resource;
     private MyAppUserData cacheData;
+    private BookOwnedFilter bookOwnedFilter = new BookOwnedFilter();
 
-
-    public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList<BookData> bookArray) {
-        bookDataArray = bookArray;
+    public OwnedResultsBaseAdapter(Activity activity, int resource,
+                                   ArrayList<BookDataOwned> ownedArray) {
+        bookDataOwnedArray = ownedArray;
+        bookDataOwnedFiltered = ownedArray;
 
         this.activity = activity;
         this.resource = resource;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.cacheData = ((MyAppUserData)this.activity.getApplicationContext());
+        this.cacheData = ((MyAppUserData) this.activity.getApplicationContext());
     }
 
     public int getCount() {
-        if (resource == R.layout.layout_search_results && bookDataArray != null) {
-            return bookDataArray.size();
-        } else {
-            return 0;
+        if (bookDataOwnedFiltered != null) {
+            return bookDataOwnedFiltered.size();
         }
+        return 0;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,19 +58,43 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
             view = inflater.inflate(resource, null);
         }
 
+        String imageURL = "";
         String imageName = "";
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
         TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
         TextView bookYear = (TextView) view.findViewById(R.id.book_year);
         ImageView bookCover = (ImageView) view.findViewById(R.id.book_cover);
 
-        if (resource == R.layout.layout_search_results) {
-            bookTitle.setText(bookDataArray.get(position).getTitle());
-            bookAuthor.setText(bookDataArray.get(position).getAuthor());
-            bookYear.setText(bookDataArray.get(position).getYear());
+        if (resource == R.layout.layout_owned_results) {
+            TextView keep = (TextView) view.findViewById(R.id.text_owned_keep);
+            TextView trade = (TextView) view.findViewById(R.id.text_owned_trade);
+            TextView sell = (TextView) view.findViewById(R.id.text_owned_sell);
+
+            bookTitle.setText(bookDataOwnedFiltered.get(position).getTitle());
+            bookAuthor.setText(bookDataOwnedFiltered.get(position).getAuthor());
+            bookYear.setText(bookDataOwnedFiltered.get(position).getYear());
+
+            if (bookDataOwnedFiltered.get(position).getKeep().equals("1")) {
+                keep.setText("Keep: Yes");
+            } else {
+                keep.setText("Keep: No");
+            }
+
+            if (bookDataOwnedFiltered.get(position).getTrade().equals("1")) {
+                trade.setText("Trade: Yes");
+            } else {
+                trade.setText("Trade: No");
+            }
+
+            if (bookDataOwnedFiltered.get(position).getSell().equals("null")) {
+                sell.setText("");
+            } else {
+                sell.setText("Sell for: $" + bookDataOwnedFiltered.get(position).getSell());
+            }
+
             imageURL = activity.getResources().getString(R.string.server_url) + "covers/"
-                    + bookDataArray.get(position).getBookID() + ".jpg";
-            imageName = bookDataArray.get(position).getBookID() + ".jpg";
+                    + bookDataOwnedFiltered.get(position).getBookID() + ".jpg";
+            imageName = bookDataOwnedFiltered.get(position).getBookID() + ".jpg";
         }
 
         new DownloadImageTask(bookCover, imageName).execute(imageURL);
@@ -80,13 +107,54 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return position;
+        return bookDataOwnedFiltered.get(position);
     }
 
-    public static class SearchResultsComparator implements Comparator<BookData> {
+    public Filter getFilter() {
+        return bookOwnedFilter;
+    }
+
+    private class BookOwnedFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterInput = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final ArrayList<BookDataOwned> originalList = bookDataOwnedArray;
+
+            int count = originalList.size();
+            final ArrayList<BookDataOwned> newList = new ArrayList<>(count);
+
+            String filter;
+
+            for (int i = 0; i < count; i++) {
+                filter = originalList.get(i).getFilterableString();
+
+                if (filter.toLowerCase().contains(filterInput)) {
+                    newList.add(originalList.get(i));
+                }
+            }
+
+            results.values = newList;
+            results.count = newList.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            bookDataOwnedFiltered = (ArrayList<BookDataOwned>) results.values;
+            notifyDataSetChanged();
+        }
+    }
+
+    public static class OwnedResultsComparator implements Comparator<BookData> {
         private String sortType;
 
-        public SearchResultsComparator(String sortType) {
+        public OwnedResultsComparator(String sortType) {
             this.sortType = sortType;
         }
 

@@ -29,9 +29,7 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
     private Activity activity;
     private int resource;
     private MyAppUserData cacheData;
-
     private BookMatchFilter bookMatchFilter = new BookMatchFilter();
-
 
     public MatchResultsBaseAdapter(Activity activity, int resource,
                                    ArrayList<BookDataMatch> bookDataMatch) {
@@ -46,9 +44,6 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
     }
 
     public int getCount() {
-        //if (bookDataMatch != null) {
-        //    return bookDataMatch.size();
-        //}
         if (bookDataFiltered != null) {
             return bookDataFiltered.size();
         }
@@ -164,45 +159,6 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
         return bookMatchFilter;
     }
 
-    private void scaleImage(ImageView view, int boundBoxInDp) {
-        /* Borrowed from:
-        *   https://argillander.wordpress.com/2011/11/24/scale-image-into-imageview-then-resize-imageview-to-match-the-image/
-        */
-        // Get the ImageView and its bitmap
-        Drawable drawing = view.getDrawable();
-        Bitmap bitmap = ((BitmapDrawable) drawing).getBitmap();
-
-        // Get current dimensions
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        // Determine how much to scale: the dimension requiring less scaling is
-        // closer to the its side. This way the image always stays inside your
-        // bounding box AND either x/y axis touches it.
-        float xScale = ((float) boundBoxInDp) / width;
-        float yScale = ((float) boundBoxInDp) / height;
-        float scale = (xScale <= yScale) ? xScale : yScale;
-
-        // Create a matrix for the scaling and add the scaling data
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-
-        // Create a new bitmap and convert it to a format understood by the ImageView
-        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-        BitmapDrawable result = new BitmapDrawable(scaledBitmap);
-        width = scaledBitmap.getWidth();
-        height = scaledBitmap.getHeight();
-
-        // Apply the scaled bitmap
-        view.setImageDrawable(result);
-
-        // Now change ImageView's dimensions to match the scaled image
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        params.width = width;
-        params.height = height;
-        view.setLayoutParams(params);
-    }
-
     private class BookMatchFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -244,9 +200,6 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
         ImageView bmImage;
         String name;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
         public DownloadImageTask(ImageView bmImage, String name) {
             this.bmImage = bmImage;
             this.name = name;
@@ -273,7 +226,7 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
             if (result == null) {
                 bmImage.setImageBitmap(cacheData.cache.get(name));
                 Log.d("CACHE", "Loaded: [" + name + "] from memory cache.");
-                scaleImage(bmImage, cacheData.cache.getImageSize());
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSize());
             } else {
                 if (cacheData.cache.getImageSize() == 0) {
                     cacheData.cache.setImageSize(bmImage.getHeight());
@@ -283,7 +236,7 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
 
                 bmImage.setImageBitmap(cacheData.cache.get(name));
 
-                scaleImage(bmImage, cacheData.cache.getImageSize());
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSize());
 
                 Log.d("CACHE", "Fetched: [" + name + "] from URL.");
             }

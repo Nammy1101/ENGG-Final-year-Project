@@ -21,17 +21,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class SearchResultsBaseAdapter extends BaseAdapter {
+public class WantedResultsBaseAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
-    private ArrayList<BookData> bookDataArray;
+    private ArrayList<BookDataWanted> bookDataWantedArray;
     private Activity activity;
     private String imageURL;
     private int resource;
     private MyAppUserData cacheData;
 
 
-    public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList<BookData> bookArray) {
-        bookDataArray = bookArray;
+    public WantedResultsBaseAdapter(Activity activity, int resource,
+                                    ArrayList<BookDataWanted> wantedArray) {
+        bookDataWantedArray = wantedArray;
 
         this.activity = activity;
         this.resource = resource;
@@ -41,8 +42,8 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        if (resource == R.layout.layout_search_results && bookDataArray != null) {
-            return bookDataArray.size();
+        if (resource == R.layout.layout_wanted_results && bookDataWantedArray != null) {
+            return bookDataWantedArray.size();
         } else {
             return 0;
         }
@@ -61,13 +62,29 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
         TextView bookYear = (TextView) view.findViewById(R.id.book_year);
         ImageView bookCover = (ImageView) view.findViewById(R.id.book_cover);
 
-        if (resource == R.layout.layout_search_results) {
-            bookTitle.setText(bookDataArray.get(position).getTitle());
-            bookAuthor.setText(bookDataArray.get(position).getAuthor());
-            bookYear.setText(bookDataArray.get(position).getYear());
+        if (resource == R.layout.layout_wanted_results) {
+            TextView trade = (TextView) view.findViewById(R.id.text_wanted_trade);
+            TextView purchase = (TextView) view.findViewById(R.id.text_wanted_purchase);
+
+            bookTitle.setText(bookDataWantedArray.get(position).getTitle());
+            bookAuthor.setText(bookDataWantedArray.get(position).getAuthor());
+            bookYear.setText(bookDataWantedArray.get(position).getYear());
+
+            if (bookDataWantedArray.get(position).getTrade().equals("1")) {
+                trade.setText("Trade: Yes");
+            } else {
+                trade.setText("Trade: No");
+            }
+
+            if (bookDataWantedArray.get(position).getPurchase().equals("null")) {
+                purchase.setText("");
+            } else {
+                purchase.setText("Purchase for: $" + bookDataWantedArray.get(position).getPurchase());
+            }
+
             imageURL = activity.getResources().getString(R.string.server_url) + "covers/"
-                    + bookDataArray.get(position).getBookID() + ".jpg";
-            imageName = bookDataArray.get(position).getBookID() + ".jpg";
+                    + bookDataWantedArray.get(position).getBookID() + ".jpg";
+            imageName = bookDataWantedArray.get(position).getBookID() + ".jpg";
         }
 
         new DownloadImageTask(bookCover, imageName).execute(imageURL);
@@ -83,10 +100,10 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
         return position;
     }
 
-    public static class SearchResultsComparator implements Comparator<BookData> {
+    public static class WantedResultsComparator implements Comparator<BookData> {
         private String sortType;
 
-        public SearchResultsComparator(String sortType) {
+        public WantedResultsComparator(String sortType) {
             this.sortType = sortType;
         }
 
