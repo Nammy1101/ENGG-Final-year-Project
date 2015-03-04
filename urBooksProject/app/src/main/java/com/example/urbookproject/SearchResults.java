@@ -2,8 +2,11 @@ package com.example.urbookproject;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -12,14 +15,14 @@ import java.util.Collections;
 public class SearchResults extends ActionBarActivity {
     private ArrayList<BookData> bookDataArray = new ArrayList<>();
     private SearchResultsBaseAdapter adapter;
-    private ListView resultsList;
+    private EditText filterEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        resultsList = (ListView) findViewById(R.id.search_results);
+        ListView resultsList = (ListView) findViewById(R.id.search_results);
 
         /* Grab data sent from ManualSearch activity */
         bookDataArray = new ArrayList<>();
@@ -30,6 +33,25 @@ public class SearchResults extends ActionBarActivity {
         resultsList.setAdapter(adapter);
         resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults",
                 bookDataArray));
+
+        filterEditText = (EditText) findViewById(R.id.book_search_filter);
+        filterEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //System.out.println("Filter text: [" + s + "]");
+                adapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -75,6 +97,7 @@ public class SearchResults extends ActionBarActivity {
         Collections.sort(bookDataArray,
                 new SearchResultsBaseAdapter.SearchResultsComparator(sortType));
         adapter.notifyDataSetChanged();
+        adapter.getFilter().filter(filterEditText.getText().toString());
 
         return super.onOptionsItemSelected(item);
     }

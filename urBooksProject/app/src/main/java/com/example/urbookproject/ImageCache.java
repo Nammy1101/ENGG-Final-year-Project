@@ -33,6 +33,45 @@ public class ImageCache {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
     }
 
+    public static void scaleImage(ImageView view, int boundBoxInDp) {
+        /* Borrowed from:
+        *   https://argillander.wordpress.com/2011/11/24/scale-image-into-imageview-then-resize-imageview-to-match-the-image/
+        */
+        // Get the ImageView and its bitmap
+        Drawable drawing = view.getDrawable();
+        Bitmap bitmap = ((BitmapDrawable) drawing).getBitmap();
+
+        // Get current dimensions
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) boundBoxInDp) / width;
+        float yScale = ((float) boundBoxInDp) / height;
+        float scale = (xScale <= yScale) ? xScale : yScale;
+
+        // Create a matrix for the scaling and add the scaling data
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        BitmapDrawable result = new BitmapDrawable(scaledBitmap);
+        width = scaledBitmap.getWidth();
+        height = scaledBitmap.getHeight();
+
+        // Apply the scaled bitmap
+        view.setImageDrawable(result);
+
+        // Now change ImageView's dimensions to match the scaled image
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        params.width = width;
+        params.height = height;
+        view.setLayoutParams(params);
+    }
+
     public int getImageSize() {
         return imageSize;
     }
@@ -93,44 +132,5 @@ public class ImageCache {
         if (bitmap == null)
             return 0;
         return bitmap.getRowBytes() * bitmap.getHeight();
-    }
-
-    public static void scaleImage(ImageView view, int boundBoxInDp) {
-        /* Borrowed from:
-        *   https://argillander.wordpress.com/2011/11/24/scale-image-into-imageview-then-resize-imageview-to-match-the-image/
-        */
-        // Get the ImageView and its bitmap
-        Drawable drawing = view.getDrawable();
-        Bitmap bitmap = ((BitmapDrawable) drawing).getBitmap();
-
-        // Get current dimensions
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        // Determine how much to scale: the dimension requiring less scaling is
-        // closer to the its side. This way the image always stays inside your
-        // bounding box AND either x/y axis touches it.
-        float xScale = ((float) boundBoxInDp) / width;
-        float yScale = ((float) boundBoxInDp) / height;
-        float scale = (xScale <= yScale) ? xScale : yScale;
-
-        // Create a matrix for the scaling and add the scaling data
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-
-        // Create a new bitmap and convert it to a format understood by the ImageView
-        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-        BitmapDrawable result = new BitmapDrawable(scaledBitmap);
-        width = scaledBitmap.getWidth();
-        height = scaledBitmap.getHeight();
-
-        // Apply the scaled bitmap
-        view.setImageDrawable(result);
-
-        // Now change ImageView's dimensions to match the scaled image
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        params.width = width;
-        params.height = height;
-        view.setLayoutParams(params);
     }
 }

@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +37,7 @@ public class MatchResultsBaseAdapter extends BaseAdapter implements Filterable {
         this.resource = resource;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.cacheData = ((MyAppUserData)this.activity.getApplicationContext());
+        this.cacheData = ((MyAppUserData) this.activity.getApplicationContext());
     }
 
     public int getCount() {

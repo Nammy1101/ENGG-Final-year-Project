@@ -4,10 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
     private WantedResultsBaseAdapter adapter;
     private ArrayList<BookDataWanted> bookDataWantedArray = new ArrayList<>();
     private ListView resultsList;
+    private EditText filterEditText;
     private Menu sortMenu;
     private String deleteFromWantedListURL;
     private int deleteIndex;
@@ -68,6 +72,25 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                 return true;
             }
         });
+
+        filterEditText = (EditText) findViewById(R.id.book_wanted_filter);
+        filterEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //System.out.println("Filter text: [" + s + "]");
+                adapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -79,6 +102,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                 Toast.makeText(getApplicationContext(), json, Toast.LENGTH_SHORT).show();
                 bookDataWantedArray.remove(deleteIndex);
                 adapter.notifyDataSetChanged();
+                adapter.getFilter().filter(filterEditText.getText().toString());
             }
         } else {
             // getWantedList.php was called
@@ -178,6 +202,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
         Collections.sort(bookDataWantedArray,
                 new WantedResultsBaseAdapter.WantedResultsComparator(sortType));
         adapter.notifyDataSetChanged();
+        adapter.getFilter().filter(filterEditText.getText().toString());
 
         return super.onOptionsItemSelected(item);
     }

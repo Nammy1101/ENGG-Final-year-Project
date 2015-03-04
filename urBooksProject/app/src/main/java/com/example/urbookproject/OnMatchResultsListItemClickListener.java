@@ -17,7 +17,7 @@ public class OnMatchResultsListItemClickListener implements AdapterView.OnItemCl
         this.adapter = adapter;
     }
 
-    public OnMatchResultsListItemClickListener( ArrayList<?> objectArray) {
+    public OnMatchResultsListItemClickListener(ArrayList<?> objectArray) {
         bookDataMatchArray = (ArrayList<BookDataMatch>) objectArray;
     }
 

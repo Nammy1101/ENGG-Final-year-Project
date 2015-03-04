@@ -82,8 +82,12 @@ public class BookDataWanted extends BookData {
     public String getFilterableString() {
         String filterString = super.getFilterableString();
 
-        if (this.trade.equals("1")) { filterString += " trade"; }
-        if (this.purchase.equals("1")) { filterString += " buy purchase"; }
+        if (this.trade.equals("1")) {
+            filterString += " trade";
+        }
+        if (!this.purchase.equals("null")) {
+            filterString += " buy purchase" + this.purchase;
+        }
 
         return filterString;
     }

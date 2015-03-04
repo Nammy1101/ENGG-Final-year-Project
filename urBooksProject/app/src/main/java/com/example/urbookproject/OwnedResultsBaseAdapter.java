@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -114,6 +110,35 @@ public class OwnedResultsBaseAdapter extends BaseAdapter implements Filterable {
         return bookOwnedFilter;
     }
 
+    public static class OwnedResultsComparator implements Comparator<BookData> {
+        private String sortType;
+
+        public OwnedResultsComparator(String sortType) {
+            this.sortType = sortType;
+        }
+
+        @Override
+        public int compare(BookData lhs, BookData rhs) {
+            switch (sortType.toLowerCase()) {
+                case "titleasc":
+                    return lhs.getTitle().compareTo(rhs.getTitle());
+                case "titledesc":
+                    return rhs.getTitle().compareTo(lhs.getTitle());
+                case "yearasc":
+                    return lhs.getYear().compareTo(rhs.getYear());
+                case "yeardesc":
+                    return rhs.getYear().compareTo(lhs.getYear());
+                case "authorasc":
+                    return lhs.getAuthor().compareTo(rhs.getAuthor());
+                case "authordesc":
+                    return rhs.getAuthor().compareTo(lhs.getAuthor());
+                default:
+                    // default is titleasc
+                    return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        }
+    }
+
     private class BookOwnedFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -148,35 +173,6 @@ public class OwnedResultsBaseAdapter extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             bookDataOwnedFiltered = (ArrayList<BookDataOwned>) results.values;
             notifyDataSetChanged();
-        }
-    }
-
-    public static class OwnedResultsComparator implements Comparator<BookData> {
-        private String sortType;
-
-        public OwnedResultsComparator(String sortType) {
-            this.sortType = sortType;
-        }
-
-        @Override
-        public int compare(BookData lhs, BookData rhs) {
-            switch (sortType.toLowerCase()) {
-                case "titleasc":
-                    return lhs.getTitle().compareTo(rhs.getTitle());
-                case "titledesc":
-                    return rhs.getTitle().compareTo(lhs.getTitle());
-                case "yearasc":
-                    return lhs.getYear().compareTo(rhs.getYear());
-                case "yeardesc":
-                    return rhs.getYear().compareTo(lhs.getYear());
-                case "authorasc":
-                    return lhs.getAuthor().compareTo(rhs.getAuthor());
-                case "authordesc":
-                    return rhs.getAuthor().compareTo(lhs.getAuthor());
-                default:
-                    // default is titleasc
-                    return lhs.getTitle().compareTo(rhs.getTitle());
-            }
         }
     }
 

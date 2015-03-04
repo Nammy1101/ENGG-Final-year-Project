@@ -4,45 +4,45 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class SearchResultsBaseAdapter extends BaseAdapter {
+public class SearchResultsBaseAdapter extends BaseAdapter implements Filterable {
     private static LayoutInflater inflater = null;
     private ArrayList<BookData> bookDataArray;
+    private ArrayList<BookData> bookDataArrayFiltered;
     private Activity activity;
-    private String imageURL;
     private int resource;
     private MyAppUserData cacheData;
+    private BookSearchFilter bookSearchFilter = new BookSearchFilter();
 
-
-    public SearchResultsBaseAdapter(Activity activity, int resource, ArrayList<BookData> bookArray) {
+    public SearchResultsBaseAdapter(Activity activity, int resource,
+                                    ArrayList<BookData> bookArray) {
         bookDataArray = bookArray;
+        bookDataArrayFiltered = bookArray;
 
         this.activity = activity;
         this.resource = resource;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.cacheData = ((MyAppUserData)this.activity.getApplicationContext());
+        this.cacheData = ((MyAppUserData) this.activity.getApplicationContext());
     }
 
     public int getCount() {
-        if (resource == R.layout.layout_search_results && bookDataArray != null) {
-            return bookDataArray.size();
+        if (bookDataArrayFiltered != null) {
+            return bookDataArrayFiltered.size();
         } else {
             return 0;
         }
@@ -55,6 +55,7 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
             view = inflater.inflate(resource, null);
         }
 
+        String imageURL = "";
         String imageName = "";
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
         TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
@@ -62,12 +63,12 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
         ImageView bookCover = (ImageView) view.findViewById(R.id.book_cover);
 
         if (resource == R.layout.layout_search_results) {
-            bookTitle.setText(bookDataArray.get(position).getTitle());
-            bookAuthor.setText(bookDataArray.get(position).getAuthor());
-            bookYear.setText(bookDataArray.get(position).getYear());
+            bookTitle.setText(bookDataArrayFiltered.get(position).getTitle());
+            bookAuthor.setText(bookDataArrayFiltered.get(position).getAuthor());
+            bookYear.setText(bookDataArrayFiltered.get(position).getYear());
             imageURL = activity.getResources().getString(R.string.server_url) + "covers/"
-                    + bookDataArray.get(position).getBookID() + ".jpg";
-            imageName = bookDataArray.get(position).getBookID() + ".jpg";
+                    + bookDataArrayFiltered.get(position).getBookID() + ".jpg";
+            imageName = bookDataArrayFiltered.get(position).getBookID() + ".jpg";
         }
 
         new DownloadImageTask(bookCover, imageName).execute(imageURL);
@@ -80,7 +81,11 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return position;
+        return bookDataArrayFiltered.get(position);
+    }
+
+    public Filter getFilter() {
+        return bookSearchFilter;
     }
 
     public static class SearchResultsComparator implements Comparator<BookData> {
@@ -109,6 +114,43 @@ public class SearchResultsBaseAdapter extends BaseAdapter {
                     // default is titleasc
                     return lhs.getTitle().compareTo(rhs.getTitle());
             }
+        }
+    }
+
+    private class BookSearchFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterInput = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final ArrayList<BookData> originalList = bookDataArray;
+
+            int count = originalList.size();
+            final ArrayList<BookData> newList = new ArrayList<>(count);
+
+            String filter;
+
+            for (int i = 0; i < count; i++) {
+                filter = originalList.get(i).getFilterableString();
+
+                if (filter.toLowerCase().contains(filterInput)) {
+                    newList.add(originalList.get(i));
+                }
+            }
+
+            results.values = newList;
+            results.count = newList.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            bookDataArrayFiltered = (ArrayList<BookData>) results.values;
+            notifyDataSetChanged();
         }
     }
 

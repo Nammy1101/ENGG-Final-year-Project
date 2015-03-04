@@ -4,46 +4,45 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class WantedResultsBaseAdapter extends BaseAdapter {
+public class WantedResultsBaseAdapter extends BaseAdapter implements Filterable {
     private static LayoutInflater inflater = null;
     private ArrayList<BookDataWanted> bookDataWantedArray;
+    private ArrayList<BookDataWanted> bookDataWantedFiltered;
     private Activity activity;
-    private String imageURL;
     private int resource;
     private MyAppUserData cacheData;
-
+    private BookWantedFilter bookWantedFilter = new BookWantedFilter();
 
     public WantedResultsBaseAdapter(Activity activity, int resource,
                                     ArrayList<BookDataWanted> wantedArray) {
         bookDataWantedArray = wantedArray;
+        bookDataWantedFiltered = wantedArray;
 
         this.activity = activity;
         this.resource = resource;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.cacheData = ((MyAppUserData)this.activity.getApplicationContext());
+        this.cacheData = ((MyAppUserData) this.activity.getApplicationContext());
     }
 
     public int getCount() {
-        if (resource == R.layout.layout_wanted_results && bookDataWantedArray != null) {
-            return bookDataWantedArray.size();
+        if (bookDataWantedFiltered != null) {
+            return bookDataWantedFiltered.size();
         } else {
             return 0;
         }
@@ -56,6 +55,7 @@ public class WantedResultsBaseAdapter extends BaseAdapter {
             view = inflater.inflate(resource, null);
         }
 
+        String imageURL = "";
         String imageName = "";
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
         TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
@@ -66,25 +66,25 @@ public class WantedResultsBaseAdapter extends BaseAdapter {
             TextView trade = (TextView) view.findViewById(R.id.text_wanted_trade);
             TextView purchase = (TextView) view.findViewById(R.id.text_wanted_purchase);
 
-            bookTitle.setText(bookDataWantedArray.get(position).getTitle());
-            bookAuthor.setText(bookDataWantedArray.get(position).getAuthor());
-            bookYear.setText(bookDataWantedArray.get(position).getYear());
+            bookTitle.setText(bookDataWantedFiltered.get(position).getTitle());
+            bookAuthor.setText(bookDataWantedFiltered.get(position).getAuthor());
+            bookYear.setText(bookDataWantedFiltered.get(position).getYear());
 
-            if (bookDataWantedArray.get(position).getTrade().equals("1")) {
+            if (bookDataWantedFiltered.get(position).getTrade().equals("1")) {
                 trade.setText("Trade: Yes");
             } else {
                 trade.setText("Trade: No");
             }
 
-            if (bookDataWantedArray.get(position).getPurchase().equals("null")) {
+            if (bookDataWantedFiltered.get(position).getPurchase().equals("null")) {
                 purchase.setText("");
             } else {
-                purchase.setText("Purchase for: $" + bookDataWantedArray.get(position).getPurchase());
+                purchase.setText("Purchase for: $" + bookDataWantedFiltered.get(position).getPurchase());
             }
 
             imageURL = activity.getResources().getString(R.string.server_url) + "covers/"
-                    + bookDataWantedArray.get(position).getBookID() + ".jpg";
-            imageName = bookDataWantedArray.get(position).getBookID() + ".jpg";
+                    + bookDataWantedFiltered.get(position).getBookID() + ".jpg";
+            imageName = bookDataWantedFiltered.get(position).getBookID() + ".jpg";
         }
 
         new DownloadImageTask(bookCover, imageName).execute(imageURL);
@@ -97,7 +97,11 @@ public class WantedResultsBaseAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return position;
+        return bookDataWantedFiltered.get(position);
+    }
+
+    public Filter getFilter() {
+        return bookWantedFilter;
     }
 
     public static class WantedResultsComparator implements Comparator<BookData> {
@@ -126,6 +130,43 @@ public class WantedResultsBaseAdapter extends BaseAdapter {
                     // default is titleasc
                     return lhs.getTitle().compareTo(rhs.getTitle());
             }
+        }
+    }
+
+    private class BookWantedFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterInput = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final ArrayList<BookDataWanted> originalList = bookDataWantedArray;
+
+            int count = originalList.size();
+            final ArrayList<BookDataWanted> newList = new ArrayList<>(count);
+
+            String filter;
+
+            for (int i = 0; i < count; i++) {
+                filter = originalList.get(i).getFilterableString();
+
+                if (filter.toLowerCase().contains(filterInput)) {
+                    newList.add(originalList.get(i));
+                }
+            }
+
+            results.values = newList;
+            results.count = newList.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            bookDataWantedFiltered = (ArrayList<BookDataWanted>) results.values;
+            notifyDataSetChanged();
         }
     }
 
