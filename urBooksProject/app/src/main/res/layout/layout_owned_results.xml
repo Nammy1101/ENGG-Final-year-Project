@@ -82,7 +82,7 @@
                     android:id="@+id/text_owned_sell"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.9"
+                    android:layout_weight="0.7"
                     android:text="Sell for:"
                     android:textSize="12sp" />
             </LinearLayout>

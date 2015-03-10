@@ -26,7 +26,7 @@ public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_search);
 
-        url = getString(R.string.server_url) + "manualUpload.php";
+        url = getString(R.string.server_url) + "ManualUpload.php";
 
         bookAuthor = (EditText) findViewById(R.id.book_author);
         bookTitle = (EditText) findViewById(R.id.book_title);

@@ -49,8 +49,8 @@
     <string name="image_cover">Cover</string>
     <string name="title_activity_insert_book">Insert Book</string>
     <string name="title_activity_my_account">My Account</string>
-    <string name="title_activity_wanted_list">Wanted List</string>
-    <string name="title_activity_owned_list">Owned List</string>
+    <string name="title_activity_wanted_list">Wishlist</string>
+    <string name="title_activity_owned_list">My Books</string>
     <string name="text_confirm_selection">Please confirm your selection:</string>
     <string name="text_transaction_options">Transaction options selected list:</string>
     <string name="text_wanted_obtain">How would you like to obtain this book?</string>
@@ -80,4 +80,6 @@
     <string name="title_activity_matched_user_account">MatchedUserAccount</string>
     <string name="text_filter">Filter results…</string>
     <string name="button_transactions">View Matches</string>
+    <string name="title_activity_owned_list_item_change">Edit Book</string>
+    <string name="title_activity_wanted_list_item_change">Edit Book</string>
 </resources>

@@ -18,7 +18,7 @@ public class Signup extends Activity implements IAsyncHttpHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        url = getString(R.string.server_url) + "signup.php";
+        url = getString(R.string.server_url) + "Signup.php";
 
         username = (EditText) findViewById(R.id.signup_username);
         password = (EditText) findViewById(R.id.signup_password);

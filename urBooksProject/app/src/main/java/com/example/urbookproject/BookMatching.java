@@ -37,6 +37,7 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         //resultsList.setOnItemClickListener(new OnResultsListItemClickListener("OwnedList"));
 
         EditText filterEditText = (EditText) findViewById(R.id.book_matching_filter);
+        filterEditText.clearFocus();
         filterEditText.addTextChangedListener(new TextWatcher() {
 
             @Override

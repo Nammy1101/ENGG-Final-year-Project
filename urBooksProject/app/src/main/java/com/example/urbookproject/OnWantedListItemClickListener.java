@@ -5,17 +5,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class OnResultsListItemClickListener implements OnItemClickListener {
-    private SearchResultsBaseAdapter adapter;
+public class OnWantedListItemClickListener implements OnItemClickListener {
+    private WantedResultsBaseAdapter adapter;
 
-    public OnResultsListItemClickListener(SearchResultsBaseAdapter adapter) {
+    public OnWantedListItemClickListener(WantedResultsBaseAdapter adapter) {
         this.adapter = adapter;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(view.getContext(), InsertBook.class);
-        intent.putExtra("bookData", ((BookData) adapter.getItem(position)));
+        Intent intent = new Intent(view.getContext(), WantedListItemChange.class);
+        intent.putExtra("bookDataWanted", ((BookDataWanted) adapter.getItem(position)));
         view.getContext().startActivity(intent);
     }
 }

@@ -26,9 +26,12 @@ public class MainActivity extends ActionBarActivity implements IAsyncHttpHandler
 
         ((MyAppUserData) this.getApplication()).cache = new ImageCache();
 
-        url = getString(R.string.server_url) + "getUserData.php";
+        url = getString(R.string.server_url) + "GetUserData.php";
         username = (EditText) findViewById(R.id.main_username);
         password = (EditText) findViewById(R.id.main_password);
+
+        username.clearFocus();
+        password.clearFocus();
 
         Button loginButton = (Button) findViewById(R.id.main_button_login);
         Button signUpButton = (Button) findViewById(R.id.main_button_signup);

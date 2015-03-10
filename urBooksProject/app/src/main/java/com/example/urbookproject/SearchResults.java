@@ -31,10 +31,10 @@ public class SearchResults extends ActionBarActivity {
         adapter = new SearchResultsBaseAdapter(SearchResults.this, R.layout.layout_search_results,
                 bookDataArray);
         resultsList.setAdapter(adapter);
-        resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults",
-                bookDataArray));
+        resultsList.setOnItemClickListener(new OnResultsListItemClickListener(adapter));
 
         filterEditText = (EditText) findViewById(R.id.book_search_filter);
+        filterEditText.clearFocus();
         filterEditText.addTextChangedListener(new TextWatcher() {
 
             @Override

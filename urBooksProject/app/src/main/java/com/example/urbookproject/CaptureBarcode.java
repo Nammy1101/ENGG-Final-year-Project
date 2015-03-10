@@ -145,7 +145,7 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             try {
                 // HttpPost httppost = new HttpPost("http://172.16.1.253/pictureUpload.php"); //
                 // server
-                HttpPost httppost = new HttpPost(uploadServer + "pictureUpload.php"); // server
+                HttpPost httppost = new HttpPost(uploadServer + "PictureUpload.php"); // server
 
                 MultipartEntity reqEntity = new MultipartEntity();
                 reqEntity.addPart("myFile",
@@ -209,12 +209,11 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                         e.printStackTrace();
                     }
                 }
-                //adapter = new SearchResultsBaseAdapter(CaptureBarcode.this, R.layout.layout_search_results, titleArray, authorArray, yearArray, bookID);
+
                 adapter = new SearchResultsBaseAdapter(CaptureBarcode.this,
                         R.layout.layout_search_results, bookDataArray);
                 resultsList.setAdapter(adapter);
-                resultsList.setOnItemClickListener(new OnResultsListItemClickListener("SearchResults",
-                        bookDataArray));
+                resultsList.setOnItemClickListener(new OnResultsListItemClickListener(adapter));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

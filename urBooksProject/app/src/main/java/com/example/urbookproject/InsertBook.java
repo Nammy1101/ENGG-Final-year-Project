@@ -46,7 +46,7 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
         ownedOptions.setVisibility(View.GONE);
         wantedOptions.setVisibility(View.GONE);
 
-        url = getString(R.string.server_url) + "insertBook.php";
+        url = getString(R.string.server_url) + "InsertBook.php";
 
         selectedOption = null;
 

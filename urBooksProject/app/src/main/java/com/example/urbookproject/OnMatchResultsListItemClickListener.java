@@ -27,7 +27,6 @@ public class OnMatchResultsListItemClickListener implements AdapterView.OnItemCl
         //intent.putExtra("matchedUserID", bookDataMatchArray.get(position).getUserID());
         intent.putExtra("matchedUserID", ((BookDataMatch) adapter.getItem(position)).getUserID());
         view.getContext().startActivity(intent);
-
     }
 
 }

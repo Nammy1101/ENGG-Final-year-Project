@@ -76,7 +76,8 @@ public class WantedResultsBaseAdapter extends BaseAdapter implements Filterable 
                 trade.setText("Trade: No");
             }
 
-            if (bookDataWantedFiltered.get(position).getPurchase().equals("null")) {
+            if (bookDataWantedFiltered.get(position).getPurchase().equals("null") ||
+                    bookDataWantedFiltered.get(position).getPurchase().equals("0.00")) {
                 purchase.setText("");
             } else {
                 purchase.setText("Purchase for: $" + bookDataWantedFiltered.get(position).getPurchase());

@@ -72,20 +72,28 @@ public class OwnedResultsBaseAdapter extends BaseAdapter implements Filterable {
 
             if (bookDataOwnedFiltered.get(position).getKeep().equals("1")) {
                 keep.setText("Keep: Yes");
+                keep.setVisibility(View.VISIBLE);
+                trade.setVisibility(View.GONE);
+                sell.setVisibility(View.GONE);
             } else {
                 keep.setText("Keep: No");
+                keep.setVisibility(View.GONE);
             }
 
             if (bookDataOwnedFiltered.get(position).getTrade().equals("1")) {
                 trade.setText("Trade: Yes");
+                trade.setVisibility(View.VISIBLE);
             } else {
                 trade.setText("Trade: No");
             }
 
-            if (bookDataOwnedFiltered.get(position).getSell().equals("null")) {
+            if (bookDataOwnedFiltered.get(position).getSell().equals("null") ||
+                    bookDataOwnedFiltered.get(position).getSell().equals("0.00")) {
                 sell.setText("");
+                sell.setVisibility(View.GONE);
             } else {
                 sell.setText("Sell for: $" + bookDataOwnedFiltered.get(position).getSell());
+                sell.setVisibility(View.VISIBLE);
             }
 
             imageURL = activity.getResources().getString(R.string.server_url) + "covers/"

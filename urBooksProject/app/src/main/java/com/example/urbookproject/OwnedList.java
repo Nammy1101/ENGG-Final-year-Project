@@ -2,6 +2,7 @@ package com.example.urbookproject;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -39,15 +40,14 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
         setContentView(R.layout.activity_owned_list);
 
         UserData userData = ((MyAppUserData) this.getApplication()).getUserData();
-        String getOwnedListURL = getString(R.string.server_url) + "getOwnedList.php";
+        String getOwnedListURL = getString(R.string.server_url) + "GetOwnedList.php";
 
         HttpPostAsyncTask getListTask = new HttpPostAsyncTask(OwnedList.this);
         getListTask.execute(getOwnedListURL, "user_id", userData.getUserID());
 
-        deleteFromOwnedListURL = getString(R.string.server_url) + "deleteFromOwnedList.php";
+        deleteFromOwnedListURL = getString(R.string.server_url) + "DeleteFromOwnedList.php";
 
         resultsList = (ListView) findViewById(R.id.owned_list);
-        resultsList.setOnItemClickListener(new OnResultsListItemClickListener("OwnedList"));
         resultsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position,
@@ -56,14 +56,15 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
                 AlertDialog.Builder builder = new AlertDialog.Builder(OwnedList.this);
                 builder.setCancelable(true);
                 builder.setTitle("Delete \'" +
-                        bookDataOwnedArray.get(position).getTitle() + "\'?");
+                        ((BookDataOwned) adapter.getItem(position)).getTitle() + "\'?");
+
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         HttpPostAsyncTask deleteTask = new HttpPostAsyncTask(OwnedList.this);
-                        deleteTask.execute(deleteFromOwnedListURL,
-                                "owned_id", bookDataOwnedArray.get(position).getOwnedID());
+                        deleteTask.execute(deleteFromOwnedListURL, "owned_id",
+                                ((BookDataOwned) adapter.getItem(position)).getOwnedID());
                         dialog.dismiss();
                     }
                 });
@@ -74,6 +75,7 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
         });
 
         filterEditText = (EditText) findViewById(R.id.book_owned_filter);
+        filterEditText.clearFocus();
         filterEditText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -96,16 +98,16 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
     @Override
     public void onPostExec(String json) {
         if (json.equals("Successfully removed book!") || json.equals("Could not delete.")) {
-            // deleteFromOwnedList.php was called
+            // DeleteFromOwnedList.php was called
 
             if (json.equals("Successfully removed book!")) {
                 Toast.makeText(getApplicationContext(), json, Toast.LENGTH_SHORT).show();
-                bookDataOwnedArray.remove(deleteIndex);
+                bookDataOwnedArray.remove(adapter.getItem(deleteIndex));
                 adapter.notifyDataSetChanged();
                 adapter.getFilter().filter(filterEditText.getText().toString());
             }
         } else {
-            // getOwnedList.php was called
+            // GetOwnedList.php was called
             try {
                 BookDataOwned bookDataOwned;
                 JSONObject jsonResponse = new JSONObject(json);
@@ -137,7 +139,14 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
             adapter = new OwnedResultsBaseAdapter(OwnedList.this, R.layout.layout_owned_results,
                     bookDataOwnedArray);
             resultsList.setAdapter(adapter);
+            resultsList.setOnItemClickListener(new OnOwnedListItemClickListener(adapter));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(OwnedList.this, HomeScreen.class);
+        startActivity(intent);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.urbookproject;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -39,15 +40,14 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
         setContentView(R.layout.activity_wanted_list);
 
         UserData userData = ((MyAppUserData) this.getApplication()).getUserData();
-        String getWantedListURL = getString(R.string.server_url) + "getWantedList.php";
+        String getWantedListURL = getString(R.string.server_url) + "GetWantedList.php";
 
         HttpPostAsyncTask getListTask = new HttpPostAsyncTask(WantedList.this);
         getListTask.execute(getWantedListURL, "user_id", userData.getUserID());
 
-        deleteFromWantedListURL = getString(R.string.server_url) + "deleteFromWantedList.php";
+        deleteFromWantedListURL = getString(R.string.server_url) + "DeleteFromWantedList.php";
 
         resultsList = (ListView) findViewById(R.id.wanted_list);
-        resultsList.setOnItemClickListener(new OnResultsListItemClickListener("WantedList"));
         resultsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position,
@@ -56,14 +56,15 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                 AlertDialog.Builder builder = new AlertDialog.Builder(WantedList.this);
                 builder.setCancelable(true);
                 builder.setTitle("Delete \'" +
-                        bookDataWantedArray.get(position).getTitle() + "\'?");
+                        ((BookDataWanted) adapter.getItem(position)).getTitle() + "\'?");
+
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         HttpPostAsyncTask deleteTask = new HttpPostAsyncTask(WantedList.this);
-                        deleteTask.execute(deleteFromWantedListURL,
-                                "wanted_id", bookDataWantedArray.get(position).getWantedID());
+                        deleteTask.execute(deleteFromWantedListURL, "wanted_id",
+                                ((BookDataWanted) adapter.getItem(position)).getWantedID());
                         dialog.dismiss();
                     }
                 });
@@ -74,6 +75,7 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
         });
 
         filterEditText = (EditText) findViewById(R.id.book_wanted_filter);
+        filterEditText.clearFocus();
         filterEditText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -96,16 +98,16 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
     @Override
     public void onPostExec(String json) {
         if (json.equals("Successfully removed book!") || json.equals("Could not delete.")) {
-            // deleteFromWantedList.php was called
+            // DeleteFromWantedList.php was called
 
             if (json.equals("Successfully removed book!")) {
                 Toast.makeText(getApplicationContext(), json, Toast.LENGTH_SHORT).show();
-                bookDataWantedArray.remove(deleteIndex);
+                bookDataWantedArray.remove(adapter.getItem(deleteIndex));
                 adapter.notifyDataSetChanged();
                 adapter.getFilter().filter(filterEditText.getText().toString());
             }
         } else {
-            // getWantedList.php was called
+            // GetWantedList.php was called
             try {
                 BookDataWanted bookDataWanted;
                 JSONObject jsonResponse = new JSONObject(json);
@@ -136,7 +138,14 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
             adapter = new WantedResultsBaseAdapter(WantedList.this, R.layout.layout_wanted_results,
                     bookDataWantedArray);
             resultsList.setAdapter(adapter);
+            resultsList.setOnItemClickListener(new OnWantedListItemClickListener(adapter));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(WantedList.this, HomeScreen.class);
+        startActivity(intent);
     }
 
     @Override
