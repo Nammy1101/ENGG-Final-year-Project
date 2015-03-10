@@ -96,13 +96,24 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
             CheckBox tradeCheckbox = (CheckBox) findViewById(R.id.checkbox_wanted_trade);
             CheckBox purchaseCheckbox = (CheckBox) findViewById(R.id.checkbox_wanted_purchase);
             EditText purchaseText = (EditText) findViewById(R.id.edit_text_purchase);
+            String purchaseString = purchaseText.getText().toString();
+            float fPrice;
+
+            try {
+                fPrice = Float.parseFloat(purchaseString);
+            } catch (NumberFormatException e) {
+                fPrice = 0.00f;
+            }
+
+            int validPrice = Float.compare(fPrice, 0.01f);
 
             if (!tradeCheckbox.isChecked() && !purchaseCheckbox.isChecked()) {
                 Toast.makeText(getApplicationContext(), "At least one checkbox must be selected.",
                         Toast.LENGTH_SHORT).show();
                 return false;
-            } else if (purchaseCheckbox.isChecked() && purchaseText.getText().toString().matches("")) {
-                Toast.makeText(getApplicationContext(), "You must enter a purchase amount.",
+            } else if (purchaseCheckbox.isChecked() &&
+                    (purchaseString.matches("") || validPrice < 0)) {
+                Toast.makeText(getApplicationContext(), "You must enter a valid purchase amount.",
                         Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -114,7 +125,7 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
             }
 
             if (purchaseText.isEnabled() && purchaseCheckbox.isChecked()) {
-                purchasePrice = purchaseText.getText().toString();
+                purchasePrice = purchaseString;
             } else {
                 purchasePrice = "NULL";
             }
@@ -135,14 +146,24 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
                 CheckBox tradeCheckbox = (CheckBox) findViewById(R.id.checkbox_owned_trade);
                 CheckBox sellCheckbox = (CheckBox) findViewById(R.id.checkbox_owned_sell);
                 EditText sellText = (EditText) findViewById(R.id.edit_text_sell);
+                String sellString = sellText.getText().toString();
+                float fPrice;
                 keep = "0";
 
+                try {
+                    fPrice = Float.parseFloat(sellString);
+                } catch (NumberFormatException e) {
+                    fPrice = 0.00f;
+                }
+
+                int validPrice = Float.compare(fPrice, 0.01f);
+
                 if (!tradeCheckbox.isChecked() && !sellCheckbox.isChecked()) {
-                    Toast.makeText(getApplicationContext(), "At least one checkbox must be selected.",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "At least one checkbox must be selected.", Toast.LENGTH_SHORT).show();
                     return false;
-                } else if (sellCheckbox.isChecked() && sellText.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "You must enter a selling price.",
+                } else if (sellCheckbox.isChecked() && (sellString.matches("") || validPrice < 0)) {
+                    Toast.makeText(getApplicationContext(), "You must enter a valid selling price.",
                             Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -154,7 +175,7 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
                 }
 
                 if (sellText.isEnabled() && sellCheckbox.isChecked()) {
-                    sellPrice = sellText.getText().toString();
+                    sellPrice = sellString;
                 } else {
                     sellPrice = "NULL";
                 }

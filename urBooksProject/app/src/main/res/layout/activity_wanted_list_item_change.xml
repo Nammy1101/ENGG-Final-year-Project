@@ -1,12 +1,241 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.urbookproject.WantedListItemChange">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ScrollView
+        android:id="@+id/login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_border">
+
+                <TextView
+                    android:id="@+id/change_wanted_book_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
+                    android:text="@string/book_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/lin1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="175dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/horizontal_bar"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="10dp">
+
+                    <ImageView
+                        android:id="@+id/change_wanted_book_cover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:adjustViewBounds="true"
+                        android:background="@color/black"
+                        android:padding="1dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_launcher" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Current preferences:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/change_wanted_trade_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:typeface="monospace"
+                            android:textSize="12sp"
+                            android:text="Trade: " />
+
+                        <TextView
+                            android:id="@+id/change_wanted_buy_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:typeface="monospace"
+                            android:textSize="12sp"
+                            android:text="Buy: " />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/change_wanted_book_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/lin1"
+                    android:layout_alignStart="@+id/lin1"
+                    android:layout_below="@+id/lin1"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toLeftOf="@+id/insert_book_year"
+                    android:layout_toStartOf="@+id/insert_book_year"
+                    android:ellipsize="end"
+                    android:maxEms="20"
+                    android:maxLines="2"
+                    android:paddingBottom="2dp"
+                    android:text="@string/book_author"
+                    android:textColor="#808080"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/change_wanted_book_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/lin1"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxEms="20"
+                    android:maxLines="1"
+                    android:paddingLeft="20dp"
+                    android:text="@string/book_year"
+                    android:textColor="#808080"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="visible" />
+
+                <View
+                    android:id="@+id/horizontal_bar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/change_wanted_book_title"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@android:color/darker_gray" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_change_wanted_options"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/text_change_wanted_transaction_options"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/text_wanted_obtain"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_change_wanted_trade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_trade" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+                        <CheckBox
+                            android:id="@+id/checkbox_change_wanted_purchase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onCheckboxClick"
+                            android:text="@string/text_purchase" />
+
+                        <EditText
+                            android:id="@+id/edit_change_text_purchase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:inputType="numberDecimal" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_options_helper1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/text_options_helper"
+                    android:textColor="#808080"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/text_confirm_selection"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/change_wanted_select"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="30dp"
+                android:text="@string/button_confirm" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
