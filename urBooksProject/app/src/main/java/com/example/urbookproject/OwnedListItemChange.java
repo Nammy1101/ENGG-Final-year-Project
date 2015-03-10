@@ -46,9 +46,32 @@ public class OwnedListItemChange extends ActionBarActivity implements IAsyncHttp
         TextView bookYear = (TextView) findViewById(R.id.change_owned_book_year);
         ImageView bookCover = (ImageView) findViewById(R.id.change_owned_book_cover);
 
+        TextView keepText = (TextView) findViewById(R.id.change_owned_keep_text);
+        TextView tradeText = (TextView) findViewById(R.id.change_owned_trade_text);
+        TextView sellText = (TextView) findViewById(R.id.change_owned_sell_text);
+
         bookTitle.setText(bookDataOwned.getTitle());
         bookAuthor.setText(bookDataOwned.getAuthor());
         bookYear.setText(bookDataOwned.getYear());
+
+        if (bookDataOwned.getKeep().equals("1")) {
+            keepText.setText("Keep:  Yes");
+        } else {
+            keepText.setText("Keep:  No");
+        }
+
+        if (bookDataOwned.getTrade().equals("1")) {
+            tradeText.setText("Trade: Yes");
+        } else {
+            tradeText.setText("Trade: No");
+        }
+
+        if (bookDataOwned.getSell().equals("null") || bookDataOwned.getSell().equals("0.00")) {
+            sellText.setText("Sell:  No");
+        } else {
+            sellText.setText("Sell:  $" + bookDataOwned.getSell());
+        }
+
         new DownloadImageTask(bookCover).execute(getString(R.string.server_url) + "covers/"
                 + bookDataOwned.getBookID() + ".jpg");
 
