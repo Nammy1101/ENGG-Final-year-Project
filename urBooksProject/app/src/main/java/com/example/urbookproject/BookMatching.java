@@ -34,7 +34,6 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         getListTask.execute(getOwnedListURL, "user_id", userData.getUserID());
 
         resultsList = (ListView) findViewById(R.id.book_matching_list);
-        //resultsList.setOnItemClickListener(new OnResultsListItemClickListener("OwnedList"));
 
         EditText filterEditText = (EditText) findViewById(R.id.book_matching_filter);
         filterEditText.clearFocus();
@@ -148,7 +147,6 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
         adapter = new MatchResultsBaseAdapter(BookMatching.this, R.layout.layout_match_results,
                 bookDataMatchArray);
         resultsList.setAdapter(adapter);
-        //resultsList.setOnItemClickListener(new OnMatchResultsListItemClickListener(bookDataMatchArray));
         resultsList.setOnItemClickListener(new OnMatchResultsListItemClickListener(adapter));
     }
 

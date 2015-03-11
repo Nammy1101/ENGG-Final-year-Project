@@ -32,6 +32,10 @@ public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler
         bookTitle = (EditText) findViewById(R.id.book_title);
         bookYear = (EditText) findViewById(R.id.book_year);
 
+        bookAuthor.clearFocus();
+        bookTitle.clearFocus();
+        bookYear.clearFocus();
+
         Button search = (Button) findViewById(R.id.search);
 
         search.setOnClickListener(new View.OnClickListener() {

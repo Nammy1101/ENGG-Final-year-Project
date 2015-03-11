@@ -55,10 +55,10 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
                 deleteIndex = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(OwnedList.this);
                 builder.setCancelable(true);
-                builder.setTitle("Delete \'" +
-                        ((BookDataOwned) adapter.getItem(position)).getTitle() + "\'?");
+                builder.setTitle("Delete book?");
+                builder.setMessage(((BookDataOwned) adapter.getItem(position)).getTitle());
 
-
+                builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
@@ -146,7 +146,9 @@ public class OwnedList extends ActionBarActivity implements IAsyncHttpHandler {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(OwnedList.this, HomeScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 
     @Override

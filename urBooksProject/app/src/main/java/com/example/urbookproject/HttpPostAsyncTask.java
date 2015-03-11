@@ -1,5 +1,7 @@
 package com.example.urbookproject;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
@@ -20,14 +22,24 @@ import java.util.List;
  */
 public class HttpPostAsyncTask extends AsyncTask<String, Void, String> {
     IAsyncHttpHandler handler = null;
+    ProgressDialog pDialog = null;
+    Context context;
 
     public HttpPostAsyncTask(IAsyncHttpHandler handler) {
         this.handler = handler;
+        this.context = (Context) handler;
+    }
+
+    public HttpPostAsyncTask(Context context, IAsyncHttpHandler handler) {
+        this.handler = handler;
+        this.context = context;
     }
 
     @Override
     protected void onPreExecute() {
-
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Please wait...");
+        pDialog.show();
     }
 
     @Override
@@ -57,5 +69,6 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         handler.onPostExec(result);  // override onPostExec() in Activity
+        pDialog.dismiss();
     }
 }

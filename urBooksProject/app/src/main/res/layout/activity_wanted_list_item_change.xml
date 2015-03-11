@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -78,17 +80,17 @@
                             android:id="@+id/change_wanted_trade_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:typeface="monospace"
+                            android:text="Trade: "
                             android:textSize="12sp"
-                            android:text="Trade: " />
+                            android:typeface="monospace" />
 
                         <TextView
                             android:id="@+id/change_wanted_buy_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:typeface="monospace"
+                            android:text="Buy: "
                             android:textSize="12sp"
-                            android:text="Buy: " />
+                            android:typeface="monospace" />
                     </LinearLayout>
 
                 </LinearLayout>

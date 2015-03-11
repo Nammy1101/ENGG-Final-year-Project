@@ -55,10 +55,10 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
                 deleteIndex = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(WantedList.this);
                 builder.setCancelable(true);
-                builder.setTitle("Delete \'" +
-                        ((BookDataWanted) adapter.getItem(position)).getTitle() + "\'?");
+                builder.setTitle("Delete book?");
+                builder.setMessage(((BookDataWanted) adapter.getItem(position)).getTitle());
 
-
+                builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
@@ -145,7 +145,9 @@ public class WantedList extends ActionBarActivity implements IAsyncHttpHandler {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(WantedList.this, HomeScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 
     @Override
