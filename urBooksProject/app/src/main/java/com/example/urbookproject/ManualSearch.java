@@ -58,6 +58,12 @@ public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler
 
     @Override
     public void onPostExec(String json) {
+        if (json.equals("")) {
+            Toast.makeText(getApplicationContext(), "No results...",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         try {
             BookData bookData;
             JSONObject jsonResponse = new JSONObject(json);

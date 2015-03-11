@@ -58,6 +58,12 @@ public class BookMatching extends ActionBarActivity implements IAsyncHttpHandler
 
     @Override
     public void onPostExec(String json) {
+        if (json.equals("")) {
+            Toast.makeText(getApplicationContext(), "No matches...",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         BookData incomingBook, outgoingBook;
         BookDataMatch bookDataMatch;
         JSONObject jsonResponse;
