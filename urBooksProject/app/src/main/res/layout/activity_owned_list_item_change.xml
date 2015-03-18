@@ -57,7 +57,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:adjustViewBounds="true"
-                        android:background="@color/black"
                         android:padding="1dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_launcher" />
@@ -78,25 +77,25 @@
                             android:id="@+id/change_owned_keep_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:typeface="monospace"
+                            android:text="Keep: "
                             android:textSize="12sp"
-                            android:text="Keep: " />
+                            android:typeface="monospace" />
 
                         <TextView
                             android:id="@+id/change_owned_trade_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:typeface="monospace"
+                            android:text="Trade: "
                             android:textSize="12sp"
-                            android:text="Trade: " />
+                            android:typeface="monospace" />
 
                         <TextView
                             android:id="@+id/change_owned_sell_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:typeface="monospace"
+                            android:text="Sell: "
                             android:textSize="12sp"
-                            android:text="Sell: " />
+                            android:typeface="monospace" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -112,8 +111,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="3dp"
-                    android:layout_toLeftOf="@+id/insert_book_year"
-                    android:layout_toStartOf="@+id/insert_book_year"
+                    android:layout_toLeftOf="@+id/change_owned_book_year"
+                    android:layout_toStartOf="@+id/change_owned_book_year"
                     android:ellipsize="end"
                     android:maxEms="20"
                     android:maxLines="2"

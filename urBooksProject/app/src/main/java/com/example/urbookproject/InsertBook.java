@@ -31,6 +31,7 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
     private String url, selectedOption;
     private String trade, sellPrice, purchasePrice, keep;
     private boolean wantedChecked, ownedChecked;
+    private MyAppUserData cacheData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
         bookData = new BookData();
         bookData = getIntent().getParcelableExtra("bookData");
         userData = ((MyAppUserData) this.getApplication()).getUserData();
+        cacheData = ((MyAppUserData) this.getApplication());
 
         ownedOptions = (LinearLayout) findViewById(R.id.linear_owned_options);
         wantedOptions = (LinearLayout) findViewById(R.id.linear_wanted_options);
@@ -58,8 +60,10 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
         bookTitle.setText(bookData.getTitle());
         bookAuthor.setText(bookData.getAuthor());
         bookYear.setText(bookData.getYear());
-        new DownloadImageTask(bookCover).execute(getString(R.string.server_url) + "covers/"
-                + bookData.getBookID() + ".jpg");
+
+        String bookImageName = bookData.getBookID() + ".jpg";
+        String bookImageURL = getString(R.string.server_url) + "covers/" + bookImageName;
+        new DownloadImageTask(bookCover, bookImageName).execute(bookImageURL);
 
         Button select = (Button) findViewById(R.id.select);
         select.setOnClickListener(new View.OnClickListener() {
@@ -299,12 +303,18 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+        String name;
 
-        public DownloadImageTask(ImageView bmImage) {
+        public DownloadImageTask(ImageView bmImage, String name) {
             this.bmImage = bmImage;
+            this.name = name;
         }
 
         protected Bitmap doInBackground(String... urls) {
+            if (cacheData.cache.containsKey(name)) {
+                return null;
+            }
+
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
@@ -318,7 +328,23 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            if (cacheData.cache.getImageSizeLarge() == 0) {
+                cacheData.cache.setImageSizeLarge(340);
+            }
+
+            if (result == null) {
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+                Log.d("CACHE", "Loaded: [" + name + "] from memory cache.");
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSizeLarge());
+            } else {
+                cacheData.cache.put(name, result);
+
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSizeLarge());
+
+                Log.d("CACHE", "Fetched: [" + name + "] from URL.");
+            }
         }
     }
 }

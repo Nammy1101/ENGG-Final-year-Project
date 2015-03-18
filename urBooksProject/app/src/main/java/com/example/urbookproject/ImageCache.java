@@ -13,6 +13,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.Collections;
@@ -25,8 +26,9 @@ public class ImageCache {
     private Map<String, Bitmap> cache = Collections.synchronizedMap(
             new LinkedHashMap<String, Bitmap>(10, 1.5f, true));
     private long size = 0;  // current allocated size
-    private long limit = 1000000;  // max memory in bytes
+    private long limit = 2000000;  // max memory in bytes
     private int imageSize = 0;
+    private int imageSizeLarge = 0;
 
     public ImageCache() {
         //use 25% of available heap size
@@ -66,10 +68,26 @@ public class ImageCache {
         view.setImageDrawable(result);
 
         // Now change ImageView's dimensions to match the scaled image
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        params.width = width;
-        params.height = height;
-        view.setLayoutParams(params);
+
+        if (view.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
+            RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) view.getLayoutParams();
+            p.width = width;
+            p.height = height;
+            view.setLayoutParams(p);
+        } else if (view.getLayoutParams() instanceof LinearLayout.LayoutParams) {
+            LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) view.getLayoutParams();
+            p.width = width;
+            p.height = height;
+            view.setLayoutParams(p);
+        }
+    }
+
+    public int getImageSizeLarge() {
+        return imageSizeLarge;
+    }
+
+    public void setImageSizeLarge(int imageSizeLarge) {
+        this.imageSizeLarge = imageSizeLarge;
     }
 
     public int getImageSize() {

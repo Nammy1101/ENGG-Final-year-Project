@@ -32,11 +32,13 @@
         android:id="@+id/submitAllChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Submit All"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/submitChangeEmail"
         android:layout_alignLeft="@+id/changeEmail"
-        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/changeEmail"
         android:layout_alignRight="@+id/submitChangeEmail"
-        android:layout_marginBottom="38dp"
-        android:text="Submit All" />
+        android:layout_alignEnd="@+id/submitChangeEmail" />
 
     <Button
         android:id="@+id/submitChangeFirstName"
@@ -66,19 +68,22 @@
         android:id="@+id/changeEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/submitChangeLastName"
         android:ems="10"
-        android:hint="Email" />
+        android:hint="Email"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/submitChangeLastName"
+        android:layout_toLeftOf="@+id/submitChangeEmail"
+        android:layout_toStartOf="@+id/submitChangeEmail" />
 
     <EditText
         android:id="@+id/changeLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/submitChangeEmail"
-        android:layout_alignLeft="@+id/changeEmail"
-        android:layout_marginBottom="37dp"
         android:ems="10"
-        android:hint="Last Name" />
+        android:hint="Last Name"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/submitChangeFirstName"
+        android:layout_toLeftOf="@+id/submitChangeLastName"
+        android:layout_toStartOf="@+id/submitChangeLastName" />
 
 </RelativeLayout>

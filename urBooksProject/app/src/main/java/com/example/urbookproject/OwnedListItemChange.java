@@ -30,6 +30,7 @@ public class OwnedListItemChange extends ActionBarActivity implements IAsyncHttp
     private BookDataOwned bookDataOwned = new BookDataOwned();
     private String url;
     private String keep, sellPrice, trade;
+    private MyAppUserData cacheData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class OwnedListItemChange extends ActionBarActivity implements IAsyncHttp
 
         bookDataOwned = new BookDataOwned();
         bookDataOwned = getIntent().getParcelableExtra("bookDataOwned");
+        cacheData = ((MyAppUserData) this.getApplication());
 
         url = getString(R.string.server_url) + "ChangeOwnedBook.php";
 
@@ -72,8 +74,9 @@ public class OwnedListItemChange extends ActionBarActivity implements IAsyncHttp
             sellText.setText("Sell:  $" + bookDataOwned.getSell());
         }
 
-        new DownloadImageTask(bookCover).execute(getString(R.string.server_url) + "covers/"
-                + bookDataOwned.getBookID() + ".jpg");
+        String bookImageName = bookDataOwned.getBookID() + ".jpg";
+        String bookImageURL = getString(R.string.server_url) + "covers/" + bookImageName;
+        new DownloadImageTask(bookCover, bookImageName).execute(bookImageURL);
 
         Button confirm = (Button) findViewById(R.id.change_owned_select);
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -234,12 +237,18 @@ public class OwnedListItemChange extends ActionBarActivity implements IAsyncHttp
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+        String name;
 
-        public DownloadImageTask(ImageView bmImage) {
+        public DownloadImageTask(ImageView bmImage, String name) {
             this.bmImage = bmImage;
+            this.name = name;
         }
 
         protected Bitmap doInBackground(String... urls) {
+            if (cacheData.cache.containsKey(name)) {
+                return null;
+            }
+
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
@@ -253,7 +262,23 @@ public class OwnedListItemChange extends ActionBarActivity implements IAsyncHttp
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            if (cacheData.cache.getImageSizeLarge() == 0) {
+                cacheData.cache.setImageSizeLarge(340);
+            }
+
+            if (result == null) {
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+                Log.d("CACHE", "Loaded: [" + name + "] from memory cache.");
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSizeLarge());
+            } else {
+                cacheData.cache.put(name, result);
+
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSizeLarge());
+
+                Log.d("CACHE", "Fetched: [" + name + "] from URL.");
+            }
         }
     }
 }

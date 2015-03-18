@@ -8,64 +8,82 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.urbookproject.MyAccount">
 
-    <TextView
-        android:id="@+id/accountUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="18dp"
-        android:text="TextView" />
 
-    <TextView
-        android:id="@+id/accountFirstName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/accountUserName"
-        android:layout_marginTop="24dp"
-        android:text="TextView" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/accountLastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/accountFirstName"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/accountFirstName"
-        android:layout_marginTop="28dp"
-        android:text="TextView" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/accountEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/accountLastName"
-        android:layout_marginTop="27dp"
-        android:text="TextView" />
+            <TextView
+                android:id="@+id/accountFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/ChangeInformationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/ChangePasswordButton"
-        android:layout_alignLeft="@+id/ChangePasswordButton"
-        android:layout_alignRight="@+id/accountEmail"
-        android:layout_marginBottom="49dp"
-        android:text="Change Information" />
+            <TextView
+                android:id="@+id/accountLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Last Name"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/ChangePasswordButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/accountEmail"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/accountEmail"
-        android:layout_marginBottom="70dp"
-        android:text="Change Password" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/horizontal_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/accountUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Username"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/accountEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accountLastName"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Email"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/ChangeInformationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ChangePasswordButton"
+            android:layout_marginTop="5dp"
+            android:text="Change Information" />
+
+        <Button
+            android:id="@+id/ChangePasswordButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

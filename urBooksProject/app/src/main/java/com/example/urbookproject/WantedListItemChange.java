@@ -28,6 +28,7 @@ public class WantedListItemChange extends ActionBarActivity implements IAsyncHtt
     private BookDataWanted bookDataWanted = new BookDataWanted();
     private String url;
     private String purchasePrice, trade;
+    private MyAppUserData cacheData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class WantedListItemChange extends ActionBarActivity implements IAsyncHtt
 
         bookDataWanted = new BookDataWanted();
         bookDataWanted = getIntent().getParcelableExtra("bookDataWanted");
+        cacheData = ((MyAppUserData) this.getApplication());
 
         url = getString(R.string.server_url) + "ChangeWantedBook.php";
 
@@ -64,8 +66,9 @@ public class WantedListItemChange extends ActionBarActivity implements IAsyncHtt
             purchaseText.setText("Buy:   $" + bookDataWanted.getPurchase());
         }
 
-        new DownloadImageTask(bookCover).execute(getString(R.string.server_url) + "covers/"
-                + bookDataWanted.getBookID() + ".jpg");
+        String bookImageName = bookDataWanted.getBookID() + ".jpg";
+        String bookImageURL = getString(R.string.server_url) + "covers/" + bookImageName;
+        new DownloadImageTask(bookCover, bookImageName).execute(bookImageURL);
 
         Button confirm = (Button) findViewById(R.id.change_wanted_select);
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -191,12 +194,18 @@ public class WantedListItemChange extends ActionBarActivity implements IAsyncHtt
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+        String name;
 
-        public DownloadImageTask(ImageView bmImage) {
+        public DownloadImageTask(ImageView bmImage, String name) {
             this.bmImage = bmImage;
+            this.name = name;
         }
 
         protected Bitmap doInBackground(String... urls) {
+            if (cacheData.cache.containsKey(name)) {
+                return null;
+            }
+
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
@@ -210,7 +219,23 @@ public class WantedListItemChange extends ActionBarActivity implements IAsyncHtt
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            if (cacheData.cache.getImageSizeLarge() == 0) {
+                cacheData.cache.setImageSizeLarge(340);
+            }
+
+            if (result == null) {
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+                Log.d("CACHE", "Loaded: [" + name + "] from memory cache.");
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSizeLarge());
+            } else {
+                cacheData.cache.put(name, result);
+
+                bmImage.setImageBitmap(cacheData.cache.get(name));
+
+                ImageCache.scaleImage(bmImage, cacheData.cache.getImageSizeLarge());
+
+                Log.d("CACHE", "Fetched: [" + name + "] from URL.");
+            }
         }
     }
 }

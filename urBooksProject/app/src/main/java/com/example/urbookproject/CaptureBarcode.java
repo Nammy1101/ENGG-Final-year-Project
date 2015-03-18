@@ -1,8 +1,10 @@
 package com.example.urbookproject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,6 +53,7 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
     ArrayList<String> yearArray = new ArrayList<>();
     ArrayList<String> bookID = new ArrayList<>();
     SearchResultsBaseAdapter adapter;
+    ProgressDialog pDialog = null;
     private Button mTakePhoto;
     private Bitmap imageToSend;
     private UserData userData = new UserData();
@@ -63,14 +66,13 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
 
         userData = ((MyAppUserData) this.getApplication()).getUserData();
 
-        // uploadServer = "http://172.16.1.253/pictureUpload";
         uploadServer = getString(R.string.server_url_local);
         iv = (ImageView) findViewById(R.id.imageview);
         mTakePhoto = (Button) findViewById(R.id.button_camera);
         mTakePhoto.setOnClickListener(this);
 
-        // phpResponse = (TextView) findViewById(R.id.phpResponse);
         resultsList = (ListView) findViewById(R.id.scan_results);
+        takePicture();
     }
 
     @Override
@@ -93,6 +95,7 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
         }
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
@@ -126,15 +129,25 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             height = maxSize;
             width = (int) (height * bitmapRatio);
         }
-        return Bitmap.createScaledBitmap(image, width, height, true);
+
+        Matrix m = new Matrix();
+        m.postRotate(90.0f);
+
+        Bitmap scaled = Bitmap.createScaledBitmap(image, width, height , true);
+
+        return Bitmap.createBitmap(scaled, 0, 0, scaled.getWidth(), scaled.getHeight(), m, true);
     }
 
     private class SendBitmapTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            pDialog = new ProgressDialog(CaptureBarcode.this);
+            pDialog.setMessage("Processing...");
+            pDialog.show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
-
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             imageToSend.compress(CompressFormat.PNG, 100, bos);
             byte[] bitmapdata = bos.toByteArray();
@@ -143,8 +156,6 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String result = "Error: ISBN unresolved";
             try {
-                // HttpPost httppost = new HttpPost("http://172.16.1.253/pictureUpload.php"); //
-                // server
                 HttpPost httppost = new HttpPost(uploadServer + "PictureUpload.php"); // server
 
                 MultipartEntity reqEntity = new MultipartEntity();
@@ -177,9 +188,16 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(CaptureBarcode.this, "Uploaded", Toast.LENGTH_LONG).show();
 
-            BookData bookData = new BookData();
+            if (result.equals("")) {
+                Toast.makeText(getApplicationContext(), "Barcode scan error, please try again.",
+                        Toast.LENGTH_LONG).show();
+                iv.setImageBitmap(imageToSend);
+                pDialog.dismiss();
+                return;
+            }
+
+            BookData bookData;
 
             try {
                 JSONObject jsonResponse = new JSONObject(result);
@@ -190,7 +208,6 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                 for (int i = 0; i < jsonMainNode.length(); i++) {
                     try {
                         JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                        // responseTitle = jsonChildNode.optString("Book_Title").trim();
                         titleArray.add(jsonChildNode.getString("title"));
                         authorArray.add(jsonChildNode.getString("author"));
                         yearArray.add(jsonChildNode.getString("year"));
@@ -218,9 +235,9 @@ public class CaptureBarcode extends ActionBarActivity implements OnClickListener
                 e.printStackTrace();
             }
 
-            // phpResponse.setText(result);
             iv.setImageBitmap(imageToSend);
+            pDialog.dismiss();
+            Toast.makeText(CaptureBarcode.this, "Success!", Toast.LENGTH_LONG).show();
         }
-
     }
 }
