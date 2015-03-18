@@ -36,6 +36,10 @@ public class ImageCache {
     }
 
     public static void scaleImage(ImageView view, int boundBoxInDp) {
+        if (view == null || view.getDrawable() == null) {
+            return;
+        }
+
         /* Borrowed from:
         *   https://argillander.wordpress.com/2011/11/24/scale-image-into-imageview-then-resize-imageview-to-match-the-image/
         */

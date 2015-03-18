@@ -188,6 +188,9 @@ public class InsertBook extends ActionBarActivity implements IAsyncHttpHandler {
             }
         }
 
+        Toast.makeText(getApplicationContext(), "Please select an option.",
+                Toast.LENGTH_SHORT).show();
+
         return false;
     }
 
