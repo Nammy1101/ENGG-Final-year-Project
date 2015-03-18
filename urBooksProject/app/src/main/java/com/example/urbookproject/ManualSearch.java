@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler {
     private ArrayList<BookData> bookDataArray = new ArrayList<>();
-    private EditText bookAuthor, bookTitle, bookYear;
+    private EditText bookAuthor, bookTitle, bookYear, bookISBN;
     private String url;
 
     @Override
@@ -26,34 +26,54 @@ public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_search);
 
-        url = getString(R.string.server_url) + "ManualUpload.php";
+        url = getString(R.string.server_url) + "ManualSearch.php";
 
         bookAuthor = (EditText) findViewById(R.id.book_author);
         bookTitle = (EditText) findViewById(R.id.book_title);
         bookYear = (EditText) findViewById(R.id.book_year);
+        bookISBN = (EditText) findViewById(R.id.book_isbn);
 
         bookAuthor.clearFocus();
         bookTitle.clearFocus();
         bookYear.clearFocus();
+        bookISBN.clearFocus();
 
         Button search = (Button) findViewById(R.id.search);
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bookAuthor.getText().toString() == null
-                        && bookTitle.getText().toString() == null) {
-                    Toast.makeText(getApplicationContext(), "Must have Title or Author",
-                            Toast.LENGTH_SHORT).show();
-                } else {
+                if (validInput()) {
                     HttpPostAsyncTask task = new HttpPostAsyncTask(ManualSearch.this);
                     task.execute(url,
                             "title", bookTitle.getText().toString(),
                             "author", bookAuthor.getText().toString(),
-                            "year", bookYear.getText().toString());
+                            "year", bookYear.getText().toString(),
+                            "isbn", bookISBN.getText().toString());
                 }
             }
         });
+    }
+
+    public boolean validInput() {
+        String title = bookTitle.getText().toString();
+        String author = bookAuthor.getText().toString();
+        String isbn = bookISBN.getText().toString();
+
+        if ( (title == null || title.equals("")) && (author == null || author.equals(""))
+                && (isbn == null || isbn.equals(""))) {
+            Toast.makeText(getApplicationContext(), "Please enter a Title, Author, or ISBN.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (isbn != null && !isbn.equals("") && isbn.length() != 10 && isbn.length() != 13) {
+            Toast.makeText(getApplicationContext(), "ISBN must be 10 or 13 characters long.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -89,8 +109,8 @@ public class ManualSearch extends ActionBarActivity implements IAsyncHttpHandler
             intent.putParcelableArrayListExtra("bookData", bookDataArray);
             startActivity(intent);
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error communicating with the server.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 

@@ -66,7 +66,28 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:ems="10"
-                        android:hint="@string/book_year" />
+                        android:hint="@string/book_year"
+                        android:inputType="number"
+                        android:maxLength="4" />
+
+                    <TextView
+                        android:id="@+id/textViewAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:text="-- OR --"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/book_isbn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:ems="10"
+                        android:hint="@string/book_isbn"
+                        android:inputType="number"
+                        android:maxLength="13" />
 
                     <Button
                         android:id="@+id/search"
