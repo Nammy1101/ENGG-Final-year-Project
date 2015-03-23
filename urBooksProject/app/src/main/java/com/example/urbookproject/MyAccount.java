@@ -30,34 +30,34 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAccount extends ActionBarActivity {
+public class MyAccount extends ActionBarActivity implements IAsyncHttpHandler {
 
     TextView UserName, FirstName, LastName, Email;
-    String response;
-    List<NameValuePair> nameValuePairs;
     private String url;
-    private String jsonResult;
-    private UserData userData = new UserData();
+    UserData userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
 
-        url = getString(R.string.server_url) + "GetUserInformation.php";
+        userData = ((MyAppUserData) this.getApplication()).getUserData();
+
+        url = getString(R.string.server_url) + "DeleteAccount.php";
 
         Button changePassword = (Button) findViewById(R.id.ChangePasswordButton);
         Button changeInformation = (Button) findViewById(R.id.ChangeInformationButton);
+        Button accountDelete = (Button) findViewById(R.id.AccountDeleteButton);
 
         UserName = (TextView) findViewById(R.id.accountUserName);
         FirstName = (TextView) findViewById(R.id.accountFirstName);
         LastName = (TextView) findViewById(R.id.accountLastName);
         Email = (TextView) findViewById(R.id.accountEmail);
 
-        userData = ((MyAppUserData) this.getApplication()).getUserData();
-
-        getInfoFromServer task = new getInfoFromServer();
-        task.execute();
+        UserName.setText(userData.getUserName());
+        FirstName.setText(userData.getFirstName());
+        LastName.setText(userData.getLastName());
+        Email.setText(userData.getEmail());
 
         changeInformation.setOnClickListener(new View.OnClickListener() {
 
@@ -77,6 +77,15 @@ public class MyAccount extends ActionBarActivity {
 
         });
 
+        accountDelete.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                HttpPostAsyncTask task = new HttpPostAsyncTask(MyAccount.this);
+                task.execute(url,"user_id", userData.getUserID());
+            }
+
+        });
     }
 
     @Override
@@ -98,74 +107,30 @@ public class MyAccount extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void fillInTextFields() {
-        String test = null;
+    @Override
+    public void onPostExec(String json) {
+        String phpResponse = "No response...";
+
         try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
+            JSONObject jsonResponse = new JSONObject(json);
             JSONArray jsonMainNode = jsonResponse.optJSONArray("table_data");
 
             for (int i = 0; i < jsonMainNode.length(); i++) {
                 JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                UserName.setText(jsonChildNode.optString("username").trim());
-                FirstName.setText(jsonChildNode.optString("firstName").trim());
-                LastName.setText(jsonChildNode.optString("lastName").trim());
-                Email.setText(jsonChildNode.optString("email").trim());
-                test = jsonChildNode.optString("username").trim();
-
+                phpResponse = jsonChildNode.optString("response").trim();
             }
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+            Toast.makeText(getApplicationContext(), "JSON Error" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
 
-    }
 
-    private class getInfoFromServer extends AsyncTask<String, Void, String> {
+            Toast.makeText(getApplicationContext(), phpResponse, Toast.LENGTH_SHORT).show();
+          //  finish();
 
-        @Override
-        protected String doInBackground(String... arg0) {
-            nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("ID", userData.getUserID()));
+        Intent intent = new Intent(MyAccount.this, MainActivity.class);
+        startActivity(intent);
 
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(url);
-            try {
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                jsonResult = inputStreamToString(
-                        response.getEntity().getContent()).toString();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
-            StringBuilder answer = new StringBuilder();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
-            try {
-                while ((rLine = rd.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-                // e.printStackTrace();
-                Toast.makeText(getApplicationContext(),
-                        "Error..." + e.toString(), Toast.LENGTH_LONG).show();
-            }
-            return answer;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            fillInTextFields();
-
-        }
     }
 
 }
