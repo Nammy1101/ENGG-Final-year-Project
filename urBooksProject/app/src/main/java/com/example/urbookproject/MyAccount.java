@@ -1,5 +1,7 @@
 package com.example.urbookproject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,6 +69,7 @@ public class MyAccount extends ActionBarActivity implements IAsyncHttpHandler {
                 startActivity(intent);
             }
         });
+
         changePassword.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -81,8 +84,18 @@ public class MyAccount extends ActionBarActivity implements IAsyncHttpHandler {
 
             @Override
             public void onClick(View v) {
-                HttpPostAsyncTask task = new HttpPostAsyncTask(MyAccount.this);
-                task.execute(url,"user_id", userData.getUserID());
+                new AlertDialog.Builder(MyAccount.this)
+                        .setTitle("Delete Account")
+                        .setMessage("Are you sure you want to delete your account?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                HttpPostAsyncTask task = new HttpPostAsyncTask(MyAccount.this);
+                                task.execute(url,"user_id", userData.getUserID());
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
 
         });
@@ -128,9 +141,10 @@ public class MyAccount extends ActionBarActivity implements IAsyncHttpHandler {
             Toast.makeText(getApplicationContext(), phpResponse, Toast.LENGTH_SHORT).show();
           //  finish();
 
+        MyAccount.this.finish();
         Intent intent = new Intent(MyAccount.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-
     }
 
 }
