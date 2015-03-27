@@ -7,12 +7,28 @@
 	
 	$userID = $_POST['user_id'];
 	
-	$queryString = "";
+	$queryString1 = "DELETE FROM `users` WHERE `user_id` ='".$userID."'";
+	$queryString2 = "DELETE FROM user_books_owned WHERE user_id ='".$userID."'";
+	$queryString3 = "DELETE FROM user_books_wanted WHERE user_id ='".$userID."'";
 	
-	 $data = mysqli_query($connection,$queryString);
+	 $data = mysqli_query($connection,$queryString1);
 	 if (!$data) {
-        $responseString = "Could not insert.";
+        $responseString = "Could not Delete.";
 	 }
+	 
+	 $data = mysqli_query($connection,$queryString2);
+	 if (!$data) {
+        $responseString = "Could not Delete.";
+	 }
+	  
+	 $data = mysqli_query($connection,$queryString3);
+	 if (!$data) {
+        $responseString = "Could not Delete.";
+	 }
+	  
+	  else{
+		  $responseString = "User Deleted";
+	  }
 	  
 	$output["table_data"] = array();
     $result = array();
