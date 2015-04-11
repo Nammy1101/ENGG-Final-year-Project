@@ -6,12 +6,14 @@ import org.apache.http.message.BasicHeader;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+/* Class borrowed from:
+ * http://www.codepool.biz/tech-frontier/android/take-a-photo-from-android-camera-and-upload-it-to-a-remote-php-server.html
+ *
+ */
 
 public class MultipartEntity implements HttpEntity {
 
@@ -47,19 +49,6 @@ public class MultipartEntity implements HttpEntity {
         isSetLast = true;
     }
 
-    public void addPart(final String key, final String value) {
-        writeFirstBoundaryIfNeeds();
-        try {
-            out.write(("Content-Disposition: form-data; name=\"" + key + "\"\r\n").getBytes());
-            out.write("Content-Type: text/plain; charset=UTF-8\r\n".getBytes());
-            out.write("Content-Transfer-Encoding: 8bit\r\n\r\n".getBytes());
-            out.write(value.getBytes());
-            out.write(("\r\n--" + boundary + "\r\n").getBytes());
-        } catch (final IOException e) {
-
-        }
-    }
-
     public void addPart(final String key, final String fileName, final InputStream fin) {
         addPart(key, fileName, fin, "application/octet-stream");
     }
@@ -87,14 +76,6 @@ public class MultipartEntity implements HttpEntity {
             } catch (final IOException e) {
 
             }
-        }
-    }
-
-    public void addPart(final String key, final File value) {
-        try {
-            addPart(key, value.getName(), new FileInputStream(value));
-        } catch (final FileNotFoundException e) {
-
         }
     }
 
